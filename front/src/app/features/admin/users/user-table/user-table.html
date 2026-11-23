@@ -1,0 +1,173 @@
+<section
+  aria-labelledby="people-heading"
+  class="flex-[999_1_640px] min-w-0 bg-white border border-card-border rounded-[14px]"
+>
+  <div
+    class="flex flex-wrap justify-between items-center gap-2.5 px-5 py-4 border-b border-card-border"
+  >
+    <h6 id="people-heading" class="m-0">
+      {{ 'users.table.heading' | translate }} <span class="text-muted">· {{ meta().total }}</span>
+    </h6>
+
+    <div class="flex gap-2 flex-wrap">
+      <input
+        type="search"
+        [attr.aria-label]="'users.table.search' | translate"
+        [placeholder]="'users.table.searchPlaceholder' | translate"
+        (input)="onSearch($event)"
+        class="h-10 w-50 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+      />
+      <select
+        [attr.aria-label]="'users.table.filterByGroup' | translate"
+        (change)="onGroupFilter($event)"
+        class="h-10 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+      >
+        <option value="">{{ 'users.table.allGroups' | translate }}</option>
+        @for (role of roles(); track role.code) {
+          <option [value]="role.code">{{ role | roleName }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <!--
+      Narrower than the design's 860px: this table drops the Gross/month
+      column and adds a slim actions column, and at 740px the whole row
+      including Edit fits the card without horizontal scrolling.
+    -->
+    <table class="w-full min-w-175 border-collapse">
+      <thead>
+        <tr class="text-left text-muted">
+          <th class="py-2.5 pl-5 pr-2 border-b border-card-border">
+            {{ 'users.table.name' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'users.table.group' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'users.table.position' | translate }}
+          </th>
+          @if (canViewCost()) {
+            <th class="py-2.5 px-2 border-b border-card-border text-right">
+              {{ 'users.table.costPerHour' | translate }}
+            </th>
+          }
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'users.table.login' | translate }}
+          </th>
+          <th class="py-2.5 pr-5 pl-2 border-b border-card-border text-right">
+            <span class="sr-only">{{ 'users.table.actions' | translate }}</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (person of people(); track person.employeeId) {
+          <tr [class.opacity-55]="!person.isActive">
+            <td class="py-2.5 pl-5 pr-2 border-b border-row-border">
+              <span class="flex items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  class="w-8.5 h-8.5 rounded-full bg-gray text-dark-blue flex items-center justify-center shrink-0 font-bold"
+                >
+                  <small>{{ person.initials }}</small>
+                </span>
+                <span class="flex flex-col">
+                  <span class="font-semibold">{{ person.firstName }} {{ person.lastName }}</span>
+                  <small class="text-muted">{{ person.email ?? '—' }}</small>
+                </span>
+              </span>
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border">
+              @if (person.roleCode) {
+                <span
+                  class="inline-flex items-center h-6 px-2.5 rounded-full whitespace-nowrap font-semibold"
+                  [class]="chipClass(person.roleCode)"
+                >
+                  <small>{{ { code: person.roleCode, name: person.roleName ?? '' } | roleName }}</small>
+                </span>
+              } @else {
+                <span class="text-dash" [attr.aria-label]="'users.table.noGroup' | translate">—</span>
+              }
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border text-muted-strong">
+              {{ person.position ?? '—' }}
+            </td>
+
+            @if (canViewCost()) {
+              <td class="py-2.5 px-2 border-b border-row-border text-right numeric font-semibold">
+                {{ person.hourlyCost ? '€ ' + person.hourlyCost : '—' }}
+              </td>
+            }
+
+            <!-- Wraps rather than nowrap: "Awaiting approval" would
+                 otherwise force the table past the card and push Edit
+                 out of sight. -->
+            <td
+              class="py-2.5 px-2 border-b border-row-border"
+              [class.text-muted]="loginMuted(person)"
+              [class.text-muted-strong]="!loginMuted(person)"
+            >
+              <small>{{ loginLabel(person) }}</small>
+            </td>
+
+            <td class="py-2.5 pr-5 pl-2 border-b border-row-border text-right">
+              @if (manageableIds().has(person.employeeId)) {
+                <button
+                  type="button"
+                  (click)="edit.emit(person)"
+                  class="h-8 px-3 rounded-lg border border-input-border bg-white text-muted-strong cursor-pointer hover:border-primary hover:text-dark-blue"
+                >
+                  <small>{{ 'users.table.edit' | translate }}</small>
+                </button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="canViewCost() ? 6 : 5" class="px-5 py-8 text-center text-muted">
+              {{ (loading() ? 'users.table.loading' : 'users.table.empty') | translate }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- The wrapper carries the border and padding, so it must go too when
+       there is only one page; the pager hides itself as well. -->
+  @if (meta().totalPages > 1) {
+    <div class="flex justify-end px-5 py-3 border-t border-card-border">
+      <app-pagination
+        [label]="'users.table.pagesLabel' | translate"
+        [page]="meta().page"
+        [pageSize]="meta().pageSize"
+        [total]="meta().total"
+        (pageChange)="pageChange.emit($event)"
+      />
+    </div>
+  }
+
+  @if (canViewCost()) {
+    <p class="m-0 px-5 py-3.5 text-muted flex items-center gap-1.5">
+      <svg
+        aria-hidden="true"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        class="shrink-0"
+      >
+        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+      </svg>
+      <small>{{ 'users.table.costNote' | translate }}</small>
+    </p>
+  }
+</section>

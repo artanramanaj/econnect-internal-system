@@ -1,0 +1,19 @@
+<div
+  role="group"
+  [attr.aria-label]="'language.label' | translate"
+  class="inline-flex gap-0.5 p-0.5 rounded-lg border"
+  [class]="groupClass()"
+>
+  @for (lang of languages; track lang) {
+    <button
+      type="button"
+      [attr.aria-pressed]="lang === current()"
+      [attr.title]="'language.' + lang | translate"
+      (click)="select(lang)"
+      class="h-7 px-2.5 rounded-md text-xs font-semibold uppercase cursor-pointer transition"
+      [class]="buttonClass(lang)"
+    >
+      {{ lang }}
+    </button>
+  }
+</div>

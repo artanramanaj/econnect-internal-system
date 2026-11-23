@@ -1,0 +1,14 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+/generated/prisma
+
+# Compiled output (rebuilt from the TS sources)
+/dist
+
+# Logs
+*.log
+
+# Personal Claude Code settings
+.claude/settings.local.json

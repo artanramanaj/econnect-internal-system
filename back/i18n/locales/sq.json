@@ -1,0 +1,91 @@
+{
+  "common": {
+    "routeNotFound": "Rruga nuk u gjet",
+    "somethingWentWrong": "Diçka shkoi keq",
+    "notSignedIn": "Nuk jeni të identifikuar.",
+    "noPermission": "Nuk keni leje për ta bërë këtë."
+  },
+  "auth": {
+    "accountCreated": "Llogaria u krijua për \"{{username}}\". Një administrator duhet ta aktivizojë përpara se të identifikoheni.",
+    "welcomeBack": "Mirë se u ktheve, {{name}}.",
+    "sessionExpired": "Sesioni ka skaduar. Ju lutemi identifikohuni përsëri.",
+    "sessionInvalid": "Sesioni ka skaduar ose është i pavlefshëm. Ju lutemi identifikohuni përsëri.",
+    "sessionRefreshed": "Sesioni u rifreskua",
+    "signedOut": "Dolët me sukses",
+    "accountGone": "Llogaria nuk ekziston më.",
+    "invalidCredentials": "Emri i përdoruesit ose fjalëkalimi është i pasaktë.",
+    "pendingActivation": "Llogaria juaj është në pritje që një administrator ta aktivizojë.",
+    "suspended": "Kjo llogari është pezulluar. Ju lutemi kontaktoni një administrator.",
+    "noLongerActive": "Kjo llogari nuk është më aktive.",
+    "groupNotSeeded": "Ky grup përdoruesish nuk ekziston. A është mbushur baza e të dhënave?",
+    "usernameTaken": "Ky emër përdoruesi është i zënë.",
+    "emailTaken": "Ky email është i regjistruar tashmë.",
+    "localeUpdated": "Gjuha u përditësua."
+  },
+  "people": {
+    "invalidId": "ID e pavlefshme e punonjësit.",
+    "invalidFilters": "Filtra kërkimi ose faqe e pavlefshme.",
+    "accountCreated": "Llogaria u krijua për {{firstName}} {{lastName}} ({{username}}).",
+    "added": "{{firstName}} {{lastName}} u shtua.",
+    "notFound": "Personi nuk u gjet.",
+    "updated": "{{firstName}} {{lastName}} u përditësua.",
+    "deactivated": "{{firstName}} {{lastName}} u çaktivizua.",
+    "cannotManage": "Nuk keni leje për të menaxhuar personat.",
+    "onlySuperAdminManages": "Vetëm një super administrator mund të menaxhojë llogaritë e administratorëve.",
+    "onlySuperAdminGrants": "Vetëm një super administrator mund të japë grupe administratori.",
+    "lastSuperAdmin": "Ky është super administratori i fundit aktiv. Promovoni dikë tjetër më parë.",
+    "cannotDeactivateSelf": "Nuk mund ta çaktivizoni llogarinë tuaj."
+  },
+  "users": {
+    "invalidId": "ID e pavlefshme e përdoruesit.",
+    "notFound": "Përdoruesi nuk u gjet.",
+    "groupNotFound": "Ky grup përdoruesish nuk ekziston.",
+    "cannotChangeOwnStatus": "Nuk mund ta ndryshoni statusin e llogarisë suaj.",
+    "cannotChangeOwnGroup": "Nuk mund ta ndryshoni grupin e llogarisë suaj.",
+    "status": {
+      "ACTIVE": "{{username}} u aktivizua.",
+      "SUSPENDED": "{{username}} u pezullua.",
+      "PENDING": "{{username}} u vendos në pritje."
+    },
+    "movedToGroup": "{{username}} u zhvendos te {{role}}."
+  },
+  "positions": {
+    "unknown": "Pozicion i panjohur.",
+    "nameTaken": "\"{{name}}\" ekziston tashmë.",
+    "invalidPage": "Faqe e pavlefshme.",
+    "added": "\"{{name}}\" u shtua.",
+    "updated": "\"{{name}}\" u përditësua.",
+    "deleted": "\"{{name}}\" u fshi.",
+    "stillHeld_one": "{{count}} person e mban ende \"{{name}}\". Tërhiqeni nga përdorimi ose zhvendoseni më parë.",
+    "stillHeld_other": "{{count}} persona e mbajnë ende \"{{name}}\". Tërhiqeni nga përdorimi ose zhvendosini më parë."
+  },
+  "validation": {
+    "correctFields": "Ju lutemi korrigjoni fushat e shënuara.",
+    "required": "Kjo fushë është e detyrueshme",
+    "invalid": "Vlerë e pavlefshme",
+    "tooShort": "Duhet të ketë të paktën {{min}} karaktere",
+    "tooLong": "Duhet të ketë më së shumti {{max}} karaktere",
+    "tooSmall": "Duhet të jetë të paktën {{min}}",
+    "tooBig": "Duhet të jetë më së shumti {{max}}",
+    "passwordMin": "Fjalëkalimi duhet të ketë të paktën 8 karaktere",
+    "passwordMax": "Fjalëkalimi është shumë i gjatë",
+    "usernameMin": "Emri i përdoruesit duhet të ketë të paktën 3 karaktere",
+    "usernameChars": "Përdorni vetëm shkronja, numra, pika, viza ose nënvija",
+    "emailInvalid": "Shkruani një adresë email të vlefshme",
+    "firstNameRequired": "Emri është i detyrueshëm",
+    "lastNameRequired": "Mbiemri është i detyrueshëm",
+    "positionRequired": "Zgjidhni një pozicion",
+    "roleInvalid": "Zgjidhni një grup të vlefshëm përdoruesish",
+    "passwordsMismatch": "Fjalëkalimet nuk përputhen",
+    "usernameRequired": "Emri i përdoruesit është i detyrueshëm",
+    "passwordRequired": "Fjalëkalimi është i detyrueshëm",
+    "currentPasswordRequired": "Fjalëkalimi aktual është i detyrueshëm",
+    "hourlyCostInvalid": "Shkruani një kosto orare të vlefshme",
+    "hourlyCostNegative": "Kostoja orare nuk mund të jetë negative",
+    "hourlyCostTooLarge": "Kostoja orare është shumë e madhe",
+    "nothingToUpdate": "Asgjë për të përditësuar",
+    "positionNameMin": "Emri i pozicionit duhet të ketë të paktën 2 karaktere",
+    "positionNameMax": "Emri i pozicionit është shumë i gjatë",
+    "localeInvalid": "Zgjidhni një gjuhë të mbështetur"
+  }
+}

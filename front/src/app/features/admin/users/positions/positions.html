@@ -1,0 +1,156 @@
+<section
+  aria-labelledby="pos-heading"
+  class="bg-white border border-card-border rounded-[14px] p-5 flex flex-col gap-4"
+>
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h6 id="pos-heading" class="m-0">{{ 'users.positions.heading' | translate }}</h6>
+    <p class="m-0 text-muted">
+      <small>
+        {{ 'users.positions.summary' | translate: { active: activeCount(), total: meta().total } }}
+      </small>
+    </p>
+  </div>
+
+  <form [formGroup]="addForm" (ngSubmit)="onAdd()" class="flex flex-wrap gap-2.5 items-start">
+    <div class="flex flex-col gap-1.5 flex-[1_1_260px] min-w-0">
+      <label for="newpos" class="sr-only">{{ 'users.positions.new' | translate }}</label>
+      <input
+        id="newpos"
+        formControlName="name"
+        [placeholder]="'users.positions.newPlaceholder' | translate"
+        class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+      />
+      @if (addForm.controls.name.touched && addForm.controls.name.invalid) {
+        <app-error-message [message]="'users.positions.nameInvalid' | translate" />
+      }
+    </div>
+    <button
+      type="submit"
+      [disabled]="saving()"
+      class="h-10.5 px-5 rounded-[9px] bg-primary text-dark-blue font-bold cursor-pointer hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {{ 'users.positions.add' | translate }}
+    </button>
+  </form>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr>
+          <th scope="col" class="text-left py-2 px-2.5 bg-table-head border-b border-row-border">
+            {{ 'users.positions.position' | translate }}
+          </th>
+          <th scope="col" class="text-right py-2 px-2.5 bg-table-head border-b border-row-border">
+            {{ 'users.positions.people' | translate }}
+          </th>
+          <th scope="col" class="text-left py-2 px-2.5 bg-table-head border-b border-row-border">
+            {{ 'users.positions.status' | translate }}
+          </th>
+          <th scope="col" class="text-right py-2 px-2.5 bg-table-head border-b border-row-border">
+            {{ 'users.positions.actions' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (position of positions(); track position.id) {
+          <tr class="border-b border-row-border">
+            <td class="py-2 px-2.5">
+              @if (renaming() === position.id) {
+                <form
+                  [formGroup]="renameForm"
+                  (ngSubmit)="submitRename(position)"
+                  class="flex gap-2 items-center"
+                >
+                  <input
+                    formControlName="name"
+                    [attr.aria-label]="'users.positions.renameLabel' | translate: { name: position.name }"
+                    class="h-9 px-2.5 rounded-[8px] border border-input-border bg-white focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="submit"
+                    [disabled]="saving()"
+                    class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray disabled:opacity-60"
+                  >
+                    {{ 'common.save' | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="cancelRename()"
+                    class="h-9 px-3 rounded-[8px] border-0 bg-transparent text-muted cursor-pointer hover:text-dark-blue"
+                  >
+                    {{ 'common.cancel' | translate }}
+                  </button>
+                </form>
+              } @else {
+                <span [class]="position.isActive ? '' : 'text-muted line-through'">
+                  {{ position.name }}
+                </span>
+              }
+            </td>
+            <td class="py-2 px-2.5 text-right numeric">{{ position.employeeCount }}</td>
+            <td class="py-2 px-2.5">
+              @if (position.isActive) {
+                <span class="inline-block px-2 py-0.5 rounded-full bg-yes-bg text-yes-fg">
+                  <small>{{ 'users.positions.inUse' | translate }}</small>
+                </span>
+              } @else {
+                <span class="inline-block px-2 py-0.5 rounded-full bg-pill-bg text-pill-fg">
+                  <small>{{ 'users.positions.retired' | translate }}</small>
+                </span>
+              }
+            </td>
+            <td class="py-2 px-2.5">
+              <div class="flex gap-2 justify-end">
+                @if (renaming() !== position.id) {
+                  <button
+                    type="button"
+                    (click)="startRename(position)"
+                    class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray"
+                  >
+                    {{ 'users.positions.rename' | translate }}
+                  </button>
+                }
+                <button
+                  type="button"
+                  (click)="toggleActive(position)"
+                  [disabled]="saving()"
+                  class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray disabled:opacity-60"
+                >
+                  {{ (position.isActive ? 'users.positions.retire' : 'users.positions.restore') | translate }}
+                </button>
+                <button
+                  type="button"
+                  (click)="confirmRemove(position)"
+                  [disabled]="saving() || position.employeeCount > 0"
+                  [attr.title]="
+                    position.employeeCount > 0
+                      ? ('users.positions.stillHeld' | translate: { count: position.employeeCount })
+                      : null
+                  "
+                  class="h-9 px-3 rounded-[8px] border border-danger/30 bg-white text-danger cursor-pointer hover:bg-danger/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {{ 'common.delete' | translate }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="py-4 px-2.5 text-muted">
+              {{ 'users.positions.empty' | translate }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Renders nothing on a single page, so the section's gap does not show. -->
+  <app-pagination
+    [label]="'users.positions.pagesLabel' | translate"
+    [page]="meta().page"
+    [pageSize]="meta().pageSize"
+    [total]="meta().total"
+    (pageChange)="pageChange.emit($event)"
+  />
+</section>

@@ -1,0 +1,270 @@
+{
+  "common": {
+    "or": "ose",
+    "save": "Ruaj",
+    "saving": "Duke ruajtur…",
+    "cancel": "Anulo",
+    "delete": "Fshi",
+    "close": "Mbyll",
+    "loading": "Duke u ngarkuar…",
+    "none": "—",
+    "optional": "(opsionale)",
+    "yes": "Po",
+    "no": "Jo",
+    "somethingWentWrong": "Diçka shkoi keq. Ju lutemi provoni përsëri.",
+    "showPassword": "Shfaq fjalëkalimin",
+    "hidePassword": "Fshih fjalëkalimin"
+  },
+  "language": {
+    "label": "Gjuha",
+    "sq": "Shqip",
+    "en": "English"
+  },
+  "nav": {
+    "internalSystem": "Sistemi i brendshëm",
+    "dashboard": "Paneli",
+    "projects": "Projektet",
+    "products": "Produktet",
+    "teamAllocations": "Caktimi i ekipeve",
+    "dailyCostEngine": "Motori i kostove ditore",
+    "bom": "Lista e materialeve (BoM)",
+    "quoteReconciler": "Rakordimi i ofertave",
+    "users": "Përdoruesit & rolet",
+    "settings": "Cilësimet e sistemit",
+    "logout": "Dil"
+  },
+  "roles": {
+    "super_admin": "Super administrator",
+    "admin": "Administrator",
+    "project_manager": "Menaxher projekti",
+    "user": "Përdorues",
+    "team_leader": "Udhëheqës ekipi",
+    "technician": "Teknik"
+  },
+  "fields": {
+    "firstName": "Emri",
+    "firstNameRequired": "Emri është i detyrueshëm",
+    "lastName": "Mbiemri",
+    "lastNameRequired": "Mbiemri është i detyrueshëm",
+    "username": "Emri i përdoruesit",
+    "usernameRequired": "Emri i përdoruesit është i detyrueshëm (min 3 karaktere)",
+    "email": "Emaili i punës",
+    "emailInvalid": "Shkruani një email të vlefshëm",
+    "phone": "Telefoni",
+    "phonePlaceholder": "+383 4X XXX XXX",
+    "position": "Pozicioni",
+    "positionRequired": "Zgjidhni një pozicion",
+    "loadingPositions": "Duke ngarkuar pozicionet…",
+    "group": "Grupi i përdoruesve",
+    "groupRequired": "Zgjidhni një grup përdoruesish",
+    "loadingGroups": "Duke ngarkuar grupet…",
+    "password": "Fjalëkalimi",
+    "passwordRequired": "Fjalëkalimi është i detyrueshëm",
+    "passwordMin": "Fjalëkalimi duhet të ketë të paktën 8 karaktere",
+    "status": "Statusi",
+    "costPerHour": "Kosto / orë €"
+  },
+  "brand": {
+    "eyebrow": "Menaxhimi i ofertave & projekteve",
+    "heading": "Nga oferta e parë deri te dorëzimi përfundimtar.",
+    "description": "Vlerësoni sistemet e sigurisë dhe IT me të dhëna të drejtpërdrejta të produkteve nga baza e shitjeve, pastaj drejtoni ekipin, buxhetin dhe ecurinë ditore të çdo projekti në një vend.",
+    "chipsLabel": "Çfarë ofrojmë",
+    "footnote": "eConnect · Integrues sistemesh · Sistem i brendshëm, i hostuar lokalisht",
+    "capabilities": {
+      "cctv": "Videovëzhgim (CCTV)",
+      "accessControl": "Kontroll i qasjes",
+      "fireAlarm": "Alarm zjarri",
+      "intrusion": "Zbulim i ndërhyrjeve",
+      "barrier": "Kontroll i barrierave",
+      "it": "IT & rrjete",
+      "lowVoltage": "Tension i ulët & elektrikë"
+    }
+  },
+  "login": {
+    "title": "Identifikohu",
+    "subtitle": "Përdorni llogarinë tuaj të punës në eConnect.",
+    "usernamePlaceholder": "emri.juaj",
+    "usernameRequired": "Emri i përdoruesit është i detyrueshëm",
+    "passwordPlaceholder": "Shkruani fjalëkalimin tuaj",
+    "forgotPassword": "Keni harruar fjalëkalimin?",
+    "submit": "Identifikohu",
+    "submitting": "Duke u identifikuar…",
+    "newToTeam": "I ri në ekip?",
+    "requestAccount": "Kërko një llogari",
+    "activatedByAdmin": "Llogaritë aktivizohen nga një administrator.",
+    "failed": "Identifikimi dështoi. Ju lutemi kontrolloni të dhënat tuaja dhe provoni përsëri."
+  },
+  "register": {
+    "brandHeading": "Kërko qasje",
+    "brandDescription": "Çdo llogari shqyrtohet. Një administrator konfirmon rolin tuaj dhe grupin e përdoruesve që përcakton çfarë mund të shihni.",
+    "steps": {
+      "send": {
+        "title": "Dërgo kërkesën",
+        "detail": "Plotësoni të dhënat tuaja dhe qasjen që ju nevojitet."
+      },
+      "review": {
+        "title": "Shqyrtimi nga administratori",
+        "detail": "Një administrator ju miraton dhe ju cakton një grup: Përdorues, Menaxher projekti, Udhëheqës ekipi ose Teknik."
+      },
+      "activation": {
+        "title": "Emaili i aktivizimit",
+        "detail": "Do të merrni një lidhje për t'u identifikuar. Të drejtat e Administratorit dhe Super administratorit jepen vetëm nga një Super administrator."
+      }
+    },
+    "title": "Krijoni llogarinë tuaj",
+    "subtitle": "Të gjitha fushat janë të detyrueshme, përveç atyre të shënuara si opsionale.",
+    "firstNamePlaceholder": "p.sh. Valon",
+    "lastNamePlaceholder": "p.sh. Shala",
+    "usernamePlaceholder": "p.sh. valon.shala",
+    "emailPlaceholder": "emri@econnect.com",
+    "group": "Grupi i kërkuar i përdoruesve",
+    "passwordPlaceholder": "Të paktën 8 karaktere",
+    "confirmPassword": "Konfirmo fjalëkalimin",
+    "confirmPasswordPlaceholder": "Përsërit fjalëkalimin",
+    "rules": {
+      "label": "Rregullat e fjalëkalimit",
+      "length": "8+ karaktere",
+      "match": "Fjalëkalimet përputhen"
+    },
+    "haveAccount": "Keni tashmë një llogari?",
+    "signIn": "Identifikohu",
+    "submit": "Dërgo kërkesën",
+    "submitting": "Duke dërguar kërkesën…",
+    "loadGroupsFailed": "Grupet e përdoruesve nuk u ngarkuan. A është serveri në punë?",
+    "loadPositionsFailed": "Pozicionet nuk u ngarkuan. A është serveri në punë?",
+    "failed": "Regjistrimi dështoi. Ju lutemi provoni përsëri."
+  },
+  "users": {
+    "breadcrumbRoot": "Administrimi",
+    "breadcrumb": "Përdoruesit & rolet",
+    "title": "Përdoruesit, stafi & lejet",
+    "subtitle": "Këtu listohen të gjithë ata që punojnë në projekte — me ose pa qasje në aplikacion",
+    "table": {
+      "heading": "Personat",
+      "search": "Kërko persona",
+      "searchPlaceholder": "Kërko",
+      "filterByGroup": "Filtro sipas grupit",
+      "allGroups": "Të gjitha grupet",
+      "name": "Emri",
+      "group": "Grupi",
+      "position": "Pozicioni",
+      "costPerHour": "Kosto / orë",
+      "login": "Qasja",
+      "actions": "Veprimet",
+      "noGroup": "Pa grup",
+      "edit": "Ndrysho",
+      "loading": "Duke u ngarkuar…",
+      "empty": "Askush nuk përputhet me këtë kërkim.",
+      "pagesLabel": "Faqet e personave",
+      "costNote": "Kostoja orare u shfaqet vetëm Super administratorit, Administratorit dhe Menaxherëve të projekteve.",
+      "noLogin": "Pa qasje",
+      "awaitingApproval": "Në pritje të miratimit",
+      "deactivated": "I çaktivizuar",
+      "neverSignedIn": "Asnjëherë i identifikuar",
+      "today": "Sot {{time}}",
+      "yesterday": "Dje"
+    },
+    "add": {
+      "heading": "Shto punonjës",
+      "firstNamePlaceholder": "p.sh. Mentor",
+      "lastNamePlaceholder": "p.sh. Rama",
+      "usernamePlaceholder": "p.sh. mentor.rama",
+      "emailPlaceholder": "emri@econnect-ks.com",
+      "password": "Fjalëkalimi fillestar",
+      "passwordHint": "Jepjani personalisht — ende nuk ka email ftese.",
+      "costPlaceholder": "0.00",
+      "dailyCost": "Kosto për ditë 8-orëshe",
+      "submit": "Ruaj punonjësin",
+      "submitting": "Duke ruajtur…"
+    },
+    "requests": {
+      "heading": "Kërkesat për qasje",
+      "groupFor": "Grupi për {{username}}",
+      "approve": "Mirato",
+      "reject": "Refuzo",
+      "empty": "Nuk ka kërkesa të hapura."
+    },
+    "positions": {
+      "heading": "Pozicionet",
+      "summary": "Titujt e punës, të ndarë nga grupet e përdoruesve. {{active}} nga {{total}} në përdorim.",
+      "new": "Pozicion i ri",
+      "newPlaceholder": "p.sh. Magazinier",
+      "nameInvalid": "Shkruani një emër me të paktën 2 karaktere",
+      "add": "Shto pozicion",
+      "position": "Pozicioni",
+      "people": "Personat",
+      "status": "Statusi",
+      "actions": "Veprimet",
+      "renameLabel": "Riemërto {{name}}",
+      "inUse": "Në përdorim",
+      "retired": "I tërhequr",
+      "rename": "Riemërto",
+      "retire": "Tërhiq",
+      "restore": "Rikthe",
+      "stillHeld": "{{count}} persona e mbajnë ende këtë pozicion — tërhiqeni nga përdorimi ose zhvendosini më parë",
+      "empty": "Ende nuk ka pozicione.",
+      "pagesLabel": "Faqet e pozicioneve",
+      "confirmDelete": "Të fshihet pozicioni \"{{name}}\"? Ky veprim nuk mund të zhbëhet."
+    },
+    "matrix": {
+      "heading": "Grupet & lejet",
+      "note": "Vetëm një Super administrator mund ta ndryshojë këtë matricë",
+      "permission": "Leja",
+      "loading": "Duke ngarkuar lejet…"
+    },
+    "drawer": {
+      "noLogin": "Pa qasje",
+      "retired": "(i tërhequr)",
+      "fieldStaff": "Punon në terren (staf terreni)",
+      "costNote": "Ruajtja e një shifre të re e mban të vjetrën në regjistër, kështu që kostot e kaluara mbeten të pandryshuara.",
+      "submit": "Ruaj të dhënat",
+      "account": "Llogaria",
+      "ownAccount": "Kjo është llogaria juaj. Grupi dhe statusi mund të ndryshohen vetëm nga dikush tjetër.",
+      "statusPending": "Në pritje të miratimit",
+      "statusActive": "Aktiv",
+      "statusSuspended": "I çaktivizuar",
+      "deactivateConfirm": "Të çaktivizohet {{name}}? Del nga sistemi menjëherë dhe nuk mund të identifikohet më. Regjistri mbetet, kështu që puna e kaluar i atribuohet ende.",
+      "deactivateYes": "Po, çaktivizo",
+      "deactivate": "Çaktivizo këtë person",
+      "positionFallback": "Pozicioni #{{id}}"
+    }
+  },
+  "matrix": {
+    "areas": {
+      "quotes": "Ofertat",
+      "catalog": "Katalogu",
+      "reports": "Raportet",
+      "quotesToProjects": "Ofertat → projektet",
+      "projects": "Projektet",
+      "field": "Terreni",
+      "administration": "Administrimi"
+    },
+    "rows": {
+      "quoteManage": "Krijo, ndrysho & kopjo oferta",
+      "quoteViewCost": "Shiko çmimin e kostos & marzhin",
+      "catalogManage": "Produktet, shërbimet & klientët",
+      "reportSales": "Raportet e shitjeve & statistikat",
+      "quoteAccept": "Prano ofertën & cakto menaxherin e projektit",
+      "projectManage": "Paneli i projektit, ekipi & planifikimi",
+      "projectViewCost": "Shiko pagat & kostot ditore",
+      "fieldBom": "Oferta si listë materialesh (pa çmime)",
+      "fieldDailyReport": "Shkruaj raporte ditore",
+      "fieldAssignment": "Shiko caktimet e tua",
+      "reportProject": "Raportet e projekteve",
+      "adminUsers": "Menaxho përdoruesit & grupet",
+      "adminSettings": "Cilësimet & sinkronizimi i DB të shitjeve"
+    },
+    "cells": {
+      "own": "Të miat",
+      "view": "Shiko",
+      "noAdmins": "Pa administratorë"
+    }
+  },
+  "pagination": {
+    "previous": "Para",
+    "previousPage": "Faqja e mëparshme",
+    "next": "Pas",
+    "nextPage": "Faqja tjetër",
+    "page": "Faqja {{n}}"
+  }
+}

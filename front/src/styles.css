@@ -1,0 +1,186 @@
+@import "tailwindcss";
+/* Toast look, positioning and the animations its auto-dismiss timer waits on.
+   Imported here rather than in angular.json, so a running `ng serve` picks it up. */
+@import "@ngxpert/hot-toast/styles.css";
+
+
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+
+
+@theme {
+  --font-montserrat: "Montserrat", sans-serif;
+
+  --color-primary: #00afef;
+  --color-light-primary: #32a6bd;
+  --color-dark-blue: #152642;
+  --color-light-black: #0f1418;
+  --color-gray: #efefef;
+  --color-white: #ffffff;
+
+  /* Supporting neutrals / accents */
+  --color-muted: #5b6570;
+  --color-muted-strong: #3c4650;
+  --color-sidebar-text: #c3cedc;
+  --color-sidebar-muted: #a9b6c8;
+  --color-input-border: #c9cfd6;
+  --color-card-border: #e2e5e9;
+  --color-link: #0078a8;
+  --color-success: #157a3a;
+  --color-danger: #d92d20;
+  --color-chip-border: #2c4166;
+  --color-chip-text: #e6edf5;
+
+  /* Group chips on the Users roster, one pair per user group */
+  --color-grp-super-bg: #152642;
+  --color-grp-super-fg: #ffffff;
+  --color-grp-admin-bg: #dff3fc;
+  --color-grp-admin-fg: #075e82;
+  --color-grp-pm-bg: #e3f4e8;
+  --color-grp-pm-fg: #14532d;
+  --color-grp-user-bg: #eceef1;
+  --color-grp-user-fg: #3c4650;
+  --color-grp-tl-bg: #fdf0e3;
+  --color-grp-tl-fg: #8a4a0b;
+  --color-grp-tech-bg: #f2f3f5;
+  --color-grp-tech-fg: #3c4650;
+
+  /* Groups & permissions matrix cells */
+  --color-yes-bg: #e3f4e8;
+  --color-yes-fg: #157a3a;
+  --color-pill-bg: #dff3fc;
+  --color-pill-fg: #075e82;
+  --color-dash: #8a939c;
+  --color-table-head: #f7f8f9;
+  --color-row-border: #efefef;
+
+  --text-h1: 2.75rem;
+  --text-h1--line-height: 1.2;
+
+  --text-h2: 2.5rem;
+  --text-h2--line-height: 1.2;
+
+  --text-h3: 1.75rem;
+  --text-h3--line-height: 1.25;
+
+  --text-h4: 1.5rem;
+  --text-h4--line-height: 1.3;
+
+  --text-h5: 1.25rem;
+  --text-h5--line-height: 1.4;
+
+  --text-h6: 1rem;
+  --text-h6--line-height: 1.5;
+}
+
+
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+    background: #efefef;
+    color: #152642;
+  }
+
+  h1 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: var(--text-h1);
+    line-height: var(--text-h1--line-height);
+  }
+
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+  }
+
+  h3 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+  }
+
+  h4 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: var(--text-h4);
+    line-height: var(--text-h4--line-height);
+  }
+
+  h5 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: var(--text-h5);
+    line-height: var(--text-h5--line-height);
+  }
+
+  h6 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: var(--text-h6);
+    line-height: var(--text-h6--line-height);
+  }
+
+  p,
+  span,
+  button {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+  }
+}
+
+
+
+@utility container {
+  max-width: 1280px;
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+
+
+@media (max-width: 767px) {
+  :root {
+    --text-h1: 2rem;
+    --text-h1--line-height: 1.25;
+
+    --text-h2: 1.75rem;
+    --text-h2--line-height: 1.3;
+
+    --text-h3: 1.5rem;
+    --text-h3--line-height: 1.3;
+
+    --text-h4: 1.25rem;
+    --text-h4--line-height: 1.35;
+
+    --text-h5: 1.125rem;
+    --text-h5--line-height: 1.4;
+  }
+}

@@ -1,0 +1,53 @@
+
+<aside class="w-64 min-h-screen h-full bg-dark-blue text-white flex flex-col">
+  <div class="px-6 py-6">
+    <img
+      src="/images/eConnect.webp"
+      alt="eConnect Logo"
+      class="object-cover w-[80%] "
+    />
+
+    <h4 class="font-semibold">
+      {{ 'nav.internalSystem' | translate }}
+    </h4>
+  </div>
+
+  <div class="flex-1 flex flex-col justify-between px-3 pb-6">
+    <nav class="flex flex-col gap-1">
+      <app-nav-link link="/dashboard">{{ 'nav.dashboard' | translate }}</app-nav-link>
+      <app-nav-link link="/projects">{{ 'nav.projects' | translate }}</app-nav-link>
+      <app-nav-link link="/products">{{ 'nav.products' | translate }}</app-nav-link>
+      <app-nav-link link="/team-allocations">{{ 'nav.teamAllocations' | translate }}</app-nav-link>
+      <app-nav-link link="/daily-cost-engine">{{ 'nav.dailyCostEngine' | translate }}</app-nav-link>
+      <app-nav-link link="/bom">{{ 'nav.bom' | translate }}</app-nav-link>
+      <app-nav-link link="/quote-reconciler">{{ 'nav.quoteReconciler' | translate }}</app-nav-link>
+
+      @if (canManageUsers()) {
+        <app-nav-link link="/users">{{ 'nav.users' | translate }}</app-nav-link>
+      }
+
+      <app-nav-link link="/settings">{{ 'nav.settings' | translate }}</app-nav-link>
+    </nav>
+
+    <div class="flex flex-col gap-2">
+      <div class="px-4 py-2">
+        <app-language-switcher tone="dark" />
+      </div>
+
+      @if (currentUser(); as user) {
+        <div class="px-4 py-2">
+          <p class="m-0 text-sm font-medium">{{ displayName() }}</p>
+          <p class="m-0 text-xs text-sidebar-muted">{{ user.roles | roleName }}</p>
+        </div>
+      }
+
+      <button
+        type="button"
+        (click)="logout()"
+        class="px-4 py-3 text-sm font-medium text-left cursor-pointer rounded-lg hover:bg-white/10 transition"
+      >
+        {{ 'nav.logout' | translate }}
+      </button>
+    </div>
+  </div>
+</aside>

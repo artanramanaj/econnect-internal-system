@@ -1,0 +1,196 @@
+<div class="fixed inset-0 z-40 flex justify-end">
+  <button
+    type="button"
+    [attr.aria-label]="'common.close' | translate"
+    (click)="close.emit()"
+    class="absolute inset-0 bg-dark-blue/40 border-0 cursor-pointer"
+  ></button>
+
+  <aside
+    role="dialog"
+    aria-labelledby="drawer-heading"
+    class="relative w-full max-w-110 h-full bg-white shadow-xl overflow-y-auto flex flex-col gap-5 p-6"
+  >
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h6 id="drawer-heading" class="m-0">{{ person().firstName }} {{ person().lastName }}</h6>
+        <small class="text-muted">{{
+          person().username ?? ('users.drawer.noLogin' | translate)
+        }}</small>
+      </div>
+      <button
+        type="button"
+        [attr.aria-label]="'common.close' | translate"
+        (click)="close.emit()"
+        class="w-9 h-9 rounded-lg border-0 bg-gray text-muted-strong cursor-pointer hover:text-dark-blue"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Details -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="flex flex-col gap-1.5">
+          <label for="efn">{{ 'fields.firstName' | translate }}</label>
+          <input
+            id="efn"
+            formControlName="firstName"
+            class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="eln">{{ 'fields.lastName' | translate }}</label>
+          <input
+            id="eln"
+            formControlName="lastName"
+            class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+          />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="epos">{{ 'fields.position' | translate }}</label>
+        <select
+          id="epos"
+          formControlName="positionId"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          <option value="">—</option>
+          @for (option of positionOptions(); track option.id) {
+            <option
+              [value]="option.id"
+              [selected]="option.id.toString() === form.controls.positionId.value"
+            >
+              {{ option.name }}{{ option.retired ? ' ' + ('users.drawer.retired' | translate) : '' }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="eph">{{ 'fields.phone' | translate }}</label>
+        <input
+          id="eph"
+          formControlName="phone"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        />
+      </div>
+
+      <label class="flex items-center gap-2.5 min-h-10">
+        <input type="checkbox" formControlName="isFieldStaff" class="w-4.5 h-4.5 accent-primary" />
+        {{ 'users.drawer.fieldStaff' | translate }}
+      </label>
+
+      @if (canViewCost()) {
+        <div class="flex flex-col gap-1.5">
+          <label for="ehc">{{ 'fields.costPerHour' | translate }}</label>
+          <input
+            id="ehc"
+            inputmode="decimal"
+            formControlName="hourlyCost"
+            class="h-10.5 px-2.5 rounded-[9px] border border-input-border bg-white text-right numeric focus:outline-none focus:border-primary"
+          />
+          <small class="text-muted">
+            {{ 'users.drawer.costNote' | translate }}
+          </small>
+        </div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="saving()"
+        class="h-11 rounded-[10px] bg-primary text-dark-blue font-bold cursor-pointer hover:brightness-95 disabled:opacity-60"
+      >
+        {{ (saving() ? 'common.saving' : 'users.drawer.submit') | translate }}
+      </button>
+    </form>
+
+    <!-- Account -->
+    @if (person().userId) {
+      <div class="flex flex-col gap-3 pt-5 border-t border-card-border">
+        <p class="m-0 text-muted-strong font-semibold">{{ 'users.drawer.account' | translate }}</p>
+
+        @if (isSelf()) {
+          <p class="m-0 px-3 py-2.5 rounded-[10px] bg-gray text-muted-strong">
+            <small>
+              {{ 'users.drawer.ownAccount' | translate }}
+            </small>
+          </p>
+        } @else {
+          <div class="flex flex-col gap-1.5">
+            <label for="egrp">{{ 'fields.group' | translate }}</label>
+            <select
+              id="egrp"
+              (change)="onRoleChange($event)"
+              class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+            >
+              @for (role of roleOptions(); track role.code) {
+                <option [value]="role.code" [selected]="role.code === person().roleCode">
+                  {{ role | roleName }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="est">{{ 'fields.status' | translate }}</label>
+            <select
+              id="est"
+              (change)="onStatusChange($event)"
+              class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+            >
+              <option value="PENDING" [selected]="person().status === 'PENDING'">
+                {{ 'users.drawer.statusPending' | translate }}
+              </option>
+              <option value="ACTIVE" [selected]="person().status === 'ACTIVE'">
+                {{ 'users.drawer.statusActive' | translate }}
+              </option>
+              <option value="SUSPENDED" [selected]="person().status === 'SUSPENDED'">
+                {{ 'users.drawer.statusSuspended' | translate }}
+              </option>
+            </select>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Danger zone -->
+    @if (!isSelf() && person().isActive) {
+      <div class="flex flex-col gap-2.5 mt-auto pt-5 border-t border-card-border">
+        @if (confirmingDelete()) {
+          <p class="m-0 text-muted-strong">
+            <small>
+              {{ 'users.drawer.deactivateConfirm' | translate: { name: person().firstName } }}
+            </small>
+          </p>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              [disabled]="saving()"
+              (click)="deactivate.emit()"
+              class="flex-1 h-10.5 rounded-[10px] bg-danger text-white font-semibold cursor-pointer hover:brightness-110 disabled:opacity-60"
+            >
+              <small>{{ 'users.drawer.deactivateYes' | translate }}</small>
+            </button>
+            <button
+              type="button"
+              (click)="confirmingDelete.set(false)"
+              class="flex-1 h-10.5 rounded-[10px] border border-input-border bg-white cursor-pointer"
+            >
+              <small>{{ 'common.cancel' | translate }}</small>
+            </button>
+          </div>
+        } @else {
+          <button
+            type="button"
+            (click)="confirmingDelete.set(true)"
+            class="h-10.5 rounded-[10px] border border-danger/40 bg-white text-danger cursor-pointer hover:bg-danger/5"
+          >
+            <small>{{ 'users.drawer.deactivate' | translate }}</small>
+          </button>
+        }
+      </div>
+    }
+  </aside>
+</div>

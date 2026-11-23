@@ -1,0 +1,75 @@
+<section
+  aria-labelledby="req-heading"
+  class="bg-white border border-card-border rounded-[14px] p-5 flex flex-col gap-3"
+>
+  <h6 id="req-heading" class="m-0">
+    {{ 'users.requests.heading' | translate }}
+    <span
+      class="inline-flex items-center justify-center min-w-5.5 h-5.5 px-1.5 rounded-full bg-primary text-dark-blue align-middle font-bold"
+    >
+      <small>{{ requests().length }}</small>
+    </span>
+  </h6>
+
+  <!-- Four across on desktop, stepping down with the viewport. -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+    @for (request of requests(); track request.id) {
+      <div class="flex flex-col gap-2.5 p-3 rounded-[10px] border border-card-border">
+        <div>
+          <p class="m-0 font-semibold">
+            {{
+              request.employee
+                ? request.employee.firstName + ' ' + request.employee.lastName
+                : request.username
+            }}
+          </p>
+          <small class="text-muted">
+            {{ request.roles[0] ?? null | roleName }} · {{ request.email }}
+          </small>
+        </div>
+
+        <!-- mt-auto keeps the controls on one line across the row when
+             names and emails wrap to different heights. -->
+        <div class="flex gap-2 flex-wrap mt-auto">
+          <!--
+            [selected] on the option, not [value] on the select: the
+            options arrive asynchronously with /api/roles, and a [value]
+            binding that has not changed since then is never re-applied,
+            so every request would fall back to the first group.
+          -->
+          <select
+            [attr.aria-label]="'users.requests.groupFor' | translate: { username: request.username }"
+            (change)="onRoleChange(request.id, $event)"
+            class="flex-[1_1_140px] h-9.5 px-2 rounded-lg border border-input-border bg-white focus:outline-none focus:border-primary"
+          >
+            @for (role of grantableRoles(); track role.code) {
+              <option [value]="role.code" [selected]="role.code === selectedRoles()[request.id]">
+                {{ role | roleName }}
+              </option>
+            }
+          </select>
+
+          <button
+            type="button"
+            [disabled]="saving()"
+            (click)="approve.emit(request)"
+            class="h-9.5 px-3 rounded-lg bg-dark-blue text-white font-semibold cursor-pointer hover:brightness-110 disabled:opacity-60"
+          >
+            <small>{{ 'users.requests.approve' | translate }}</small>
+          </button>
+
+          <button
+            type="button"
+            [disabled]="saving()"
+            (click)="reject.emit(request)"
+            class="h-9.5 px-3 rounded-lg border border-input-border bg-white cursor-pointer hover:border-danger hover:text-danger disabled:opacity-60"
+          >
+            <small>{{ 'users.requests.reject' | translate }}</small>
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <p class="m-0 text-muted col-span-full">{{ 'users.requests.empty' | translate }}</p>
+    }
+  </div>
+</section>

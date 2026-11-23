@@ -1,0 +1,209 @@
+<section
+  aria-labelledby="add-heading"
+  class="flex-[1_1_340px] min-w-0 bg-white border border-card-border rounded-[14px] p-5 flex flex-col gap-3"
+>
+  <h6 id="add-heading" class="m-0">{{ 'users.add.heading' | translate }}</h6>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="flex flex-col gap-1.5">
+        <label for="fn">{{ 'fields.firstName' | translate }}</label>
+        <input
+          id="fn"
+          formControlName="firstName"
+          [placeholder]="'users.add.firstNamePlaceholder' | translate"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+          <app-error-message [message]="'fields.firstNameRequired' | translate" />
+        }
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="ln">{{ 'fields.lastName' | translate }}</label>
+        <input
+          id="ln"
+          formControlName="lastName"
+          [placeholder]="'users.add.lastNamePlaceholder' | translate"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+          <app-error-message [message]="'fields.lastNameRequired' | translate" />
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="un">{{ 'fields.username' | translate }}</label>
+      <input
+        id="un"
+        formControlName="username"
+        autocomplete="off"
+        [placeholder]="'users.add.usernamePlaceholder' | translate"
+        class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+      />
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <app-error-message [message]="'fields.usernameRequired' | translate" />
+      }
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="em">{{ 'fields.email' | translate }}</label>
+      <input
+        id="em"
+        type="email"
+        formControlName="email"
+        autocomplete="off"
+        [placeholder]="'users.add.emailPlaceholder' | translate"
+        class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+      />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <app-error-message [message]="'fields.emailInvalid' | translate" />
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="flex flex-col gap-1.5">
+        <label for="pos">{{ 'fields.position' | translate }}</label>
+        <select
+          id="pos"
+          formControlName="positionId"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          @for (option of positions(); track option.id) {
+            <option
+              [value]="option.id"
+              [selected]="option.id.toString() === form.controls.positionId.value"
+            >
+              {{ option.name }}
+            </option>
+          } @empty {
+            <option value="">{{ 'fields.loadingPositions' | translate }}</option>
+          }
+        </select>
+        @if (form.controls.positionId.touched && form.controls.positionId.invalid) {
+          <app-error-message [message]="'fields.positionRequired' | translate" />
+        }
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="ph"
+          >{{ 'fields.phone' | translate }}
+          <span class="text-muted">{{ 'common.optional' | translate }}</span></label
+        >
+        <input
+          id="ph"
+          type="tel"
+          formControlName="phone"
+          [placeholder]="'fields.phonePlaceholder' | translate"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="grp">{{ 'fields.group' | translate }}</label>
+      <select
+        id="grp"
+        formControlName="roleCode"
+        class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+      >
+        @for (role of grantableRoles(); track role.code) {
+          <option [value]="role.code" [selected]="role.code === form.controls.roleCode.value">
+            {{ role | roleName }}
+          </option>
+        } @empty {
+          <option value="">{{ 'fields.loadingGroups' | translate }}</option>
+        }
+      </select>
+      @if (form.controls.roleCode.touched && form.controls.roleCode.invalid) {
+        <app-error-message [message]="'fields.groupRequired' | translate" />
+      }
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="pw">{{ 'users.add.password' | translate }}</label>
+      <div class="relative flex">
+        <input
+          id="pw"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          autocomplete="new-password"
+          class="flex-1 h-10.5 pl-3 pr-11 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        />
+        <button
+          type="button"
+          [attr.aria-label]="
+            (showPassword() ? 'common.hidePassword' : 'common.showPassword') | translate
+          "
+          (click)="togglePassword()"
+          class="absolute right-0.75 top-0.75 w-9 h-9 border-0 bg-transparent text-muted flex items-center justify-center cursor-pointer rounded-lg hover:text-dark-blue"
+        >
+          @if (showPassword()) {
+            <svg
+              aria-hidden="true"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+              ></path>
+              <path d="M6.61 6.61A18.5 18.5 0 0 0 2 12s3 8 10 8a9.12 9.12 0 0 0 5.39-1.61"></path>
+              <path d="M2 2l20 20"></path>
+            </svg>
+          } @else {
+            <svg
+              aria-hidden="true"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          }
+        </button>
+      </div>
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <app-error-message [message]="'fields.passwordMin' | translate" />
+      }
+      <small class="text-muted">
+        {{ 'users.add.passwordHint' | translate }}
+      </small>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="flex flex-col gap-1.5">
+        <label for="hc">{{ 'fields.costPerHour' | translate }}</label>
+        <input
+          id="hc"
+          inputmode="decimal"
+          formControlName="hourlyCost"
+          [placeholder]="'users.add.costPlaceholder' | translate"
+          class="h-10.5 px-2.5 rounded-[9px] border border-input-border bg-white text-right numeric placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+      </div>
+      <div class="p-3 rounded-[10px] bg-gray flex flex-col justify-center">
+        <p class="m-0 text-muted"><small>{{ 'users.add.dailyCost' | translate }}</small></p>
+        <p class="mt-1 mb-0 numeric font-semibold">€ {{ dailyPreview() }}</p>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="saving()"
+      class="h-11 rounded-[10px] bg-primary text-dark-blue font-bold cursor-pointer hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {{ (saving() ? 'users.add.submitting' : 'users.add.submit') | translate }}
+    </button>
+  </form>
+</section>

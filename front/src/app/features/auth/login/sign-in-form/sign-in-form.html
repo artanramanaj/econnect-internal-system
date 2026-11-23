@@ -1,0 +1,138 @@
+<section class="flex-[1_1_480px] flex items-center justify-center px-6 py-12">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-full max-w-100 flex flex-col gap-5.5">
+    <div class="flex flex-col gap-2">
+      <h2>{{ 'login.title' | translate }}</h2>
+      <p class="m-0 text-muted">{{ 'login.subtitle' | translate }}</p>
+    </div>
+
+    @if (errorMessage(); as message) {
+      <app-error-message variant="banner" [message]="message" />
+    }
+
+    <!-- Username -->
+    <div class="flex flex-col gap-1.5">
+      <label for="username">{{ 'fields.username' | translate }}</label>
+      <input
+        id="username"
+        type="text"
+        formControlName="username"
+        autocomplete="username"
+        [placeholder]="'login.usernamePlaceholder' | translate"
+        class="h-12 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+      />
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <app-error-message [message]="'login.usernameRequired' | translate" />
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="flex flex-col gap-1.5">
+      <div class="flex justify-between items-baseline">
+        <label for="pw">{{ 'fields.password' | translate }}</label>
+        <a href="#forgot" class="text-link hover:text-dark-blue no-underline"
+          ><small>{{ 'login.forgotPassword' | translate }}</small></a
+        >
+      </div>
+      <div class="relative flex">
+        <input
+          id="pw"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          autocomplete="current-password"
+          [placeholder]="'login.passwordPlaceholder' | translate"
+          class="flex-1 h-12 pl-3.5 pr-13 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        <button
+          type="button"
+          [attr.aria-label]="
+            (showPassword() ? 'common.hidePassword' : 'common.showPassword') | translate
+          "
+          (click)="togglePassword()"
+          class="absolute right-0.5 top-0.5 w-11 h-11 border-0 bg-transparent text-muted flex items-center justify-center cursor-pointer rounded-lg hover:text-dark-blue"
+        >
+          @if (showPassword()) {
+            <svg
+              aria-hidden="true"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+              ></path>
+              <path d="M6.61 6.61A18.5 18.5 0 0 0 2 12s3 8 10 8a9.12 9.12 0 0 0 5.39-1.61"></path>
+              <path d="M2 2l20 20"></path>
+            </svg>
+          } @else {
+            <svg
+              aria-hidden="true"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          }
+        </button>
+      </div>
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        @if (form.controls.password.hasError('required')) {
+          <app-error-message [message]="'fields.passwordRequired' | translate" />
+        } @else {
+          <app-error-message [message]="'fields.passwordMin' | translate" />
+        }
+      }
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="loading()"
+      class="h-12.5 rounded-[10px] bg-primary text-dark-blue flex items-center justify-center hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {{ (loading() ? 'login.submitting' : 'login.submit') | translate }}
+    </button>
+
+    <div class="flex items-center gap-3 text-muted">
+      <div class="flex-1 h-px bg-card-border"></div>
+      <small>{{ 'common.or' | translate }}</small>
+      <div class="flex-1 h-px bg-card-border"></div>
+    </div>
+
+    <p class="m-0 text-center text-muted-strong">
+      {{ 'login.newToTeam' | translate }}
+      <a routerLink="/register" class="text-link hover:text-dark-blue no-underline"
+        >{{ 'login.requestAccount' | translate }}</a
+      >
+    </p>
+
+    <div class="flex gap-3 px-4 py-3.5 rounded-[10px] bg-gray text-muted-strong leading-snug">
+      <svg
+        aria-hidden="true"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#0078a8"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="shrink-0 mt-px"
+      >
+        <path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path>
+        <path d="M12 9v4M12 16h.01"></path>
+      </svg>
+      <small>{{ 'login.activatedByAdmin' | translate }}</small>
+    </div>
+  </form>
+</section>

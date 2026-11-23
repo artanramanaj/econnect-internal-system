@@ -1,0 +1,270 @@
+{
+  "common": {
+    "or": "or",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "close": "Close",
+    "loading": "Loading…",
+    "none": "—",
+    "optional": "(optional)",
+    "yes": "Yes",
+    "no": "No",
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "language": {
+    "label": "Language",
+    "sq": "Shqip",
+    "en": "English"
+  },
+  "nav": {
+    "internalSystem": "Internal System",
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "products": "Products",
+    "teamAllocations": "Team Allocations",
+    "dailyCostEngine": "Daily Cost Engine",
+    "bom": "Bill of Materials (BoM)",
+    "quoteReconciler": "Quote Reconciler",
+    "users": "Users & roles",
+    "settings": "System Settings",
+    "logout": "Logout"
+  },
+  "roles": {
+    "super_admin": "Super admin",
+    "admin": "Admin",
+    "project_manager": "Project manager",
+    "user": "User",
+    "team_leader": "Team leader",
+    "technician": "Technician"
+  },
+  "fields": {
+    "firstName": "First name",
+    "firstNameRequired": "First name is required",
+    "lastName": "Last name",
+    "lastNameRequired": "Last name is required",
+    "username": "Username",
+    "usernameRequired": "Username is required (min 3 characters)",
+    "email": "Work email",
+    "emailInvalid": "Enter a valid email",
+    "phone": "Phone",
+    "phonePlaceholder": "+383 4X XXX XXX",
+    "position": "Position",
+    "positionRequired": "Choose a position",
+    "loadingPositions": "Loading positions…",
+    "group": "User group",
+    "groupRequired": "Choose a user group",
+    "loadingGroups": "Loading groups…",
+    "password": "Password",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters",
+    "status": "Status",
+    "costPerHour": "Cost / hour €"
+  },
+  "brand": {
+    "eyebrow": "Quote & project management",
+    "heading": "From the first quote to the final handover.",
+    "description": "Price security and IT systems with live product data from the sales database, then run each project's team, budget and daily progress in one place.",
+    "chipsLabel": "What we deliver",
+    "footnote": "eConnect · System integrator · Internal system, hosted on-premise",
+    "capabilities": {
+      "cctv": "Video surveillance (CCTV)",
+      "accessControl": "Access control",
+      "fireAlarm": "Fire alarm",
+      "intrusion": "Intrusion detection",
+      "barrier": "Barrier control",
+      "it": "IT & networking",
+      "lowVoltage": "Low voltage & electrical"
+    }
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Use your eConnect work account.",
+    "usernamePlaceholder": "your.username",
+    "usernameRequired": "Username is required",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "newToTeam": "New to the team?",
+    "requestAccount": "Request an account",
+    "activatedByAdmin": "Accounts are activated by an administrator.",
+    "failed": "Sign in failed. Please check your details and try again."
+  },
+  "register": {
+    "brandHeading": "Request access",
+    "brandDescription": "Every account is reviewed. An administrator confirms your role and the user group that decides what you can see.",
+    "steps": {
+      "send": {
+        "title": "Send the request",
+        "detail": "Fill in your details and the access you need."
+      },
+      "review": {
+        "title": "Admin review",
+        "detail": "An admin approves you and assigns a group: User, Project Manager, Team Leader or Technician."
+      },
+      "activation": {
+        "title": "Activation email",
+        "detail": "You'll get a link to sign in. Admin and Super admin rights are granted only by a Super admin."
+      }
+    },
+    "title": "Create your account",
+    "subtitle": "All fields are required unless marked optional.",
+    "firstNamePlaceholder": "e.g. Valon",
+    "lastNamePlaceholder": "e.g. Shala",
+    "usernamePlaceholder": "e.g. valon.shala",
+    "emailPlaceholder": "name@econnect.com",
+    "group": "Requested user group",
+    "passwordPlaceholder": "At least 8 characters",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordPlaceholder": "Repeat password",
+    "rules": {
+      "label": "Password rules",
+      "length": "8+ characters",
+      "match": "Passwords match"
+    },
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "submit": "Send request",
+    "submitting": "Sending request…",
+    "loadGroupsFailed": "Could not load the user groups. Is the server running?",
+    "loadPositionsFailed": "Could not load the positions. Is the server running?",
+    "failed": "Registration failed. Please try again."
+  },
+  "users": {
+    "breadcrumbRoot": "Administration",
+    "breadcrumb": "Users & roles",
+    "title": "Users, staff & permissions",
+    "subtitle": "Everyone who works on projects is listed here — with or without an app login",
+    "table": {
+      "heading": "People",
+      "search": "Search people",
+      "searchPlaceholder": "Search",
+      "filterByGroup": "Filter by group",
+      "allGroups": "All groups",
+      "name": "Name",
+      "group": "Group",
+      "position": "Position",
+      "costPerHour": "Cost / hour",
+      "login": "Login",
+      "actions": "Actions",
+      "noGroup": "No group",
+      "edit": "Edit",
+      "loading": "Loading…",
+      "empty": "Nobody matches that search.",
+      "pagesLabel": "People pages",
+      "costNote": "Hourly cost is shown only to Super admin, Admin and Project managers.",
+      "noLogin": "No login",
+      "awaitingApproval": "Awaiting approval",
+      "deactivated": "Deactivated",
+      "neverSignedIn": "Never signed in",
+      "today": "Today {{time}}",
+      "yesterday": "Yesterday"
+    },
+    "add": {
+      "heading": "Add employee",
+      "firstNamePlaceholder": "e.g. Mentor",
+      "lastNamePlaceholder": "e.g. Rama",
+      "usernamePlaceholder": "e.g. mentor.rama",
+      "emailPlaceholder": "name@econnect-ks.com",
+      "password": "Initial password",
+      "passwordHint": "Give it to them in person — there is no invite email yet.",
+      "costPlaceholder": "0.00",
+      "dailyCost": "Cost per 8 h day",
+      "submit": "Save employee",
+      "submitting": "Saving…"
+    },
+    "requests": {
+      "heading": "Access requests",
+      "groupFor": "Group for {{username}}",
+      "approve": "Approve",
+      "reject": "Reject",
+      "empty": "No open requests."
+    },
+    "positions": {
+      "heading": "Positions",
+      "summary": "Job titles, separate from user groups. {{active}} of {{total}} in use.",
+      "new": "New position",
+      "newPlaceholder": "e.g. Warehouse keeper",
+      "nameInvalid": "Enter a name of at least 2 characters",
+      "add": "Add position",
+      "position": "Position",
+      "people": "People",
+      "status": "Status",
+      "actions": "Actions",
+      "renameLabel": "Rename {{name}}",
+      "inUse": "In use",
+      "retired": "Retired",
+      "rename": "Rename",
+      "retire": "Retire",
+      "restore": "Restore",
+      "stillHeld": "{{count}} people still hold this position — retire it instead, or move them first",
+      "empty": "No positions yet.",
+      "pagesLabel": "Position pages",
+      "confirmDelete": "Delete the position \"{{name}}\"? This cannot be undone."
+    },
+    "matrix": {
+      "heading": "Groups & permissions",
+      "note": "Only a Super admin can change this matrix",
+      "permission": "Permission",
+      "loading": "Loading permissions…"
+    },
+    "drawer": {
+      "noLogin": "No login",
+      "retired": "(retired)",
+      "fieldStaff": "Works on site (field staff)",
+      "costNote": "Saving a new figure keeps the old one on record, so past costings are unchanged.",
+      "submit": "Save details",
+      "account": "Account",
+      "ownAccount": "This is your own account. Group and status can only be changed by someone else.",
+      "statusPending": "Awaiting approval",
+      "statusActive": "Active",
+      "statusSuspended": "Deactivated",
+      "deactivateConfirm": "Deactivate {{name}}? They are signed out immediately and cannot sign back in. The record stays, so past work still attributes to them.",
+      "deactivateYes": "Yes, deactivate",
+      "deactivate": "Deactivate this person",
+      "positionFallback": "Position #{{id}}"
+    }
+  },
+  "matrix": {
+    "areas": {
+      "quotes": "Quotes",
+      "catalog": "Catalog",
+      "reports": "Reports",
+      "quotesToProjects": "Quotes → projects",
+      "projects": "Projects",
+      "field": "Field",
+      "administration": "Administration"
+    },
+    "rows": {
+      "quoteManage": "Create, edit & copy quotes",
+      "quoteViewCost": "See cost price & margin",
+      "catalogManage": "Products, services & clients",
+      "reportSales": "Sales reports & statistics",
+      "quoteAccept": "Accept quote & assign PM",
+      "projectManage": "Project dashboard, team & planning",
+      "projectViewCost": "See salaries & daily costs",
+      "fieldBom": "Quote as bill of materials (no prices)",
+      "fieldDailyReport": "Write daily reports",
+      "fieldAssignment": "View own assignments",
+      "reportProject": "Project reports",
+      "adminUsers": "Manage users & groups",
+      "adminSettings": "Settings & Sales DB sync"
+    },
+    "cells": {
+      "own": "Own",
+      "view": "View",
+      "noAdmins": "No admins"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "previousPage": "Previous page",
+    "next": "Next",
+    "nextPage": "Next page",
+    "page": "Page {{n}}"
+  }
+}

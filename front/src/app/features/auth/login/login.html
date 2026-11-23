@@ -1,0 +1,22 @@
+<div class="relative min-h-screen flex flex-wrap font-montserrat text-light-black bg-white">
+  <div class="absolute top-4 right-4 z-10">
+    <app-language-switcher />
+  </div>
+
+  <app-brand-panel
+    extraClasses="flex-[1_1_520px] px-14 py-12 justify-between gap-14"
+    [eyebrow]="'brand.eyebrow' | translate"
+    [heading]="'brand.heading' | translate"
+    [description]="'brand.description' | translate"
+    [chipsLabel]="'brand.chipsLabel' | translate"
+    [chips]="capabilities()"
+    [footnote]="'brand.footnote' | translate"
+    [showGraphic]="true"
+  />
+
+  <app-sign-in-form
+    [loading]="loading()"
+    [errorMessage]="errorMessage()"
+    (submitted)="onSubmit($event)"
+  />
+</div>

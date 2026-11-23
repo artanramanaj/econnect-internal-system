@@ -1,0 +1,44 @@
+<!--
+  Text size is set here: the admin screens scope their type scale per
+  component, so nothing from the caller reaches this template.
+-->
+@if (totalPages() > 1) {
+  <nav [attr.aria-label]="label()" class="flex flex-wrap items-center gap-1.5 text-sm">
+    <button
+      type="button"
+      [attr.aria-label]="'pagination.previousPage' | translate"
+      [disabled]="!hasPrevious()"
+      (click)="go(page() - 1)"
+      class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {{ 'pagination.previous' | translate }}
+    </button>
+
+    @for (n of pages(); track n) {
+      <button
+        type="button"
+        [attr.aria-label]="'pagination.page' | translate: { n }"
+        [attr.aria-current]="n === page() ? 'page' : null"
+        (click)="go(n)"
+        class="h-9 min-w-9 px-2 rounded-[8px] border cursor-pointer"
+        [class]="
+          n === page()
+            ? 'border-primary bg-primary text-dark-blue font-semibold'
+            : 'border-card-border bg-white hover:bg-gray'
+        "
+      >
+        {{ n }}
+      </button>
+    }
+
+    <button
+      type="button"
+      [attr.aria-label]="'pagination.nextPage' | translate"
+      [disabled]="!hasNext()"
+      (click)="go(page() + 1)"
+      class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {{ 'pagination.next' | translate }}
+    </button>
+  </nav>
+}

@@ -1,0 +1,76 @@
+<section [class]="classes()">
+  @if (logoLink(); as link) {
+    <a [routerLink]="link" class="relative flex items-center gap-3 no-underline">
+      <img src="/images/eConnect.webp" alt="eConnect" class="h-11 w-auto block" />
+    </a>
+  } @else {
+    <div class="relative flex items-center gap-3">
+      <img src="/images/eConnect.webp" alt="eConnect" class="h-11 w-auto block" />
+    </div>
+  }
+
+  @if (showGraphic()) {
+    <!-- Decorative network graphic -->
+    <svg
+      aria-hidden="true"
+      width="360"
+      height="300"
+      viewBox="0 0 360 300"
+      fill="none"
+      class="absolute -right-10 top-24 opacity-50"
+    >
+      <path
+        d="M40 60 L160 40 L300 90 L250 210 L120 240 L60 160 Z M160 40 L170 140 L250 210 M60 160 L170 140 L300 90 M120 240 L170 140"
+        stroke="#32a6bd"
+        stroke-width="1.25"
+      ></path>
+      <circle cx="40" cy="60" r="5" fill="#00afef"></circle>
+      <circle cx="160" cy="40" r="5" fill="#32a6bd"></circle>
+      <circle cx="300" cy="90" r="5" fill="#00afef"></circle>
+      <circle cx="250" cy="210" r="5" fill="#32a6bd"></circle>
+      <circle cx="120" cy="240" r="5" fill="#00afef"></circle>
+      <circle cx="60" cy="160" r="5" fill="#32a6bd"></circle>
+      <circle cx="170" cy="140" r="9" fill="#152642" stroke="#00afef" stroke-width="2"></circle>
+    </svg>
+  }
+
+  <div class="relative flex flex-col gap-5 max-w-130">
+    @if (eyebrow()) {
+      <p class="m-0 uppercase tracking-[0.08em] text-primary">{{ eyebrow() }}</p>
+    }
+
+    <h1 class="text-white">{{ heading() }}</h1>
+
+    @if (description()) {
+      <p class="m-0 text-sidebar-text leading-relaxed">{{ description() }}</p>
+    }
+  </div>
+
+  @if (chips().length || footnote()) {
+    <div class="relative flex flex-col gap-3.5">
+      @if (chipsLabel()) {
+        <p class="m-0 uppercase tracking-[0.08em] text-sidebar-muted">
+          <small>{{ chipsLabel() }}</small>
+        </p>
+      }
+
+      @if (chips().length) {
+        <ul class="list-none m-0 p-0 flex flex-wrap gap-2">
+          @for (chip of chips(); track chip) {
+            <li class="px-3.5 py-2 rounded-full border border-chip-border text-chip-text">
+              {{ chip }}
+            </li>
+          }
+        </ul>
+      }
+
+      @if (footnote()) {
+        <p class="mt-2 mb-0 text-sidebar-muted">
+          <small>{{ footnote() }}</small>
+        </p>
+      }
+    </div>
+  }
+
+  <ng-content />
+</section>

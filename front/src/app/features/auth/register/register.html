@@ -1,0 +1,40 @@
+<div class="relative min-h-screen flex flex-wrap font-montserrat text-light-black bg-gray">
+  <div class="absolute top-4 right-4 z-10">
+    <app-language-switcher />
+  </div>
+
+  <app-brand-panel
+    extraClasses="flex-[1_1_400px] p-12 gap-12"
+    logoLink="/login"
+    [heading]="'register.brandHeading' | translate"
+    [description]="'register.brandDescription' | translate"
+  >
+    <ol class="list-none m-0 p-0 flex flex-col gap-5.5">
+      @for (step of steps; track step.title; let first = $first) {
+        <li class="flex gap-4">
+          <span
+            class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+            [class]="
+              first ? 'bg-primary text-dark-blue' : 'border-[1.5px] border-primary text-primary'
+            "
+          >
+            <strong>{{ $index + 1 }}</strong>
+          </span>
+          <div>
+            <p class="text-white">{{ step.title | translate }}</p>
+            <small class="text-sidebar-muted leading-snug">{{ step.detail | translate }}</small>
+          </div>
+        </li>
+      }
+    </ol>
+  </app-brand-panel>
+
+  <app-register-form
+    [loading]="loading()"
+    [errorMessage]="errorMessage()"
+    [fieldIssues]="fieldIssues()"
+    [roles]="roles()"
+    [positions]="positions()"
+    (submitted)="onSubmit($event)"
+  />
+</div>

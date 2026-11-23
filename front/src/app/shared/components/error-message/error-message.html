@@ -1,0 +1,17 @@
+@if (variant() === 'banner') {
+  <div class="rounded-[10px] border border-danger/30 bg-danger/10 text-danger px-4 py-3">
+    <p class="m-0">{{ message() }}</p>
+    @if (details().length) {
+      <ul class="mt-2 mb-0 pl-5">
+        <!-- $index, not the text: two fields can fail with the same message. -->
+        @for (detail of details(); track $index) {
+          <li>
+            <small>{{ detail }}</small>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+} @else {
+  <small class="text-danger">{{ message() }}</small>
+}

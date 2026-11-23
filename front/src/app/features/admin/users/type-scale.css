@@ -1,0 +1,51 @@
+/*
+ * Component-local type scale, shared across the Users screen family.
+ *
+ * The global scale in styles.css is tuned for the marketing-weight auth
+ * screens (h1 is 44px). This screen is a dense admin table where the design
+ * calls for 28px / 17px / 14px.
+ *
+ * These are element selectors, and Angular scopes them to one component's
+ * template. Every component that renders part of this screen must therefore
+ * pull this file in through styleUrls, or its markup silently falls back to
+ * the global scale.
+ *
+ * No :host rule belongs here — the children set `host: { class: 'contents' }`
+ * so their <section> stays a direct flex child of the page layout.
+ */
+
+h1 {
+  font-size: 28px;
+  line-height: 1.25;
+}
+
+h6 {
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+p,
+label,
+input,
+select,
+button,
+td,
+th {
+  font-size: 14px;
+}
+
+small {
+  font-size: 12px;
+}
+
+/* Column headers and the "cost per day" caption sit a step below the body. */
+thead th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabular figures so the cost column lines up on the decimal. */
+.numeric {
+  font-variant-numeric: tabular-nums;
+}

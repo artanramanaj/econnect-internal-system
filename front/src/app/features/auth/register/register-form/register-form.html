@@ -1,0 +1,194 @@
+<section class="flex-[999_1_560px] min-w-0 flex justify-center py-12 px-6">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="w-full max-w-160 bg-white rounded-2xl border border-card-border p-9 flex flex-col gap-6"
+  >
+    <div class="flex flex-col gap-1.5">
+      <h2>{{ 'register.title' | translate }}</h2>
+      <p class="text-muted">{{ 'register.subtitle' | translate }}</p>
+    </div>
+
+    @if (errorMessage(); as message) {
+      <app-error-message variant="banner" [message]="message" [details]="issueMessages()" />
+    }
+
+    <!-- Primary details -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4.5">
+      <div class="flex flex-col gap-1.5">
+        <label for="fn">{{ 'fields.firstName' | translate }}</label>
+        <input
+          id="fn"
+          formControlName="firstName"
+          [placeholder]="'register.firstNamePlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+          <app-error-message [message]="'fields.firstNameRequired' | translate" />
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="ln">{{ 'fields.lastName' | translate }}</label>
+        <input
+          id="ln"
+          formControlName="lastName"
+          [placeholder]="'register.lastNamePlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+          <app-error-message [message]="'fields.lastNameRequired' | translate" />
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="un">{{ 'fields.username' | translate }}</label>
+        <input
+          id="un"
+          formControlName="username"
+          [placeholder]="'register.usernamePlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (form.controls.username.touched && form.controls.username.invalid) {
+          <app-error-message [message]="'fields.usernameRequired' | translate" />
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="em">{{ 'fields.email' | translate }}</label>
+        <input
+          id="em"
+          type="email"
+          formControlName="email"
+          [placeholder]="'register.emailPlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <app-error-message [message]="'fields.emailInvalid' | translate" />
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="ph"
+          >{{ 'fields.phone' | translate }}
+          <span class="text-muted">{{ 'common.optional' | translate }}</span></label
+        >
+        <input
+          id="ph"
+          type="tel"
+          formControlName="phone"
+          [placeholder]="'fields.phonePlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="pos">{{ 'fields.position' | translate }}</label>
+        <select
+          id="pos"
+          formControlName="positionId"
+          class="h-11.5 w-full px-3 rounded-[10px] border border-input-border bg-white text-light-black focus:outline-none focus:border-primary"
+        >
+          @for (option of positions(); track option.id) {
+            <option
+              [value]="option.id"
+              [selected]="option.id.toString() === form.controls.positionId.value"
+            >
+              {{ option.name }}
+            </option>
+          } @empty {
+            <option value="">{{ 'fields.loadingPositions' | translate }}</option>
+          }
+        </select>
+        @if (form.controls.positionId.touched && form.controls.positionId.invalid) {
+          <app-error-message [message]="'fields.positionRequired' | translate" />
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="grp">{{ 'register.group' | translate }}</label>
+        <select
+          id="grp"
+          formControlName="requestedRoleCode"
+          class="h-11.5 w-full px-3 rounded-[10px] border border-input-border bg-white text-light-black focus:outline-none focus:border-primary"
+        >
+          @for (role of roles(); track role.code) {
+            <option [value]="role.code">{{ role | roleName }}</option>
+          } @empty {
+            <option value="">{{ 'fields.loadingGroups' | translate }}</option>
+          }
+        </select>
+        @if (form.controls.requestedRoleCode.touched && form.controls.requestedRoleCode.invalid) {
+          <app-error-message [message]="'fields.groupRequired' | translate" />
+        }
+      </div>
+    </div>
+
+    <!-- Passwords -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4.5">
+      <div class="flex flex-col gap-1.5">
+        <label for="p1">{{ 'fields.password' | translate }}</label>
+        <input
+          id="p1"
+          type="password"
+          formControlName="password"
+          [placeholder]="'register.passwordPlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="p2">{{ 'register.confirmPassword' | translate }}</label>
+        <input
+          id="p2"
+          type="password"
+          formControlName="confirmPassword"
+          [placeholder]="'register.confirmPasswordPlaceholder' | translate"
+          class="h-11.5 w-full px-3.5 rounded-[10px] border border-input-border bg-white text-light-black placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+      </div>
+    </div>
+
+    <!-- Live password rules -->
+    <ul
+      [attr.aria-label]="'register.rules.label' | translate"
+      class="list-none m-0 -mt-1.5 p-0 flex flex-wrap gap-y-2 gap-x-5"
+    >
+      @for (rule of passwordRules; track rule.label) {
+        <li class="flex items-center gap-1.5" [class]="rule.ok ? 'text-success' : 'text-muted'">
+          <svg
+            aria-hidden="true"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path [attr.d]="rule.ok ? ruleOkIcon : ruleTodoIcon"></path>
+          </svg>
+          <small>{{ rule.label | translate }}</small>
+        </li>
+      }
+    </ul>
+
+    <!-- Actions -->
+    <div class="flex flex-wrap items-center justify-between gap-4 pt-1">
+      <p class="m-0 text-muted-strong">
+        {{ 'register.haveAccount' | translate }}
+        <a routerLink="/login" class="text-link hover:text-dark-blue no-underline">{{
+          'register.signIn' | translate
+        }}</a>
+      </p>
+      <button
+        type="submit"
+        [disabled]="loading()"
+        class="h-12 px-7 rounded-[10px] bg-primary text-dark-blue no-underline flex items-center justify-center hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {{ (loading() ? 'register.submitting' : 'register.submit') | translate }}
+      </button>
+    </div>
+  </form>
+</section>

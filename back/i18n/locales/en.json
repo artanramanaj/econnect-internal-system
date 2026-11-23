@@ -1,0 +1,91 @@
+{
+  "common": {
+    "routeNotFound": "Route not found",
+    "somethingWentWrong": "Something went wrong",
+    "notSignedIn": "You are not signed in.",
+    "noPermission": "You do not have permission to do that."
+  },
+  "auth": {
+    "accountCreated": "Account created for \"{{username}}\". An administrator must activate it before you can sign in.",
+    "welcomeBack": "Welcome back, {{name}}.",
+    "sessionExpired": "Session expired. Please sign in again.",
+    "sessionInvalid": "Session expired or invalid. Please sign in again.",
+    "sessionRefreshed": "Session refreshed",
+    "signedOut": "Signed out successfully",
+    "accountGone": "Account no longer exists.",
+    "invalidCredentials": "Invalid username or password.",
+    "pendingActivation": "Your account is waiting for an administrator to activate it.",
+    "suspended": "This account has been suspended. Please contact an administrator.",
+    "noLongerActive": "This account is no longer active.",
+    "groupNotSeeded": "That user group does not exist. Has the database been seeded?",
+    "usernameTaken": "That username is already taken.",
+    "emailTaken": "That email is already registered.",
+    "localeUpdated": "Language updated."
+  },
+  "people": {
+    "invalidId": "Invalid employee id.",
+    "invalidFilters": "Invalid search filters or page.",
+    "accountCreated": "Account created for {{firstName}} {{lastName}} ({{username}}).",
+    "added": "{{firstName}} {{lastName}} added.",
+    "notFound": "Person not found.",
+    "updated": "{{firstName}} {{lastName}} updated.",
+    "deactivated": "{{firstName}} {{lastName}} deactivated.",
+    "cannotManage": "You do not have permission to manage people.",
+    "onlySuperAdminManages": "Only a super admin can manage administrator accounts.",
+    "onlySuperAdminGrants": "Only a super admin can grant administrator groups.",
+    "lastSuperAdmin": "This is the last active super admin. Promote someone else first.",
+    "cannotDeactivateSelf": "You cannot deactivate your own account."
+  },
+  "users": {
+    "invalidId": "Invalid user id.",
+    "notFound": "User not found.",
+    "groupNotFound": "That user group does not exist.",
+    "cannotChangeOwnStatus": "You cannot change the status of your own account.",
+    "cannotChangeOwnGroup": "You cannot change the group of your own account.",
+    "status": {
+      "ACTIVE": "{{username}} activated.",
+      "SUSPENDED": "{{username}} suspended.",
+      "PENDING": "{{username}} set to pending."
+    },
+    "movedToGroup": "{{username}} moved to {{role}}."
+  },
+  "positions": {
+    "unknown": "Unknown position.",
+    "nameTaken": "\"{{name}}\" already exists.",
+    "invalidPage": "Invalid page.",
+    "added": "\"{{name}}\" added.",
+    "updated": "\"{{name}}\" updated.",
+    "deleted": "\"{{name}}\" deleted.",
+    "stillHeld_one": "{{count}} person still holds \"{{name}}\". Retire it instead, or move them first.",
+    "stillHeld_other": "{{count}} people still hold \"{{name}}\". Retire it instead, or move them first."
+  },
+  "validation": {
+    "correctFields": "Please correct the highlighted fields.",
+    "required": "This field is required",
+    "invalid": "Invalid value",
+    "tooShort": "Must be at least {{min}} characters",
+    "tooLong": "Must be at most {{max}} characters",
+    "tooSmall": "Must be at least {{min}}",
+    "tooBig": "Must be at most {{max}}",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordMax": "Password is too long",
+    "usernameMin": "Username must be at least 3 characters",
+    "usernameChars": "Use only letters, numbers, dots, dashes or underscores",
+    "emailInvalid": "Enter a valid email address",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "positionRequired": "Choose a position",
+    "roleInvalid": "Choose a valid user group",
+    "passwordsMismatch": "Passwords do not match",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "currentPasswordRequired": "Current password is required",
+    "hourlyCostInvalid": "Enter a valid hourly cost",
+    "hourlyCostNegative": "Hourly cost cannot be negative",
+    "hourlyCostTooLarge": "Hourly cost is too large",
+    "nothingToUpdate": "Nothing to update",
+    "positionNameMin": "Position name must be at least 2 characters",
+    "positionNameMax": "Position name is too long",
+    "localeInvalid": "Choose a supported language"
+  }
+}
