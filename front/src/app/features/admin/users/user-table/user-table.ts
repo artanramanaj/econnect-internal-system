@@ -21,7 +21,7 @@ const CHIP_CLASSES: Record<string, string> = {
   selector: 'app-user-table',
   imports: [Pagination, TranslatePipe, RoleNamePipe],
   templateUrl: './user-table.html',
-  styleUrls: ['../type-scale.css'],
+  styleUrls: ['../../../../shared/styles/type-scale.css'],
   // `contents` keeps the host out of the layout box model, so the inner
   // <section> stays a direct flex child of the page's row.
   host: { class: 'contents' },

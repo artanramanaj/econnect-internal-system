@@ -16,7 +16,9 @@
     <nav class="flex flex-col gap-1">
       <app-nav-link link="/dashboard">{{ 'nav.dashboard' | translate }}</app-nav-link>
       <app-nav-link link="/projects">{{ 'nav.projects' | translate }}</app-nav-link>
-      <app-nav-link link="/products">{{ 'nav.products' | translate }}</app-nav-link>
+      @if (canViewCatalog()) {
+        <app-nav-link link="/products">{{ 'nav.products' | translate }}</app-nav-link>
+      }
       <app-nav-link link="/team-allocations">{{ 'nav.teamAllocations' | translate }}</app-nav-link>
       <app-nav-link link="/daily-cost-engine">{{ 'nav.dailyCostEngine' | translate }}</app-nav-link>
       <app-nav-link link="/bom">{{ 'nav.bom' | translate }}</app-nav-link>

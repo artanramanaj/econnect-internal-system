@@ -1,0 +1,19 @@
+// ---------- core (shared) ----------
+
+/// VAT rates by validity period. A rate change is a new row with a new
+/// validFrom, so a document can still show the rate that applied on its date.
+/// Items store the `code`, not a row id, which is why nothing has a foreign
+/// key into this table.
+model VatRate {
+  id        Int       @id @default(autoincrement())
+  code      String    @db.VarChar(20) // STANDARD, REDUCED, ZERO
+  name      String    @db.VarChar(60)
+  rate      Decimal   @db.Decimal(5, 2) // 18.00
+  validFrom DateTime  @map("valid_from") @db.Date
+  validTo   DateTime? @map("valid_to") @db.Date
+
+  // This constraint's index also serves lookups by code; a separate
+  // @@index([code, validFrom]) would be an exact duplicate of it.
+  @@unique([code, validFrom])
+  @@map("vat_rates")
+}

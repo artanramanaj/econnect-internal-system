@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { vi } from 'vitest';
 import { provideTranslateTesting } from '../../../core/i18n/translate.testing';
 import { Person } from '../../../core/models/people.model';
 import { ToastService } from '../../../core/services/toast.service';
@@ -294,8 +293,16 @@ describe('Users', () => {
       .expectOne((r) => r.url === '/api/positions')
       .flush({ ...positionsPage(2, 11), positions: [POSITIONS[1]] });
 
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     component.removePosition(POSITIONS[1]);
+    await fixture.whenStable();
+    httpMock.expectNone('/api/positions/12');
+
+    const modal = (fixture.nativeElement as HTMLElement).querySelector('app-delete-modal')!;
+    expect(modal.textContent).toContain('Delete position?');
+    expect(modal.textContent).toContain('The position "Installer" will be deleted permanently.');
+    Array.from(modal.querySelectorAll('button'))
+      .find((b) => b.textContent?.trim() === 'Delete')!
+      .click();
 
     httpMock.expectOne('/api/positions/12').flush({ message: '"Installer" deleted.', id: 12 });
     await fixture.whenStable();

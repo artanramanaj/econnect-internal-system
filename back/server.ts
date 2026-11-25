@@ -5,6 +5,9 @@ import routes from './routes/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { i18nMiddleware, t } from './i18n/index.js';
 import { ACCESS_TOKEN_TTL_MS, REFRESH_TOKEN_TTL_MS } from './utils/tokenUtils.js';
+// Side effect: creates the brochure upload directory, so an unwritable disk
+// fails here at boot instead of at the first upload.
+import './utils/brochureStorage.js';
 
 // Fail fast rather than at the first request that needs to sign a token.
 for (const key of ['DATABASE_URL', 'JWT_SECRET']) {

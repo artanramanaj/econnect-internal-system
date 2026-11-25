@@ -1,0 +1,261 @@
+<!-- 999 vs the add card's 1: the table takes all spare width; on narrow
+     screens the card wraps below. -->
+<section
+  aria-labelledby="items-heading"
+  class="flex-[999_1_640px] min-w-0 bg-white border border-card-border rounded-[14px]"
+>
+  <div
+    class="flex flex-wrap justify-between items-center gap-2.5 px-5 py-4 border-b border-card-border"
+  >
+    <h6 id="items-heading" class="m-0">
+      {{ 'items.table.heading' | translate }} <span class="text-muted">· {{ meta().total }}</span>
+    </h6>
+  </div>
+
+  <div class="flex flex-wrap gap-2 px-5 py-3 border-b border-card-border">
+    <input
+      type="search"
+      [attr.aria-label]="'items.table.search' | translate"
+      [placeholder]="'items.table.searchPlaceholder' | translate"
+      (input)="onSearch($event)"
+      class="h-10 w-64 max-w-full px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+    />
+
+    <select
+      [attr.aria-label]="'items.table.filterByType' | translate"
+      (change)="onFilter('type', $event)"
+      class="h-10 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      <option value="">{{ 'items.table.allTypes' | translate }}</option>
+      @for (type of types; track type) {
+        <option [value]="type">{{ ('items.types.' + type) | translate }}</option>
+      }
+    </select>
+
+    <select
+      [attr.aria-label]="'items.table.filterByCategory' | translate"
+      (change)="onFilter('categoryId', $event)"
+      class="h-10 max-w-56 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      <option value="">{{ 'items.table.allCategories' | translate }}</option>
+      @for (category of options().categories; track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+
+    <select
+      [attr.aria-label]="'items.table.filterByBrand' | translate"
+      (change)="onFilter('brandId', $event)"
+      class="h-10 max-w-56 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      <option value="">{{ 'items.table.allBrands' | translate }}</option>
+      @for (brand of options().brands; track brand.id) {
+        <option [value]="brand.id">{{ brand.name }}</option>
+      }
+    </select>
+
+    <select
+      [attr.aria-label]="'items.table.filterBySource' | translate"
+      (change)="onFilter('source', $event)"
+      class="h-10 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      <option value="">{{ 'items.table.allSources' | translate }}</option>
+      @for (source of sources; track source) {
+        <option [value]="source">{{ ('items.sources.' + source) | translate }}</option>
+      }
+    </select>
+
+    <select
+      [attr.aria-label]="'items.table.filterByStatus' | translate"
+      (change)="onFilter('status', $event)"
+      class="h-10 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      @for (status of statuses; track status) {
+        <option [value]="status">{{ ('items.status.' + status) | translate }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-225 border-collapse">
+      <thead>
+        <tr class="text-left text-muted">
+          <th class="py-2.5 pl-5 pr-2 border-b border-card-border">
+            {{ 'items.table.sku' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'items.table.description' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'items.table.type' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'items.table.category' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'items.table.unit' | translate }}
+          </th>
+          @if (canViewCost()) {
+            <th class="py-2.5 px-2 border-b border-card-border text-right">
+              {{ 'items.table.cost' | translate }}
+            </th>
+          }
+          <th class="py-2.5 px-2 border-b border-card-border text-right">
+            {{ 'items.table.vat' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'items.table.datasheet' | translate }}
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border">
+            {{ 'items.table.source' | translate }}
+          </th>
+          <th class="py-2.5 pr-5 pl-2 border-b border-card-border text-right">
+            <span class="sr-only">{{ 'items.table.actions' | translate }}</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr [class.opacity-55]="item.isArchived">
+            <td class="py-2.5 pl-5 pr-2 border-b border-row-border font-semibold whitespace-nowrap">
+              {{ item.sku }}
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border">
+              <span class="flex flex-col">
+                <span>{{ item.description }}</span>
+                @if (maker(item); as byline) {
+                  <small class="text-muted">{{ byline }}</small>
+                }
+              </span>
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border whitespace-nowrap">
+              {{ ('items.types.' + item.type) | translate }}
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border text-muted-strong">
+              {{ item.category?.name ?? '—' }}
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border whitespace-nowrap">
+              {{ item.baseUnitCode | codeLabel: 'units' }}
+            </td>
+
+            @if (canViewCost()) {
+              <td
+                class="py-2.5 px-2 border-b border-row-border text-right numeric font-semibold whitespace-nowrap"
+              >
+                {{ item.costPrice | money }}
+              </td>
+            }
+
+            <td class="py-2.5 px-2 border-b border-row-border text-right numeric">
+              {{ vatLabel(item.vatCode) }}
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border whitespace-nowrap">
+              @if (item.brochure; as pdf) {
+                <button
+                  type="button"
+                  (click)="openPdf.emit(item)"
+                  [attr.title]="pdf.name"
+                  class="inline-flex items-center gap-1 h-8 px-2 rounded-lg border-0 bg-transparent text-pill-fg font-semibold cursor-pointer hover:underline"
+                >
+                  <svg
+                    aria-hidden="true"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8zM14 3v5h5"></path>
+                  </svg>
+                  <small>{{ 'items.table.pdf' | translate }}</small>
+                </button>
+              } @else if (canManage()) {
+                <!-- Opens the drawer, whose Documents section does the upload. -->
+                <button
+                  type="button"
+                  (click)="open.emit(item)"
+                  class="h-8 px-2.5 rounded-lg border border-dashed border-input-border bg-transparent text-muted-strong cursor-pointer hover:border-primary hover:text-dark-blue"
+                >
+                  <small>{{ 'items.table.upload' | translate }}</small>
+                </button>
+              } @else {
+                <span class="text-muted">—</span>
+              }
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border whitespace-nowrap">
+              <span
+                class="inline-flex items-center h-6 px-2.5 rounded-full font-semibold"
+                [class]="item.source === 'PRODATA' ? 'bg-pill-bg text-pill-fg' : 'bg-gray text-muted-strong'"
+              >
+                <small>{{ ('items.sources.' + item.source) | translate }}</small>
+              </span>
+              @if (item.isArchived) {
+                <small class="ml-1.5 text-muted">{{ 'items.table.archived' | translate }}</small>
+              }
+            </td>
+
+            <td class="py-2.5 pr-5 pl-2 border-b border-row-border text-right">
+              <button
+                type="button"
+                (click)="open.emit(item)"
+                class="h-8 px-3 rounded-lg border border-input-border bg-white text-muted-strong cursor-pointer hover:border-primary hover:text-dark-blue"
+              >
+                <small>{{ (canManage() ? 'items.table.edit' : 'items.table.view') | translate }}</small>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="canViewCost() ? 10 : 9" class="px-5 py-8 text-center text-muted">
+              {{ (loading() ? 'items.table.loading' : 'items.table.empty') | translate }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- The wrapper carries the border and padding, so it must go too when
+       there is only one page; the pager hides itself as well. -->
+  @if (meta().totalPages > 1) {
+    <div class="flex justify-end px-5 py-3 border-t border-card-border">
+      <app-pagination
+        [label]="'items.table.pagesLabel' | translate"
+        [page]="meta().page"
+        [pageSize]="meta().pageSize"
+        [total]="meta().total"
+        (pageChange)="pageChange.emit($event)"
+      />
+    </div>
+  }
+
+  @if (canViewCost()) {
+    <p class="m-0 px-5 py-3.5 text-muted flex items-center gap-1.5">
+      <svg
+        aria-hidden="true"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        class="shrink-0"
+      >
+        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+      </svg>
+      <small>{{ 'items.table.costNote' | translate }}</small>
+    </p>
+  }
+</section>

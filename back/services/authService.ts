@@ -9,6 +9,7 @@ import {
   refreshTokenExpiry,
   type TokenPayload,
 } from "../utils/tokenUtils.js";
+import { isUniqueViolation } from "../utils/prismaErrors.js";
 import type { RegisterInput } from "../validators/auth.schema.js";
 import type { Language } from "../i18n/languages.js";
 
@@ -132,42 +133,6 @@ export async function registerUser(input: RegisterInput): Promise<PublicUser> {
     }
     throw err;
   }
-}
-
-/**
- * Detect which column a P2002 unique violation hit.
- *
- * Prisma 7 with a driver adapter does NOT populate `meta.target`; it reports the
- * constraint under `meta.driverAdapterError.cause`. Both shapes are checked so
- * this keeps working if the adapter is swapped out.
- */
-function isUniqueViolation(err: unknown, field: string): boolean {
-  if (typeof err !== "object" || err === null) return false;
-
-  const e = err as {
-    code?: string;
-    meta?: {
-      target?: unknown;
-      driverAdapterError?: {
-        cause?: {
-          constraint?: { index?: string; fields?: string[] };
-          originalMessage?: string;
-        };
-      };
-    };
-  };
-
-  if (e.code !== "P2002") return false;
-
-  const cause = e.meta?.driverAdapterError?.cause;
-  const candidates: string[] = [
-    ...(Array.isArray(e.meta?.target) ? e.meta.target.map(String) : [String(e.meta?.target ?? "")]),
-    cause?.constraint?.index ?? "",
-    ...(cause?.constraint?.fields ?? []),
-    cause?.originalMessage ?? "",
-  ];
-
-  return candidates.some((c) => c.includes(field));
 }
 
 export interface LoginResult {

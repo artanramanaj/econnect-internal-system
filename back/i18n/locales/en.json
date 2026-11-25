@@ -59,6 +59,51 @@
     "stillHeld_one": "{{count}} person still holds \"{{name}}\". Retire it instead, or move them first.",
     "stillHeld_other": "{{count}} people still hold \"{{name}}\". Retire it instead, or move them first."
   },
+  "items": {
+    "invalidId": "Invalid item id.",
+    "invalidFilters": "Invalid search filters or page.",
+    "notFound": "Item not found.",
+    "skuTaken": "The code \"{{sku}}\" is already used by another item.",
+    "unknownUnit": "Unknown unit \"{{code}}\".",
+    "unknownVatCode": "The VAT rate \"{{code}}\" does not exist or is no longer in force.",
+    "baseUnitRepeated": "The base unit cannot also be an alternative unit.",
+    "syncManaged": "This item comes from ProData, so its code, description, base unit, VAT, cost, category, brand, manufacturer and barcode can only be changed there.",
+    "syncManagedDelete": "Items from ProData cannot be deleted. Archive it instead.",
+    "costHidden": "You do not have permission to set the cost price.",
+    "added": "\"{{sku}}\" added.",
+    "updated": "\"{{sku}}\" updated.",
+    "archived": "\"{{sku}}\" archived.",
+    "restored": "\"{{sku}}\" restored.",
+    "deleted": "\"{{sku}}\" deleted.",
+    "unknownCategory": "That category does not exist.",
+    "unknownBrand": "That brand does not exist.",
+    "brochureRequired": "Attach a PDF file.",
+    "brochureInvalid": "Only PDF files can be attached.",
+    "brochureTooLarge": "The PDF must be {{max}} MB or smaller.",
+    "brochureMissing": "This item has no brochure.",
+    "brochureUploaded": "Brochure attached to \"{{sku}}\".",
+    "brochureRemoved": "Brochure removed from \"{{sku}}\"."
+  },
+  "categories": {
+    "unknown": "Unknown category.",
+    "nameTaken": "\"{{name}}\" already exists.",
+    "invalidPage": "Invalid page.",
+    "added": "Category \"{{name}}\" added.",
+    "updated": "Category \"{{name}}\" updated.",
+    "deleted": "Category \"{{name}}\" deleted.",
+    "stillUsed_one": "{{count}} item still uses \"{{name}}\". Move it to another category first.",
+    "stillUsed_other": "{{count}} items still use \"{{name}}\". Move them to another category first."
+  },
+  "brands": {
+    "unknown": "Unknown brand.",
+    "nameTaken": "\"{{name}}\" already exists.",
+    "invalidPage": "Invalid page.",
+    "added": "Brand \"{{name}}\" added.",
+    "updated": "Brand \"{{name}}\" updated.",
+    "deleted": "Brand \"{{name}}\" deleted.",
+    "stillUsed_one": "{{count}} item still uses \"{{name}}\". Move it to another brand first.",
+    "stillUsed_other": "{{count}} items still use \"{{name}}\". Move them to another brand first."
+  },
   "validation": {
     "correctFields": "Please correct the highlighted fields.",
     "required": "This field is required",
@@ -86,6 +131,18 @@
     "nothingToUpdate": "Nothing to update",
     "positionNameMin": "Position name must be at least 2 characters",
     "positionNameMax": "Position name is too long",
-    "localeInvalid": "Choose a supported language"
+    "localeInvalid": "Choose a supported language",
+    "skuRequired": "Code is required",
+    "descriptionRequired": "Description must be at least 2 characters",
+    "unitRequired": "Choose a unit",
+    "vatCodeRequired": "Choose a VAT rate",
+    "costPriceInvalid": "Enter a valid cost price",
+    "costPriceNegative": "Cost price cannot be negative",
+    "costPriceTooLarge": "Cost price is too large",
+    "costPriceDecimals": "Use at most 4 decimal places",
+    "factorInvalid": "Enter a quantity greater than 0, with at most 4 decimal places",
+    "unitsDuplicate": "Each unit can be listed only once",
+    "refNameMin": "Name must be at least 2 characters",
+    "refNameMax": "Name is too long"
   }
 }

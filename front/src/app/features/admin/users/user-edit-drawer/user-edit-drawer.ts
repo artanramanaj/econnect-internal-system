@@ -18,7 +18,7 @@ interface PositionOption {
   selector: 'app-user-edit-drawer',
   imports: [ReactiveFormsModule, TranslatePipe, RoleNamePipe],
   templateUrl: './user-edit-drawer.html',
-  styleUrls: ['../type-scale.css'],
+  styleUrls: ['../../../../shared/styles/type-scale.css'],
   // `contents` keeps the host out of the layout box model, so the inner
   // overlay keeps its own fixed positioning.
   host: { class: 'contents' },

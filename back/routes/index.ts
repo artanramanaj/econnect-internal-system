@@ -4,6 +4,8 @@ import userRoutes from "./userRoutes.js";
 import peopleRoutes from "./peopleRoutes.js";
 import roleRoutes from "./roleRoutes.js";
 import positionsRoutes from "./positionsRoutes.js";
+import itemsRoutes from "./itemsRoutes.js";
+import { brandsRoutes, categoriesRoutes } from "./catalogRefsRoutes.js";
 
 const router = Router();
 
@@ -14,5 +16,8 @@ router.use("/users", userRoutes);
 router.use("/people", peopleRoutes);
 router.use("/roles", roleRoutes);
 router.use("/positions", positionsRoutes);
+router.use("/items", itemsRoutes);
+router.use("/categories", categoriesRoutes);
+router.use("/brands", brandsRoutes);
 
 export default router;

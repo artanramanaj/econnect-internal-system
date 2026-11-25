@@ -13,7 +13,8 @@
     "no": "Jo",
     "somethingWentWrong": "Diçka shkoi keq. Ju lutemi provoni përsëri.",
     "showPassword": "Shfaq fjalëkalimin",
-    "hidePassword": "Fshih fjalëkalimin"
+    "hidePassword": "Fshih fjalëkalimin",
+    "breadcrumb": "Shtegu i navigimit"
   },
   "language": {
     "label": "Gjuha",
@@ -204,7 +205,8 @@
       "stillHeld": "{{count}} persona e mbajnë ende këtë pozicion — tërhiqeni nga përdorimi ose zhvendosini më parë",
       "empty": "Ende nuk ka pozicione.",
       "pagesLabel": "Faqet e pozicioneve",
-      "confirmDelete": "Të fshihet pozicioni \"{{name}}\"? Ky veprim nuk mund të zhbëhet."
+      "deleteHeading": "Të fshihet pozicioni?",
+      "confirmDelete": "Pozicioni \"{{name}}\" do të fshihet përgjithmonë. Ky veprim nuk mund të zhbëhet."
     },
     "matrix": {
       "heading": "Grupet & lejet",
@@ -228,6 +230,157 @@
       "deactivate": "Çaktivizo këtë person",
       "positionFallback": "Pozicioni #{{id}}"
     }
+  },
+  "items": {
+    "breadcrumbRoot": "Katalogu",
+    "breadcrumb": "Produktet & shërbimet",
+    "title": "Produktet & shërbimet",
+    "table": {
+      "heading": "Artikujt",
+      "search": "Kërko artikuj",
+      "searchPlaceholder": "Kodi, përshkrimi ose kategoria",
+      "filterByType": "Filtro sipas llojit",
+      "allTypes": "Të gjitha llojet",
+      "filterByCategory": "Filtro sipas kategorisë",
+      "allCategories": "Të gjitha kategoritë",
+      "filterByBrand": "Filtro sipas brendit",
+      "allBrands": "Të gjithë brendet",
+      "filterBySource": "Filtro sipas burimit",
+      "allSources": "Të gjitha burimet",
+      "filterByStatus": "Filtro sipas statusit",
+      "sku": "Kodi",
+      "description": "Përshkrimi",
+      "type": "Lloji",
+      "category": "Kategoria",
+      "unit": "Njësia",
+      "cost": "Kostoja",
+      "vat": "TVSH",
+      "datasheet": "Broshura",
+      "pdf": "PDF",
+      "upload": "Ngarko",
+      "source": "Burimi",
+      "actions": "Veprimet",
+      "edit": "Ndrysho",
+      "view": "Shiko",
+      "archived": "I arkivuar",
+      "loading": "Duke u ngarkuar…",
+      "empty": "Asnjë artikull nuk përputhet me këta filtra.",
+      "pagesLabel": "Faqet e artikujve",
+      "costNote": "Çmimi i kostos u shfaqet vetëm grupeve që lejohen të shohin koston & marzhin."
+    },
+    "status": {
+      "active": "Aktivë",
+      "archived": "Të arkivuar",
+      "all": "Të gjithë"
+    },
+    "types": {
+      "PRODUCT": "Produkt",
+      "SERVICE": "Shërbim"
+    },
+    "sources": {
+      "PRODATA": "ProData",
+      "LOCAL": "Lokal"
+    },
+    "add": {
+      "heading": "Shto një produkt",
+      "hint": "Ruhet si artikull lokal — sinkronizimi me ProData nuk e ndryshon kurrë.",
+      "submit": "Shto produktin"
+    },
+    "pdf": {
+      "zoneTitle": "Broshurë / fletë teknike (PDF)",
+      "browse": "Zgjidhni një PDF…",
+      "hint": "PDF · deri në {{max}} MB",
+      "open": "Hape",
+      "replace": "Zëvendëso PDF-në",
+      "remove": "Hiq PDF-në",
+      "none": "Nuk ka broshurë të bashkëngjitur.",
+      "notPdf": "Mund të bashkëngjiten vetëm skedarë PDF",
+      "tooLarge": "PDF-ja duhet të jetë {{max}} MB ose më e vogël",
+      "removePicked": "Hiq {{name}}"
+    },
+    "refs": {
+      "name": "Emri",
+      "items": "Artikuj",
+      "actions": "Veprime",
+      "add": "Shto",
+      "rename": "Riemërto",
+      "renameLabel": "Riemërto {{name}}",
+      "empty": "Asnjë deri tani.",
+      "nameInvalid": "Shkruani një emër me 2 deri në 80 karaktere",
+      "stillUsed": "Përdoret nga {{count}} artikuj — zhvendosini më parë",
+      "categories": {
+        "heading": "Kategoritë",
+        "placeholder": "Kategori e re…",
+        "deleteHeading": "Të fshihet kategoria?",
+        "confirmDelete": "Kategoria \"{{name}}\" do të fshihet përgjithmonë. Ky veprim nuk mund të zhbëhet.",
+        "pagesLabel": "Faqet e kategorive"
+      },
+      "brands": {
+        "heading": "Brendet",
+        "placeholder": "Brend i ri…",
+        "deleteHeading": "Të fshihet brendi?",
+        "confirmDelete": "Brendi \"{{name}}\" do të fshihet përgjithmonë. Ky veprim nuk mund të zhbëhet.",
+        "pagesLabel": "Faqet e brendeve"
+      }
+    },
+    "drawer": {
+      "sku": "Kodi",
+      "skuRequired": "Kodi është i detyrueshëm",
+      "type": "Lloji",
+      "description": "Përshkrimi",
+      "descriptionRequired": "Përshkrimi duhet të ketë të paktën 2 karaktere",
+      "category": "Kategoria",
+      "brand": "Brendi",
+      "none": "Asnjë",
+      "manufacturer": "Prodhuesi",
+      "barcode": "Barkodi",
+      "baseUnit": "Njësia bazë",
+      "unitRequired": "Zgjidhni një njësi",
+      "vat": "Norma e TVSH-së",
+      "vatRequired": "Zgjidhni një normë TVSH-je",
+      "costPrice": "Çmimi i kostos €",
+      "costInvalid": "Shkruani një shumë 0 ose më të madhe, me më së shumti 4 shifra dhjetore",
+      "costNote": "Çdo ndryshim i kostos ruhet në historikun e kostos.",
+      "altUnits": "Njësi alternative",
+      "altUnitsHint": "Sa njësi bazë përmban njëra prej tyre, p.sh. 1 kuti = 10 copë.",
+      "altUnitsEmpty": "Asnjë — artikulli ofertohet vetëm në njësinë bazë.",
+      "addUnit": "Shto njësi",
+      "removeUnit": "Hiq {{unit}}",
+      "unit": "Njësia",
+      "factor": "Njësi bazë në një",
+      "factorInvalid": "Shkruani një sasi më të madhe se 0, me më së shumti 4 shifra dhjetore",
+      "choose": "Zgjidhni…",
+      "syncNote": "Ky artikull vjen nga ProData. Kodi, përshkrimi, njësia bazë, TVSH-ja, kostoja, kategoria, brendi, prodhuesi dhe barkodi përditësohen nga sinkronizimi i natës dhe ndryshohen vetëm në ProData.",
+      "prodataId": "ID në ProData {{id}}",
+      "lastSynced": "Sinkronizuar së fundi {{when}}",
+      "neverSynced": "Ende i pasinkronizuar",
+      "updatedAt": "Përditësuar {{when}}",
+      "history": "Historiku i kostos",
+      "historyEmpty": "Ende asnjë ndryshim kostoje i regjistruar.",
+      "historyFirst": "Kostoja e parë",
+      "historyBy": "nga {{name}}",
+      "historyBySync": "nga sinkronizimi me ProData",
+      "documents": "Dokumentet",
+      "submit": "Ruaj ndryshimet",
+      "archive": "Arkivo",
+      "archiveHint": "Artikujt e arkivuar fshihen nga lista dhe nga ofertat e reja. Asgjë nuk humbet; mund ta riktheni në çdo kohë.",
+      "restore": "Rikthe",
+      "delete": "Fshi këtë artikull",
+      "deleteConfirm": "Të fshihet {{sku}} përgjithmonë? Njësitë alternative dhe historiku i kostos fshihen bashkë me të. Arkivojeni nëse mund t'ju duhet përsëri.",
+      "deleteYes": "Po, fshije",
+      "readOnly": "Mund ta shikoni katalogun, por jo ta ndryshoni."
+    }
+  },
+  "units": {
+    "pcs": "Copë",
+    "m": "Metra",
+    "box": "Kuti",
+    "hr": "Orë"
+  },
+  "vat": {
+    "STANDARD": "Standarde",
+    "REDUCED": "E reduktuar",
+    "ZERO": "Zero"
   },
   "matrix": {
     "areas": {

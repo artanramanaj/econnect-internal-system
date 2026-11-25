@@ -32,6 +32,13 @@ export class Sidebar {
       this.authService.hasPermission('admin.users.non_admin'),
   );
 
+  /** Same reasoning: the products route is guarded by these two codes. */
+  readonly canViewCatalog = computed(
+    () =>
+      this.authService.hasPermission('catalog.view') ||
+      this.authService.hasPermission('catalog.manage'),
+  );
+
   logout() {
     this.authService.logout().subscribe({
       // Navigate either way — a failed logout still clears the client session.

@@ -59,6 +59,51 @@
     "stillHeld_one": "{{count}} person e mban ende \"{{name}}\". Tërhiqeni nga përdorimi ose zhvendoseni më parë.",
     "stillHeld_other": "{{count}} persona e mbajnë ende \"{{name}}\". Tërhiqeni nga përdorimi ose zhvendosini më parë."
   },
+  "items": {
+    "invalidId": "ID e pavlefshme e artikullit.",
+    "invalidFilters": "Filtra kërkimi ose faqe e pavlefshme.",
+    "notFound": "Artikulli nuk u gjet.",
+    "skuTaken": "Kodi \"{{sku}}\" përdoret tashmë nga një artikull tjetër.",
+    "unknownUnit": "Njësi e panjohur \"{{code}}\".",
+    "unknownVatCode": "Norma e TVSH-së \"{{code}}\" nuk ekziston ose nuk është më në fuqi.",
+    "baseUnitRepeated": "Njësia bazë nuk mund të jetë edhe njësi alternative.",
+    "syncManaged": "Ky artikull vjen nga ProData, prandaj kodi, përshkrimi, njësia bazë, TVSH-ja, kostoja, kategoria, brendi, prodhuesi dhe barkodi ndryshohen vetëm atje.",
+    "syncManagedDelete": "Artikujt nga ProData nuk mund të fshihen. Arkivojeni në vend të kësaj.",
+    "costHidden": "Nuk keni leje për të vendosur çmimin e kostos.",
+    "added": "\"{{sku}}\" u shtua.",
+    "updated": "\"{{sku}}\" u përditësua.",
+    "archived": "\"{{sku}}\" u arkivua.",
+    "restored": "\"{{sku}}\" u rikthye.",
+    "deleted": "\"{{sku}}\" u fshi.",
+    "unknownCategory": "Kjo kategori nuk ekziston.",
+    "unknownBrand": "Ky brend nuk ekziston.",
+    "brochureRequired": "Bashkëngjitni një skedar PDF.",
+    "brochureInvalid": "Mund të bashkëngjiten vetëm skedarë PDF.",
+    "brochureTooLarge": "PDF-ja duhet të jetë {{max}} MB ose më e vogël.",
+    "brochureMissing": "Ky artikull nuk ka broshurë.",
+    "brochureUploaded": "Broshura iu bashkëngjit \"{{sku}}\".",
+    "brochureRemoved": "Broshura u hoq nga \"{{sku}}\"."
+  },
+  "categories": {
+    "unknown": "Kategori e panjohur.",
+    "nameTaken": "\"{{name}}\" ekziston tashmë.",
+    "invalidPage": "Faqe e pavlefshme.",
+    "added": "Kategoria \"{{name}}\" u shtua.",
+    "updated": "Kategoria \"{{name}}\" u përditësua.",
+    "deleted": "Kategoria \"{{name}}\" u fshi.",
+    "stillUsed_one": "{{count}} artikull e përdor ende \"{{name}}\". Kalojeni më parë në një kategori tjetër.",
+    "stillUsed_other": "{{count}} artikuj e përdorin ende \"{{name}}\". Kalojini më parë në një kategori tjetër."
+  },
+  "brands": {
+    "unknown": "Brend i panjohur.",
+    "nameTaken": "\"{{name}}\" ekziston tashmë.",
+    "invalidPage": "Faqe e pavlefshme.",
+    "added": "Brendi \"{{name}}\" u shtua.",
+    "updated": "Brendi \"{{name}}\" u përditësua.",
+    "deleted": "Brendi \"{{name}}\" u fshi.",
+    "stillUsed_one": "{{count}} artikull e përdor ende \"{{name}}\". Kalojeni më parë në një brend tjetër.",
+    "stillUsed_other": "{{count}} artikuj e përdorin ende \"{{name}}\". Kalojini më parë në një brend tjetër."
+  },
   "validation": {
     "correctFields": "Ju lutemi korrigjoni fushat e shënuara.",
     "required": "Kjo fushë është e detyrueshme",
@@ -86,6 +131,18 @@
     "nothingToUpdate": "Asgjë për të përditësuar",
     "positionNameMin": "Emri i pozicionit duhet të ketë të paktën 2 karaktere",
     "positionNameMax": "Emri i pozicionit është shumë i gjatë",
-    "localeInvalid": "Zgjidhni një gjuhë të mbështetur"
+    "localeInvalid": "Zgjidhni një gjuhë të mbështetur",
+    "skuRequired": "Kodi është i detyrueshëm",
+    "descriptionRequired": "Përshkrimi duhet të ketë të paktën 2 karaktere",
+    "unitRequired": "Zgjidhni një njësi",
+    "vatCodeRequired": "Zgjidhni një normë TVSH-je",
+    "costPriceInvalid": "Shkruani një çmim kostoje të vlefshëm",
+    "costPriceNegative": "Çmimi i kostos nuk mund të jetë negativ",
+    "costPriceTooLarge": "Çmimi i kostos është shumë i madh",
+    "costPriceDecimals": "Përdorni më së shumti 4 shifra dhjetore",
+    "factorInvalid": "Shkruani një sasi më të madhe se 0, me më së shumti 4 shifra dhjetore",
+    "unitsDuplicate": "Secila njësi mund të shënohet vetëm një herë",
+    "refNameMin": "Emri duhet të ketë të paktën 2 karaktere",
+    "refNameMax": "Emri është shumë i gjatë"
   }
 }

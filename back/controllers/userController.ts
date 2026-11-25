@@ -10,6 +10,7 @@ import {
   ACTIVE_SUPER_ADMIN,
 } from "../services/userAdminService.js";
 import { ROLE_CODES } from "../constants/user.constants.js";
+import { actorId } from "../utils/actor.js";
 import { t, type MessageKey } from "../i18n/index.js";
 import type { UpdateUserStatusInput, AssignRoleInput } from "../validators/user.schema.js";
 
@@ -26,12 +27,6 @@ const userWithRelations = {
     roles: { include: { role: true } },
   },
 } as const;
-
-function actorId(req: Request): number {
-  const id = req.user?.userId;
-  if (!id) throw new customError("common.notSignedIn", StatusCodes.UNAUTHORIZED);
-  return id;
-}
 
 function parseUserId(req: Request): number {
   const id = Number(req.params.id);

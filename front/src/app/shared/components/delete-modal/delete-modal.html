@@ -1,0 +1,61 @@
+<!--
+  Text size is set here: the admin screens scope their type scale per
+  component, so nothing from the caller reaches this template.
+-->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- A click outside the card cancels. Hidden from assistive tech: keyboard
+       and screen-reader users have Escape, the ✕ and the Cancel button. -->
+  <div aria-hidden="true" (click)="cancel.emit()" class="absolute inset-0 bg-dark-blue/40"></div>
+
+  <div
+    role="alertdialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="headingId"
+    [attr.aria-describedby]="messageId"
+    class="relative w-full max-w-md rounded-2xl bg-white shadow-xl p-6 flex flex-col gap-6"
+  >
+    <button
+      type="button"
+      [attr.aria-label]="'common.close' | translate"
+      (click)="cancel.emit()"
+      class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg border-0 bg-transparent text-muted cursor-pointer hover:bg-gray hover:text-dark-blue"
+    >
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
+        <path d="M18 6 6 18M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Right padding keeps a long heading clear of the ✕. -->
+    <div class="flex flex-col gap-2 pr-8">
+      <h2 [id]="headingId" class="m-0 text-lg font-semibold text-light-black">{{ heading() }}</h2>
+      <p [id]="messageId" class="m-0 text-sm leading-relaxed text-muted">{{ message() }}</p>
+    </div>
+
+    <div class="flex justify-end gap-2.5">
+      <button
+        #cancelButton
+        type="button"
+        (click)="cancel.emit()"
+        class="h-10 px-4 rounded-[9px] border border-card-border bg-white text-sm font-semibold text-light-black cursor-pointer hover:bg-gray"
+      >
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="confirm.emit()"
+        class="h-10 px-4 rounded-[9px] border-0 bg-danger text-sm font-semibold text-white cursor-pointer hover:brightness-110"
+      >
+        {{ 'common.delete' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -31,6 +31,6 @@ export class LanguageSwitcher {
     if (this.tone() === 'dark') {
       return active ? 'bg-white/15 text-white' : 'text-sidebar-muted hover:text-white';
     }
-    return active ? 'bg-primary text-dark-blue' : 'text-muted hover:text-dark-blue';
+    return active ? 'bg-primary text-white' : 'text-muted hover:text-dark-blue';
   }
 }

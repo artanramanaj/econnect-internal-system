@@ -1,12 +1,13 @@
 /*
- * Component-local type scale, shared across the Users screen family.
+ * Component-local type scale for the dense admin screens: the Users family
+ * and Products.
  *
  * The global scale in styles.css is tuned for the marketing-weight auth
- * screens (h1 is 44px). This screen is a dense admin table where the design
+ * screens (h1 is 44px). These screens are dense tables where the design
  * calls for 28px / 17px / 14px.
  *
  * These are element selectors, and Angular scopes them to one component's
- * template. Every component that renders part of this screen must therefore
+ * template. Every component that renders part of such a screen must therefore
  * pull this file in through styleUrls, or its markup silently falls back to
  * the global scale.
  *

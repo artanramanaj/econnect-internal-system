@@ -29,6 +29,7 @@ export const routes: Routes = [
       },
       {
         path: 'products',
+        canActivate: [permissionGuard('catalog.view', 'catalog.manage')],
         loadComponent: () => import('./features/products/products').then((m) => m.Products),
       },
       {

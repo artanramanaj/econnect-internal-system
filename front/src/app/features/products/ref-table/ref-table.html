@@ -1,0 +1,138 @@
+<section
+  [attr.aria-labelledby]="kind() + '-heading'"
+  class="flex-[1_1_380px] min-w-0 bg-white border border-card-border rounded-[14px] p-5 flex flex-col gap-4"
+>
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h6 [id]="kind() + '-heading'" class="m-0">
+      {{ ('items.refs.' + kind() + '.heading') | translate }}
+      <span class="text-muted">· {{ meta().total }}</span>
+    </h6>
+  </div>
+
+  @if (canManage()) {
+    <form [formGroup]="addForm" (ngSubmit)="onAdd()" class="flex flex-wrap gap-2.5 items-start">
+      <div class="flex flex-col gap-1.5 flex-[1_1_200px] min-w-0">
+        <label [for]="kind() + '-new'" class="sr-only">
+          {{ ('items.refs.' + kind() + '.placeholder') | translate }}
+        </label>
+        <input
+          [id]="kind() + '-new'"
+          formControlName="name"
+          [placeholder]="('items.refs.' + kind() + '.placeholder') | translate"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+        />
+        @if (addForm.controls.name.touched && addForm.controls.name.invalid) {
+          <app-error-message [message]="'items.refs.nameInvalid' | translate" />
+        }
+      </div>
+      <button
+        type="submit"
+        [disabled]="saving()"
+        class="h-10.5 px-5 rounded-[9px] bg-primary text-white font-bold cursor-pointer hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {{ 'items.refs.add' | translate }}
+      </button>
+    </form>
+  }
+
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr>
+          <th scope="col" class="text-left py-2 px-2.5 bg-table-head border-b border-row-border">
+            {{ 'items.refs.name' | translate }}
+          </th>
+          <th scope="col" class="text-right py-2 px-2.5 bg-table-head border-b border-row-border">
+            {{ 'items.refs.items' | translate }}
+          </th>
+          @if (canManage()) {
+            <th scope="col" class="text-right py-2 px-2.5 bg-table-head border-b border-row-border">
+              {{ 'items.refs.actions' | translate }}
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (ref of refs(); track ref.id) {
+          <tr class="border-b border-row-border">
+            <td class="py-2 px-2.5">
+              @if (renaming() === ref.id) {
+                <form
+                  [formGroup]="renameForm"
+                  (ngSubmit)="submitRename(ref)"
+                  class="flex gap-2 items-center"
+                >
+                  <input
+                    formControlName="name"
+                    [attr.aria-label]="'items.refs.renameLabel' | translate: { name: ref.name }"
+                    class="h-9 px-2.5 rounded-[8px] border border-input-border bg-white focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="submit"
+                    [disabled]="saving()"
+                    class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray disabled:opacity-60"
+                  >
+                    {{ 'common.save' | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="cancelRename()"
+                    class="h-9 px-3 rounded-[8px] border-0 bg-transparent text-muted cursor-pointer hover:text-dark-blue"
+                  >
+                    {{ 'common.cancel' | translate }}
+                  </button>
+                </form>
+              } @else {
+                <span>{{ ref.name }}</span>
+              }
+            </td>
+            <td class="py-2 px-2.5 text-right numeric">{{ ref.itemCount }}</td>
+            @if (canManage()) {
+              <td class="py-2 px-2.5">
+                <div class="flex gap-2 justify-end">
+                  @if (renaming() !== ref.id) {
+                    <button
+                      type="button"
+                      (click)="startRename(ref)"
+                      class="h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray"
+                    >
+                      {{ 'items.refs.rename' | translate }}
+                    </button>
+                  }
+                  <button
+                    type="button"
+                    (click)="confirmRemove(ref)"
+                    [disabled]="saving() || ref.itemCount > 0"
+                    [attr.title]="
+                      ref.itemCount > 0
+                        ? ('items.refs.stillUsed' | translate: { count: ref.itemCount })
+                        : null
+                    "
+                    class="h-9 px-3 rounded-[8px] border border-danger/30 bg-white text-danger cursor-pointer hover:bg-danger/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {{ 'common.delete' | translate }}
+                  </button>
+                </div>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="canManage() ? 3 : 2" class="py-4 px-2.5 text-muted">
+              {{ 'items.refs.empty' | translate }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Renders nothing on a single page, so the section's gap does not show. -->
+  <app-pagination
+    [label]="('items.refs.' + kind() + '.pagesLabel') | translate"
+    [page]="meta().page"
+    [pageSize]="meta().pageSize"
+    [total]="meta().total"
+    (pageChange)="pageChange.emit($event)"
+  />
+</section>

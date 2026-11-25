@@ -11,7 +11,7 @@ import { RoleNamePipe } from '../../../../shared/pipes/role-name.pipe';
   selector: 'app-add-employee',
   imports: [ReactiveFormsModule, ErrorMessage, TranslatePipe, RoleNamePipe],
   templateUrl: './add-employee.html',
-  styleUrls: ['../type-scale.css'],
+  styleUrls: ['../../../../shared/styles/type-scale.css'],
   // `contents` keeps the host out of the layout box model, so the inner
   // <section> stays a direct flex child of the page's row.
   host: { class: 'contents' },

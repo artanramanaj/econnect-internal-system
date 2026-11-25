@@ -31,6 +31,7 @@ import { GroupsPermissions } from './groups-permissions/groups-permissions';
 import { UserEditDrawer } from './user-edit-drawer/user-edit-drawer';
 import { PositionEdit, Positions } from './positions/positions';
 import { ErrorMessage } from '../../../shared/components/error-message/error-message';
+import { DeleteModal } from '../../../shared/components/delete-modal/delete-modal';
 import { ToastService } from '../../../core/services/toast.service';
 
 /** Groups only a super admin may manage or grant. Mirrors the server. */
@@ -53,10 +54,11 @@ interface RosterQuery {
     UserEditDrawer,
     Positions,
     ErrorMessage,
+    DeleteModal,
     TranslatePipe,
   ],
   templateUrl: './users.html',
-  styleUrls: ['./users.css', './type-scale.css'],
+  styleUrls: ['./users.css', '../../../shared/styles/type-scale.css'],
 })
 export class Users {
   private admin = inject(UserAdminService);
@@ -94,6 +96,9 @@ export class Users {
   readonly groupFilter = signal('');
   readonly searchTerm = signal('');
   readonly editing = signal<Person | null>(null);
+
+  /** The position the delete modal is asking about; null while it is closed. */
+  readonly positionToDelete = signal<Position | null>(null);
 
   /** Group picked in each access-request card, keyed by user id. */
   readonly requestRole = signal<Record<number, string>>({});
@@ -439,11 +444,21 @@ export class Users {
       });
   }
 
+  /** From a row's Delete: nothing is sent until the modal says yes. */
   removePosition(position: Position): void {
-    const question = this.translate.instant('users.positions.confirmDelete', {
-      name: position.name,
-    });
-    if (!confirm(question)) return;
+    this.positionToDelete.set(position);
+  }
+
+  cancelRemovePosition(): void {
+    this.positionToDelete.set(null);
+  }
+
+  confirmRemovePosition(): void {
+    const position = this.positionToDelete();
+    if (!position) return;
+    // Closed before the request, so a refusal shows in the page banner
+    // rather than behind the modal.
+    this.positionToDelete.set(null);
 
     this.beginWrite();
     this.admin

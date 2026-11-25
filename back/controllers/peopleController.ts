@@ -14,6 +14,9 @@ import {
 import { ROLE_CODES } from "../constants/user.constants.js";
 import { personQuerySchema } from "../validators/people.schema.js";
 import { paginate } from "../utils/pagination.js";
+import { actorId } from "../utils/actor.js";
+import { startOfToday } from "../utils/dates.js";
+import { isUniqueViolation } from "../utils/prismaErrors.js";
 import { t } from "../i18n/index.js";
 import type {
   CreatePersonInput,
@@ -21,12 +24,6 @@ import type {
 } from "../validators/people.schema.js";
 
 const SALT_ROUNDS = 10;
-
-/** validFrom is a DATE column, so normalise away the clock. */
-function startOfToday(): Date {
-  const now = new Date();
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-}
 
 const personInclude = {
   user: {
@@ -110,12 +107,6 @@ function toPerson(row: PersonRow, withCost: boolean): PersonDto {
   }
 
   return person;
-}
-
-function actorId(req: Request): number {
-  const id = req.user?.userId;
-  if (!id) throw new customError("common.notSignedIn", StatusCodes.UNAUTHORIZED);
-  return id;
 }
 
 function parseEmployeeId(req: Request): number {
@@ -377,37 +368,4 @@ export async function deactivatePerson(req: Request, res: Response) {
       }),
       person: toPerson(updated as PersonRow, withCost),
     });
-}
-
-/**
- * Prisma 7 with a driver adapter does NOT populate `meta.target`; it reports
- * the constraint under `meta.driverAdapterError.cause`. Both shapes checked.
- */
-function isUniqueViolation(err: unknown, field: string): boolean {
-  if (typeof err !== "object" || err === null) return false;
-
-  const e = err as {
-    code?: string;
-    meta?: {
-      target?: unknown;
-      driverAdapterError?: {
-        cause?: {
-          constraint?: { index?: string; fields?: string[] };
-          originalMessage?: string;
-        };
-      };
-    };
-  };
-
-  if (e.code !== "P2002") return false;
-
-  const cause = e.meta?.driverAdapterError?.cause;
-  const candidates: string[] = [
-    ...(Array.isArray(e.meta?.target) ? e.meta.target.map(String) : [String(e.meta?.target ?? "")]),
-    cause?.constraint?.index ?? "",
-    ...(cause?.constraint?.fields ?? []),
-    cause?.originalMessage ?? "",
-  ];
-
-  return candidates.some((c) => c.includes(field));
 }

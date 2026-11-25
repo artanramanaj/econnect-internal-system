@@ -1,0 +1,8 @@
+/*
+ * The type scale this screen shares with its child components lives in
+ * shared/styles/type-scale.css, pulled in through styleUrls — element
+ * selectors are scoped per component, so each one has to ask for it.
+ */
+:host {
+  display: block;
+}

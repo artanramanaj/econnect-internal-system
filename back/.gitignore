@@ -12,3 +12,6 @@ node_modules
 
 # Personal Claude Code settings
 .claude/settings.local.json
+
+# User-uploaded product brochures live on disk, not in git.
+/uploads

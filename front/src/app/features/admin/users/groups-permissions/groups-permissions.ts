@@ -7,7 +7,7 @@ import { RoleNamePipe } from '../../../../shared/pipes/role-name.pipe';
   selector: 'app-groups-permissions',
   imports: [TranslatePipe, RoleNamePipe],
   templateUrl: './groups-permissions.html',
-  styleUrls: ['../type-scale.css'],
+  styleUrls: ['../../../../shared/styles/type-scale.css'],
   // `contents` keeps the host out of the layout box model, so the inner
   // <section> stays a direct flex child of <main>.
   host: { class: 'contents' },

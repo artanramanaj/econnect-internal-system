@@ -20,7 +20,7 @@ export interface PositionEdit {
   selector: 'app-positions',
   imports: [ReactiveFormsModule, ErrorMessage, Pagination, TranslatePipe],
   templateUrl: './positions.html',
-  styleUrls: ['../type-scale.css'],
+  styleUrls: ['../../../../shared/styles/type-scale.css'],
   host: { class: 'contents' },
 })
 export class Positions {

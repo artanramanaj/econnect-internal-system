@@ -13,7 +13,8 @@
     "no": "No",
     "somethingWentWrong": "Something went wrong. Please try again.",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "breadcrumb": "Breadcrumb"
   },
   "language": {
     "label": "Language",
@@ -204,7 +205,8 @@
       "stillHeld": "{{count}} people still hold this position — retire it instead, or move them first",
       "empty": "No positions yet.",
       "pagesLabel": "Position pages",
-      "confirmDelete": "Delete the position \"{{name}}\"? This cannot be undone."
+      "deleteHeading": "Delete position?",
+      "confirmDelete": "The position \"{{name}}\" will be deleted permanently. This cannot be undone."
     },
     "matrix": {
       "heading": "Groups & permissions",
@@ -228,6 +230,157 @@
       "deactivate": "Deactivate this person",
       "positionFallback": "Position #{{id}}"
     }
+  },
+  "items": {
+    "breadcrumbRoot": "Catalogue",
+    "breadcrumb": "Products & services",
+    "title": "Products & services",
+    "table": {
+      "heading": "Items",
+      "search": "Search items",
+      "searchPlaceholder": "Code, description or category",
+      "filterByType": "Filter by type",
+      "allTypes": "All types",
+      "filterByCategory": "Filter by category",
+      "allCategories": "All categories",
+      "filterByBrand": "Filter by brand",
+      "allBrands": "All brands",
+      "filterBySource": "Filter by source",
+      "allSources": "All sources",
+      "filterByStatus": "Filter by status",
+      "sku": "Code",
+      "description": "Description",
+      "type": "Type",
+      "category": "Category",
+      "unit": "Unit",
+      "cost": "Cost",
+      "vat": "VAT",
+      "datasheet": "Datasheet",
+      "pdf": "PDF",
+      "upload": "Upload",
+      "source": "Source",
+      "actions": "Actions",
+      "edit": "Edit",
+      "view": "View",
+      "archived": "Archived",
+      "loading": "Loading…",
+      "empty": "No items match these filters.",
+      "pagesLabel": "Item pages",
+      "costNote": "Cost price is shown only to groups allowed to see cost & margin."
+    },
+    "status": {
+      "active": "Active",
+      "archived": "Archived",
+      "all": "All"
+    },
+    "types": {
+      "PRODUCT": "Product",
+      "SERVICE": "Service"
+    },
+    "sources": {
+      "PRODATA": "ProData",
+      "LOCAL": "Local"
+    },
+    "add": {
+      "heading": "Add a product",
+      "hint": "Saved as a local item — the ProData sync never changes it.",
+      "submit": "Add product"
+    },
+    "pdf": {
+      "zoneTitle": "Brochure / datasheet (PDF)",
+      "browse": "Choose a PDF…",
+      "hint": "PDF · up to {{max}} MB",
+      "open": "Open",
+      "replace": "Replace PDF",
+      "remove": "Remove the PDF",
+      "none": "No brochure attached.",
+      "notPdf": "Only PDF files can be attached",
+      "tooLarge": "The PDF must be {{max}} MB or smaller",
+      "removePicked": "Remove {{name}}"
+    },
+    "refs": {
+      "name": "Name",
+      "items": "Items",
+      "actions": "Actions",
+      "add": "Add",
+      "rename": "Rename",
+      "renameLabel": "Rename {{name}}",
+      "empty": "None yet.",
+      "nameInvalid": "Enter a name of 2 to 80 characters",
+      "stillUsed": "Used by {{count}} item(s) — move them first",
+      "categories": {
+        "heading": "Categories",
+        "placeholder": "New category…",
+        "deleteHeading": "Delete category?",
+        "confirmDelete": "The category \"{{name}}\" will be deleted permanently. This cannot be undone.",
+        "pagesLabel": "Category pages"
+      },
+      "brands": {
+        "heading": "Brands",
+        "placeholder": "New brand…",
+        "deleteHeading": "Delete brand?",
+        "confirmDelete": "The brand \"{{name}}\" will be deleted permanently. This cannot be undone.",
+        "pagesLabel": "Brand pages"
+      }
+    },
+    "drawer": {
+      "sku": "Code",
+      "skuRequired": "Code is required",
+      "type": "Type",
+      "description": "Description",
+      "descriptionRequired": "Description must be at least 2 characters",
+      "category": "Category",
+      "brand": "Brand",
+      "none": "None",
+      "manufacturer": "Manufacturer",
+      "barcode": "Barcode",
+      "baseUnit": "Base unit",
+      "unitRequired": "Choose a unit",
+      "vat": "VAT rate",
+      "vatRequired": "Choose a VAT rate",
+      "costPrice": "Cost price €",
+      "costInvalid": "Enter an amount of 0 or more, with at most 4 decimals",
+      "costNote": "Every change of cost is kept in the cost history.",
+      "altUnits": "Alternative units",
+      "altUnitsHint": "How many base units one of these holds, e.g. 1 box = 10 pcs.",
+      "altUnitsEmpty": "None — the item is quoted in its base unit only.",
+      "addUnit": "Add unit",
+      "removeUnit": "Remove {{unit}}",
+      "unit": "Unit",
+      "factor": "Base units in one",
+      "factorInvalid": "Enter a quantity greater than 0, with at most 4 decimals",
+      "choose": "Choose…",
+      "syncNote": "This item comes from ProData. Code, description, base unit, VAT, cost, category, brand, manufacturer and barcode are updated by the nightly sync and can only be changed in ProData.",
+      "prodataId": "ProData ID {{id}}",
+      "lastSynced": "Last synced {{when}}",
+      "neverSynced": "Not synced yet",
+      "updatedAt": "Updated {{when}}",
+      "history": "Cost history",
+      "historyEmpty": "No cost changes recorded yet.",
+      "historyFirst": "First cost",
+      "historyBy": "by {{name}}",
+      "historyBySync": "by the ProData sync",
+      "documents": "Documents",
+      "submit": "Save changes",
+      "archive": "Archive",
+      "archiveHint": "Archived items are hidden from the list and from new quotes. Nothing is lost; you can restore it at any time.",
+      "restore": "Restore",
+      "delete": "Delete this item",
+      "deleteConfirm": "Delete {{sku}} for good? Its alternative units and cost history go with it. Archive it instead if it might be needed again.",
+      "deleteYes": "Yes, delete",
+      "readOnly": "You can view the catalogue but not change it."
+    }
+  },
+  "units": {
+    "pcs": "Pieces",
+    "m": "Metres",
+    "box": "Boxes",
+    "hr": "Hours"
+  },
+  "vat": {
+    "STANDARD": "Standard",
+    "REDUCED": "Reduced",
+    "ZERO": "Zero"
   },
   "matrix": {
     "areas": {

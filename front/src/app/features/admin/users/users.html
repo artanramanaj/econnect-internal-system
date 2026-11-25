@@ -82,3 +82,12 @@
     (deactivate)="deactivate()"
   />
 }
+
+@if (positionToDelete(); as position) {
+  <app-delete-modal
+    [heading]="'users.positions.deleteHeading' | translate"
+    [message]="'users.positions.confirmDelete' | translate: { name: position.name }"
+    (cancel)="cancelRemovePosition()"
+    (confirm)="confirmRemovePosition()"
+  />
+}

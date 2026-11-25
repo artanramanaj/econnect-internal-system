@@ -1,0 +1,303 @@
+<section
+  aria-labelledby="add-item-heading"
+  class="flex-[1_1_340px] min-w-0 bg-white border border-card-border rounded-[14px] p-5 flex flex-col gap-3"
+>
+  <h6 id="add-item-heading" class="m-0">{{ 'items.add.heading' | translate }}</h6>
+  <p class="m-0 px-3 py-2.5 rounded-[10px] bg-pill-bg text-pill-fg">
+    <small>{{ 'items.add.hint' | translate }}</small>
+  </p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="flex flex-col gap-3">
+    <div class="grid grid-cols-[1fr_8rem] gap-2.5">
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-sku">{{ 'items.drawer.sku' | translate }}</label>
+        <input
+          id="add-item-sku"
+          formControlName="sku"
+          maxlength="60"
+          autocomplete="off"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        />
+        @if (invalid(form.controls.sku)) {
+          <app-error-message [message]="'items.drawer.skuRequired' | translate" />
+        }
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="add-item-type">{{ 'items.drawer.type' | translate }}</label>
+        <select
+          id="add-item-type"
+          formControlName="type"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          @for (type of types; track type) {
+            <option [value]="type">{{ ('items.types.' + type) | translate }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="add-item-description">{{ 'items.drawer.description' | translate }}</label>
+      <input
+        id="add-item-description"
+        formControlName="description"
+        maxlength="255"
+        class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+      />
+      @if (invalid(form.controls.description)) {
+        <app-error-message [message]="'items.drawer.descriptionRequired' | translate" />
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-category">{{ 'items.drawer.category' | translate }}</label>
+        <select
+          id="add-item-category"
+          formControlName="categoryId"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          <option value="">{{ 'items.drawer.none' | translate }}</option>
+          <!-- No [selected] sync needed: the control starts on "" and only a
+               click changes it, so the value never predates the options. -->
+          @for (category of options().categories; track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-brand">{{ 'items.drawer.brand' | translate }}</label>
+        <select
+          id="add-item-brand"
+          formControlName="brandId"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          <option value="">{{ 'items.drawer.none' | translate }}</option>
+          @for (brand of options().brands; track brand.id) {
+            <option [value]="brand.id">{{ brand.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-manufacturer">{{ 'items.drawer.manufacturer' | translate }}</label>
+        <input
+          id="add-item-manufacturer"
+          formControlName="manufacturer"
+          list="add-item-manufacturers"
+          maxlength="80"
+          autocomplete="off"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        />
+        <datalist id="add-item-manufacturers">
+          @for (manufacturer of options().manufacturers; track manufacturer) {
+            <option [value]="manufacturer"></option>
+          }
+        </datalist>
+      </div>
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-barcode">{{ 'items.drawer.barcode' | translate }}</label>
+        <input
+          id="add-item-barcode"
+          formControlName="barcode"
+          maxlength="60"
+          autocomplete="off"
+          class="h-10.5 px-3 rounded-[9px] border border-input-border bg-white numeric focus:outline-none focus:border-primary"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-unit">{{ 'items.drawer.baseUnit' | translate }}</label>
+        <select
+          id="add-item-unit"
+          formControlName="baseUnitCode"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          <option value="">{{ 'items.drawer.choose' | translate }}</option>
+          <!-- [selected] per option, not [value] on the select: the options
+               arrive after the control has its value. -->
+          @for (unit of options().units; track unit.code) {
+            <option [value]="unit.code" [selected]="unit.code === form.controls.baseUnitCode.value">
+              {{ unit.code }} · {{ unit.code | codeLabel: 'units' : unit.name }}
+            </option>
+          }
+        </select>
+        @if (invalid(form.controls.baseUnitCode)) {
+          <app-error-message [message]="'items.drawer.unitRequired' | translate" />
+        }
+      </div>
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <label for="add-item-vat">{{ 'items.drawer.vat' | translate }}</label>
+        <select
+          id="add-item-vat"
+          formControlName="vatCode"
+          class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+        >
+          <option value="">{{ 'items.drawer.choose' | translate }}</option>
+          @for (rate of options().vatRates; track rate.code) {
+            <option [value]="rate.code" [selected]="rate.code === form.controls.vatCode.value">
+              {{ rate.code | codeLabel: 'vat' : rate.name }} · {{ percent(rate.rate) }}%
+            </option>
+          }
+        </select>
+        @if (invalid(form.controls.vatCode)) {
+          <app-error-message [message]="'items.drawer.vatRequired' | translate" />
+        }
+      </div>
+    </div>
+
+    @if (canViewCost()) {
+      <div class="flex flex-col gap-1.5">
+        <label for="add-item-cost">{{ 'items.drawer.costPrice' | translate }}</label>
+        <input
+          id="add-item-cost"
+          inputmode="decimal"
+          formControlName="costPrice"
+          placeholder="0.00"
+          autocomplete="off"
+          class="h-10.5 px-2.5 rounded-[9px] border border-input-border bg-white text-right numeric focus:outline-none focus:border-primary"
+        />
+        @if (invalid(form.controls.costPrice)) {
+          <app-error-message [message]="'items.drawer.costInvalid' | translate" />
+        }
+      </div>
+    }
+
+    <fieldset class="m-0 p-0 border-0 flex flex-col gap-2">
+      <legend class="p-0 mb-1 text-muted-strong font-semibold">
+        {{ 'items.drawer.altUnits' | translate }}
+      </legend>
+
+      <div formArrayName="units" class="flex flex-col gap-2">
+        @for (row of units.controls; track row; let i = $index) {
+          <div [formGroupName]="i" class="flex flex-col gap-1">
+            <div class="flex gap-2 items-center">
+              <select
+                formControlName="unitCode"
+                [attr.aria-label]="'items.drawer.unit' | translate"
+                class="flex-1 min-w-0 h-10 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+              >
+                <option value="">{{ 'items.drawer.choose' | translate }}</option>
+                @for (unit of unitChoices(i); track unit.code) {
+                  <option [value]="unit.code" [selected]="unit.code === row.controls.unitCode.value">
+                    {{ unit.code }} · {{ unit.code | codeLabel: 'units' : unit.name }}
+                  </option>
+                }
+              </select>
+              <span aria-hidden="true" class="text-muted">=</span>
+              <input
+                formControlName="factor"
+                inputmode="decimal"
+                autocomplete="off"
+                [attr.aria-label]="'items.drawer.factor' | translate"
+                class="w-20 h-10 px-2.5 rounded-[9px] border border-input-border bg-white text-right numeric focus:outline-none focus:border-primary"
+              />
+              <span class="text-muted whitespace-nowrap">
+                <small>{{ form.controls.baseUnitCode.value || '…' }}</small>
+              </span>
+              <button
+                type="button"
+                (click)="removeUnit(i)"
+                [attr.aria-label]="
+                  'items.drawer.removeUnit' | translate: { unit: row.controls.unitCode.value || '…' }
+                "
+                class="w-9 h-9 shrink-0 rounded-lg border-0 bg-gray text-muted-strong cursor-pointer hover:text-danger"
+              >
+                ✕
+              </button>
+            </div>
+            @if (invalid(row.controls.unitCode)) {
+              <app-error-message [message]="'items.drawer.unitRequired' | translate" />
+            } @else if (invalid(row.controls.factor)) {
+              <app-error-message [message]="'items.drawer.factorInvalid' | translate" />
+            }
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        (click)="addUnit()"
+        class="self-start h-9 px-3 rounded-[8px] border border-card-border bg-white cursor-pointer hover:bg-gray"
+      >
+        <small>+ {{ 'items.drawer.addUnit' | translate }}</small>
+      </button>
+    </fieldset>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-muted-strong font-semibold">{{ 'items.pdf.zoneTitle' | translate }}</span>
+
+      @if (brochure(); as file) {
+        <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] border border-card-border">
+          <span
+            class="w-9 h-9 shrink-0 rounded-lg bg-danger/10 text-danger font-bold flex items-center justify-center"
+          >
+            <small>PDF</small>
+          </span>
+          <span class="flex-1 min-w-0 flex flex-col">
+            <span class="truncate font-semibold">{{ file.name }}</span>
+            <small class="text-muted">{{ pickedSize(file) }}</small>
+          </span>
+          <button
+            type="button"
+            (click)="clearBrochure()"
+            [attr.aria-label]="'items.pdf.removePicked' | translate: { name: file.name }"
+            class="w-9 h-9 shrink-0 rounded-lg border-0 bg-gray text-muted-strong cursor-pointer hover:text-danger"
+          >
+            ✕
+          </button>
+        </div>
+      } @else {
+        <label
+          for="add-item-brochure"
+          class="flex flex-col items-center gap-1.5 px-4 py-5 rounded-[12px] border-[1.5px] border-dashed border-primary bg-primary/5 text-center cursor-pointer"
+        >
+          <svg
+            aria-hidden="true"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-pill-fg"
+          >
+            <path d="M12 16V4M7 9l5-5 5 5M5 20h14"></path>
+          </svg>
+          <span class="font-semibold">{{ 'items.pdf.browse' | translate }}</span>
+          <small class="text-muted">{{ 'items.pdf.hint' | translate: { max: maxMb } }}</small>
+          <input
+            id="add-item-brochure"
+            type="file"
+            accept="application/pdf,.pdf"
+            (change)="onBrochurePicked($event)"
+            class="sr-only"
+          />
+        </label>
+      }
+
+      @if (brochureError(); as problem) {
+        <app-error-message
+          [message]="
+            (problem === 'notPdf' ? 'items.pdf.notPdf' : 'items.pdf.tooLarge')
+              | translate: { max: maxMb }
+          "
+        />
+      }
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="saving()"
+      class="h-11 rounded-[10px] bg-primary text-white font-bold cursor-pointer hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {{ (saving() ? 'common.saving' : 'items.add.submit') | translate }}
+    </button>
+  </form>
+</section>

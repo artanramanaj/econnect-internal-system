@@ -3,6 +3,11 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma.js";
 import { ROLES, ROLE_CODES } from "../constants/user.constants.js";
 import { PERMISSIONS, ROLE_PERMISSIONS } from "../constants/permissions.constants.js";
+import {
+  DEFAULT_CATEGORIES,
+  DEFAULT_UNITS,
+  DEFAULT_VAT_RATES,
+} from "../constants/catalog.constants.js";
 
 /**
  * The five job titles the app ships with. The migration also imported whatever
@@ -23,6 +28,40 @@ async function main() {
     await prisma.position.upsert({
       where: { name },
       // Left alone on update: retiring one in the UI must survive a reseed.
+      update: {},
+      create: { name },
+    });
+  }
+
+  // Items cannot be created without a unit and a VAT code, so a fresh database
+  // needs these. Left alone on update, like positions: anything changed later
+  // (by an admin, or by the ProData sync) must survive a reseed.
+  console.log("Seeding units...");
+  for (const unit of DEFAULT_UNITS) {
+    await prisma.unit.upsert({
+      where: { code: unit.code },
+      update: {},
+      create: unit,
+    });
+  }
+
+  console.log("Seeding VAT rates...");
+  for (const vat of DEFAULT_VAT_RATES) {
+    // A DATE column: midnight UTC stores exactly the calendar day.
+    const validFrom = new Date(`${vat.validFrom}T00:00:00Z`);
+    await prisma.vatRate.upsert({
+      where: { code_validFrom: { code: vat.code, validFrom } },
+      update: {},
+      create: { code: vat.code, name: vat.name, rate: vat.rate, validFrom },
+    });
+  }
+
+  // Left alone on update: a rename in the UI must survive a reseed. A renamed
+  // default does come back under its old name, as an empty extra category.
+  console.log("Seeding categories...");
+  for (const name of DEFAULT_CATEGORIES) {
+    await prisma.category.upsert({
+      where: { name },
       update: {},
       create: { name },
     });
