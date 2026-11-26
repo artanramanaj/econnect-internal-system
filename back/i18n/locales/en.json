@@ -117,6 +117,7 @@
     "notEditable": "This quote can no longer be edited.",
     "stale": "Someone else saved this quote in the meantime. Reload it and apply your changes again.",
     "notPendingApproval": "This quote is not waiting for approval.",
+    "validUntilPast": "The \"valid until\" date cannot be before today.",
     "cannotApproveOwn": "You cannot approve or reject a quote you saved yourself.",
     "created": "Quote {{number}} created.",
     "saved": "Quote {{number}} saved as version {{version}}.",

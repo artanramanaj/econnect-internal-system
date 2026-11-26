@@ -431,6 +431,7 @@
       "title": "Project name",
       "titleRequired": "Project name must be at least 2 characters",
       "validUntil": "Valid until",
+      "validUntilPast": "Valid until cannot be before today",
       "paymentTerms": "Payment terms",
       "notes": "Notes to client",
       "notesHint": "(printed on the PDF)",

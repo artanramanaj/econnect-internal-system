@@ -1,7 +1,13 @@
 import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Decimal } from 'decimal.js';
@@ -117,7 +123,7 @@ export class QuoteEditor {
     partnerId: ['', Validators.required],
     siteId: [''],
     title: ['', [notBlank, Validators.minLength(2), Validators.maxLength(160)]],
-    validUntil: [''],
+    validUntil: ['', (control: AbstractControl<string>) => this.validUntilError(control.value)],
     paymentTerms: ['', Validators.maxLength(160)],
     notes: ['', Validators.maxLength(4000)],
     lines: this.fb.nonNullable.array<LineGroup>([]),
@@ -468,6 +474,25 @@ export class QuoteEditor {
       },
       error: (err) => this.showError(err),
     });
+  }
+
+  // ---------- valid until ----------
+
+  /** Today as the date input holds it, "2026-11-26", in the user's own time zone. */
+  today(): string {
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  }
+
+  /**
+   * No day already gone. A saved quote whose date has since passed may keep
+   * it — only a new or changed date is checked — so it can still be edited.
+   * The server applies the same rule.
+   */
+  private validUntilError(value: string): ValidationErrors | null {
+    if (!value || value === this.quote()?.validUntil) return null;
+    return value < this.today() ? { pastDate: true } : null;
   }
 
   // ---------- display ----------

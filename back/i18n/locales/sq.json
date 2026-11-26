@@ -117,6 +117,7 @@
     "notEditable": "Kjo ofertë nuk mund të ndryshohet më.",
     "stale": "Dikush tjetër e ruajti këtë ofertë ndërkohë. Ringarkojeni dhe bëni ndryshimet përsëri.",
     "notPendingApproval": "Kjo ofertë nuk është në pritje të miratimit.",
+    "validUntilPast": "Data \"e vlefshme deri më\" nuk mund të jetë para ditës së sotme.",
     "cannotApproveOwn": "Nuk mund ta miratoni ose refuzoni një ofertë që e keni ruajtur vetë.",
     "created": "Oferta {{number}} u krijua.",
     "saved": "Oferta {{number}} u ruajt si versioni {{version}}.",

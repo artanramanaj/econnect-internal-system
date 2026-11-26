@@ -197,6 +197,26 @@ function clampMarkup(value: Decimal): Decimal {
   return Decimal.min(Decimal.max(value, limit.negated()), limit);
 }
 
+/** Today's calendar day on the server, "2026-11-26" — comparable as text. */
+function today(): string {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+/**
+ * A quote cannot be made valid until a day already gone. A saved quote whose
+ * date has since passed keeps it on later saves — only a new or changed date
+ * is checked, so an expired quote can still be edited.
+ */
+function assertValidUntil(validUntil: string | null | undefined, stored: Date | null): void {
+  if (!validUntil) return;
+  if (stored !== null && stored.toISOString().slice(0, 10) === validUntil) return;
+  if (validUntil < today()) {
+    throw new customError("quotes.validUntilPast", StatusCodes.BAD_REQUEST);
+  }
+}
+
 function headerColumns(input: CreateQuoteInput | UpdateQuoteInput) {
   return {
     siteId: input.siteId ?? null,
@@ -246,6 +266,7 @@ function approvalColumns(approval: SaveApproval, userId: number) {
 }
 
 export async function createQuote(input: CreateQuoteInput, userId: number): Promise<SaveOutcome> {
+  assertValidUntil(input.validUntil, null);
   const { lines: priced, totals } = price(input.lines);
   const { lowMarkup, approval, status } = await decideOnSave(totals, userId);
 
@@ -302,6 +323,7 @@ export async function saveRevision(
         status: true,
         version: true,
         partnerId: true,
+        validUntil: true,
         revisions: {
           where: { isCurrent: true },
           select: { id: true, revisionMajor: true, revisionMinor: true },
@@ -317,6 +339,7 @@ export async function saveRevision(
     if (quote.version !== input.version) {
       throw new customError("quotes.stale", StatusCodes.CONFLICT);
     }
+    assertValidUntil(input.validUntil, quote.validUntil);
     const current = quote.revisions[0];
     if (!current) {
       throw new Error(`quote ${id} has no current revision`);

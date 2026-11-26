@@ -431,6 +431,7 @@
       "title": "Emri i projektit",
       "titleRequired": "Emri i projektit duhet të ketë të paktën 2 karaktere",
       "validUntil": "E vlefshme deri më",
+      "validUntilPast": "Data nuk mund të jetë para ditës së sotme",
       "paymentTerms": "Kushtet e pagesës",
       "notes": "Shënime për klientin",
       "notesHint": "(shtypen në PDF)",

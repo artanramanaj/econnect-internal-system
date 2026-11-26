@@ -175,8 +175,12 @@
             id="quote-valid"
             type="date"
             formControlName="validUntil"
+            [min]="today()"
             class="h-10.5 px-2.5 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary disabled:bg-gray disabled:text-muted-strong"
           />
+          @if (form.controls.validUntil.invalid) {
+            <app-error-message [message]="'quotes.editor.validUntilPast' | translate" />
+          }
         </div>
 
         <div class="flex flex-col gap-1.5 min-w-0">

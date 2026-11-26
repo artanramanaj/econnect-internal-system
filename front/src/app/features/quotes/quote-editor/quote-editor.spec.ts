@@ -222,6 +222,29 @@ describe('QuoteEditor', () => {
       expect(text()).toContain('Project name must be at least 2 characters');
     });
 
+    it('should refuse a valid-until date before today, and offer none in the picker', async () => {
+      const component = await openNew();
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const day = (d: Date) =>
+        `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+      expect(el().querySelector<HTMLInputElement>('#quote-valid')?.min).toBe(day(new Date()));
+
+      component.form.controls.partnerId.setValue('1');
+      component.form.controls.title.setValue('Warehouse CCTV');
+      component.form.controls.validUntil.setValue(day(yesterday));
+      component.save();
+      await stable();
+
+      httpMock.expectNone('/api/quotes');
+      expect(text()).toContain('Valid until cannot be before today');
+
+      // Today itself is fine.
+      component.form.controls.validUntil.setValue(day(new Date()));
+      expect(component.form.controls.validUntil.valid).toBe(true);
+    });
+
     it('should load the picked client’s sites and adopt its payment terms', async () => {
       const component = await openNew();
 
@@ -413,6 +436,16 @@ describe('QuoteEditor', () => {
   });
 
   describe('a saved quote', () => {
+    it('should keep a valid-until date that has since passed, but refuse moving it to another past day', async () => {
+      const component = await openSaved(quote({ validUntil: '2025-01-31' }));
+
+      // Expired, but unchanged: still savable.
+      expect(component.form.controls.validUntil.valid).toBe(true);
+
+      component.form.controls.validUntil.setValue('2025-02-15');
+      expect(component.form.controls.validUntil.hasError('pastDate')).toBe(true);
+    });
+
     it('should show the quote, its version and its lines, with the client fixed', async () => {
       const component = await openSaved();
 
