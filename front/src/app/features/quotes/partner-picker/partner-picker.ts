@@ -1,4 +1,15 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CreatePartnerRequest, Partner, Site } from '../../../core/models/partner.model';
@@ -7,8 +18,9 @@ import { ErrorMessage } from '../../../shared/components/error-message/error-mes
 import { notBlank } from '../../../shared/forms/decimal';
 
 /**
- * The client and site fields of the quote editor: a searchable client
- * dropdown with an inline "+ New client" form, and the picked client's sites.
+ * The client and site fields of the quote editor: the client is chosen from a
+ * dropdown or by searching — two icon buttons switch between the two — with
+ * an inline "+ New client" form, and the picked client's sites.
  * On a saved quote the client is fixed and shown as text.
  *
  * Presentational: the parent searches, creates and loads sites; the two
@@ -47,6 +59,55 @@ export class PartnerPicker {
   /** Whether the inline new-client form is open. */
   readonly adding = signal(false);
 
+  /** How the client is chosen: from the dropdown, or by searching. */
+  readonly mode = signal<'select' | 'search'>('select');
+  /** What is typed in the search box. */
+  readonly term = signal('');
+
+  /**
+   * The client picked from a search, kept so the dropdown can still show it
+   * once the list is reloaded without the search term.
+   */
+  private readonly chosen = signal<Partner | null>(null);
+
+  /** The dropdown's clients: the loaded ones, plus the one picked by search. */
+  readonly options = computed(() => {
+    const list = this.partners();
+    const chosen = this.chosen();
+    return chosen && !list.some((p) => p.id === chosen.id) ? [chosen, ...list] : list;
+  });
+
+  private readonly searchBox = viewChild<ElementRef<HTMLInputElement>>('searchBox');
+  private readonly injector = inject(Injector);
+
+  setMode(mode: 'select' | 'search'): void {
+    if (mode === this.mode()) return;
+    this.mode.set(mode);
+    if (mode === 'search') {
+      afterNextRender(() => this.searchBox()?.nativeElement.focus(), { injector: this.injector });
+    } else {
+      this.clearSearch();
+    }
+  }
+
+  /** A search result clicked: picked, and back to the dropdown showing it. */
+  choose(partner: Partner): void {
+    const control = this.partnerControl();
+    control.setValue(String(partner.id));
+    control.markAsTouched();
+    this.chosen.set(partner);
+    this.picked.emit(control.value);
+    this.setMode('select');
+  }
+
+  /** Leaving the search: the dropdown gets the full list back. */
+  private clearSearch(): void {
+    if (this.term() !== '') {
+      this.term.set('');
+      this.search.emit('');
+    }
+  }
+
   readonly newForm = this.fb.nonNullable.group({
     legalName: ['', [notBlank, Validators.minLength(2), Validators.maxLength(160)]],
     city: ['', Validators.maxLength(80)],
@@ -57,7 +118,9 @@ export class PartnerPicker {
   });
 
   onSearch(event: Event): void {
-    this.search.emit((event.target as HTMLInputElement).value.trim());
+    const term = (event.target as HTMLInputElement).value.trim();
+    this.term.set(term);
+    this.search.emit(term);
   }
 
   onPick(): void {

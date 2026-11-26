@@ -54,23 +54,80 @@ describe('PartnerPicker', () => {
     expect(text()).toContain('Main warehouse · Prishtinë');
   });
 
-  it('should emit the search term and the picked client', () => {
-    const terms: string[] = [];
-    const picked: string[] = [];
-    component.search.subscribe((term) => terms.push(term));
-    component.picked.subscribe((id) => picked.push(id));
+  const modeButton = (label: string) =>
+    el().querySelector(`button[aria-label="${label}"]`) as HTMLButtonElement;
 
-    const search = el().querySelector('input[type="search"]') as HTMLInputElement;
-    search.value = ' north ';
-    search.dispatchEvent(new Event('input'));
+  it('should start on the dropdown, with no search box', () => {
+    expect(el().querySelector('#quote-partner')).toBeTruthy();
+    expect(el().querySelector('input[type="search"]')).toBeNull();
+    expect(modeButton('Choose from the list').getAttribute('aria-pressed')).toBe('true');
+    expect(modeButton('Search clients').getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('should emit the client picked from the dropdown', () => {
+    const picked: string[] = [];
+    component.picked.subscribe((id) => picked.push(id));
 
     const select = el().querySelector('#quote-partner') as HTMLSelectElement;
     select.value = '1';
     select.dispatchEvent(new Event('change'));
 
-    expect(terms).toEqual(['north']);
     expect(partnerControl.value).toBe('1');
     expect(picked).toEqual(['1']);
+  });
+
+  it('should switch to the search with the icon, and back', async () => {
+    modeButton('Search clients').click();
+    await fixture.whenStable();
+
+    expect(el().querySelector('#quote-partner')).toBeNull();
+    expect(el().querySelector('#quote-partner-search')).toBeTruthy();
+    expect(modeButton('Search clients').getAttribute('aria-pressed')).toBe('true');
+
+    modeButton('Choose from the list').click();
+    await fixture.whenStable();
+
+    expect(el().querySelector('#quote-partner')).toBeTruthy();
+    expect(el().querySelector('#quote-partner-search')).toBeNull();
+  });
+
+  it('should search, pick a result, and return to the dropdown showing it', async () => {
+    const terms: string[] = [];
+    const picked: string[] = [];
+    component.search.subscribe((term) => terms.push(term));
+    component.picked.subscribe((id) => picked.push(id));
+
+    modeButton('Search clients').click();
+    await fixture.whenStable();
+    const search = el().querySelector('#quote-partner-search') as HTMLInputElement;
+    search.value = ' north ';
+    search.dispatchEvent(new Event('input'));
+    await fixture.whenStable();
+
+    const result = button('Northgate Logistics');
+    expect(result.textContent).toContain('P-0001 · Prishtinë');
+    result.click();
+    // The parent reloads the full list, which may not hold the pick.
+    fixture.componentRef.setInput('partners', []);
+    await fixture.whenStable();
+
+    expect(terms).toEqual(['north', '']);
+    expect(picked).toEqual(['1']);
+    expect(partnerControl.value).toBe('1');
+    const select = el().querySelector('#quote-partner') as HTMLSelectElement;
+    expect(select.selectedOptions[0]?.textContent).toContain('Northgate Logistics (P-0001)');
+  });
+
+  it('should say when no client matches the search', async () => {
+    modeButton('Search clients').click();
+    await fixture.whenStable();
+    const search = el().querySelector('#quote-partner-search') as HTMLInputElement;
+    search.value = 'zzz';
+    search.dispatchEvent(new Event('input'));
+    fixture.componentRef.setInput('partners', []);
+    await fixture.whenStable();
+
+    expect(text()).toContain('No client matches.');
   });
 
   it('should ask for a client once the field was touched and left empty', async () => {

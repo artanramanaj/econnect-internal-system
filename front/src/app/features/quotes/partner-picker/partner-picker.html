@@ -8,26 +8,113 @@
       </small>
     </div>
   } @else {
-    <label for="quote-partner">{{ 'quotes.editor.client' | translate }}</label>
-    <input
-      type="search"
-      (input)="onSearch($event)"
-      [attr.aria-label]="'quotes.editor.clientSearch' | translate"
-      [placeholder]="'quotes.editor.clientSearch' | translate"
-      class="h-9 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
-    />
-    <select
-      id="quote-partner"
-      [formControl]="partnerControl()"
-      (change)="onPick()"
-      class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
-      [class.border-danger]="partnerInvalid()"
-    >
-      <option value="">{{ 'quotes.editor.chooseClient' | translate }}</option>
-      @for (partner of partners(); track partner.id) {
-        <option [value]="partner.id">{{ label(partner) }}</option>
-      }
-    </select>
+    <label [for]="mode() === 'search' ? 'quote-partner-search' : 'quote-partner'">
+      {{ 'quotes.editor.client' | translate }}
+    </label>
+
+    <!-- The dropdown or the search box, with the toggle beside it. -->
+    <div class="flex flex-row items-start gap-2">
+      <div class="flex-1 min-w-0">
+        @if (mode() === 'select') {
+          <select
+            id="quote-partner"
+            [formControl]="partnerControl()"
+            (change)="onPick()"
+            class="w-full h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+            [class.border-danger]="partnerInvalid()"
+          >
+            <option value="">{{ 'quotes.editor.chooseClient' | translate }}</option>
+            <!-- [selected] per option: the list can be reloaded after the pick. -->
+            @for (partner of options(); track partner.id) {
+              <option [value]="partner.id" [selected]="partnerControl().value === '' + partner.id">
+                {{ label(partner) }}
+              </option>
+            }
+          </select>
+        } @else {
+          <div class="relative">
+            <input
+              #searchBox
+              id="quote-partner-search"
+              type="search"
+              autocomplete="off"
+              [value]="term()"
+              (input)="onSearch($event)"
+              (keydown.escape)="setMode('select')"
+              [placeholder]="'quotes.editor.clientSearch' | translate"
+              class="w-full h-10.5 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+              [class.border-danger]="partnerInvalid()"
+            />
+            @if (term()) {
+              <ul
+                [attr.aria-label]="'quotes.editor.clientResults' | translate"
+                class="absolute z-10 left-0 right-0 top-full mt-1 m-0 p-1 list-none max-h-64 overflow-y-auto rounded-[10px] border border-card-border bg-white shadow-lg"
+              >
+                @for (partner of partners(); track partner.id) {
+                  <li>
+                    <button
+                      type="button"
+                      (click)="choose(partner)"
+                      class="w-full text-left px-2.5 py-2 rounded-md border-0 bg-transparent cursor-pointer hover:bg-table-head flex flex-col"
+                    >
+                      <span class="font-semibold">{{ partner.tradeName || partner.legalName }}</span>
+                      <small class="text-muted">
+                        {{ partner.partnerNumber }}@if (partner.city) { · {{ partner.city }} }
+                      </small>
+                    </button>
+                  </li>
+                } @empty {
+                  <li class="px-2.5 py-2 text-muted">
+                    <small>{{ 'quotes.editor.clientNoMatch' | translate }}</small>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Choose from the dropdown, or search: one of the two is pressed.
+           Same height as the field beside it. -->
+      <div
+        role="group"
+        [attr.aria-label]="'quotes.editor.clientMode' | translate"
+        class="shrink-0 h-10.5 inline-flex items-center gap-0.5 p-1 rounded-[9px] border border-input-border bg-white"
+      >
+        <button
+          type="button"
+          (click)="setMode('select')"
+          [attr.aria-pressed]="mode() === 'select'"
+          [attr.aria-label]="'quotes.editor.clientPickMode' | translate"
+          [title]="'quotes.editor.clientPickMode' | translate"
+          class="w-7 h-7 inline-flex items-center justify-center rounded-md border-0 cursor-pointer"
+          [class]="mode() === 'select' ? 'bg-dark-blue text-white' : 'bg-transparent text-muted hover:text-dark-blue'"
+        >
+          <!-- A list with a chevron: the dropdown. -->
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h10" />
+            <path d="M4 12h10" />
+            <path d="M4 18h10" />
+            <path d="m17 10 2.5 3 2.5-3" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          (click)="setMode('search')"
+          [attr.aria-pressed]="mode() === 'search'"
+          [attr.aria-label]="'quotes.editor.clientSearchMode' | translate"
+          [title]="'quotes.editor.clientSearchMode' | translate"
+          class="w-7 h-7 inline-flex items-center justify-center rounded-md border-0 cursor-pointer"
+          [class]="mode() === 'search' ? 'bg-dark-blue text-white' : 'bg-transparent text-muted hover:text-dark-blue'"
+        >
+          <!-- A magnifying glass: the search. -->
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
     @if (partnerInvalid()) {
       <app-error-message [message]="'quotes.editor.clientRequired' | translate" />
     }
