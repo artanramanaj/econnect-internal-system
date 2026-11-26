@@ -119,8 +119,8 @@
         >
           <option value="">{{ 'items.drawer.choose' | translate }}</option>
           <!-- [selected] per option, not [value] on the select: the options
-               arrive after the control has its value. -->
-          @for (unit of options().units; track unit.code) {
+               arrive after the control has its value. Hours only for a service. -->
+          @for (unit of baseUnits(); track unit.code) {
             <option [value]="unit.code" [selected]="unit.code === form.controls.baseUnitCode.value">
               {{ unit.code }} · {{ unit.code | codeLabel: 'units' : unit.name }}
             </option>

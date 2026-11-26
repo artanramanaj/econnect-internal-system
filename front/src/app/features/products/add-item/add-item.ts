@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
   CreateItemRequest,
@@ -27,6 +28,9 @@ export interface AddItemSubmit {
 }
 
 type UnitRow = FormGroup<{ unitCode: FormControl<string>; factor: FormControl<string> }>;
+
+/** Units that only make sense for work, never as a product's base unit. */
+const SERVICE_ONLY_UNITS: readonly string[] = ['hr'];
 
 /**
  * The always-there "add a product" card beside the table (add-employee is the
@@ -86,6 +90,20 @@ export class AddItem {
         this.form.controls.vatCode.setValue(first.code);
       }
     });
+
+    // Switching to Product drops a base unit a product cannot have (Hours).
+    this.form.controls.type.valueChanges.pipe(takeUntilDestroyed()).subscribe((type) => {
+      const base = this.form.controls.baseUnitCode;
+      if (type === 'PRODUCT' && SERVICE_ONLY_UNITS.includes(base.value)) base.setValue('');
+    });
+  }
+
+  /** The base units the chosen type may have: no Hours for a product. */
+  baseUnits(): UnitOption[] {
+    const units = this.options().units;
+    return this.form.controls.type.value === 'PRODUCT'
+      ? units.filter((unit) => !SERVICE_ONLY_UNITS.includes(unit.code))
+      : units;
   }
 
   private unitRow(): UnitRow {

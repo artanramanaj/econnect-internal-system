@@ -65,6 +65,52 @@ describe('AddItem', () => {
     expect(component.form.controls.vatCode.value).toBe('STANDARD');
   });
 
+  describe('the base unit', () => {
+    const withHours: ItemOptions = { ...OPTIONS, units: [{ code: 'hr', name: 'Hours' }, ...OPTIONS.units] };
+    /** The codes the base-unit select actually renders. */
+    const baseChoices = () =>
+      Array.from(el().querySelectorAll<HTMLOptionElement>('#add-item-unit option'))
+        .map((option) => option.value)
+        .filter(Boolean);
+    const pickType = async (type: string) => {
+      const select = el().querySelector<HTMLSelectElement>('#add-item-type')!;
+      select.value = type;
+      select.dispatchEvent(new Event('change'));
+      await fixture.whenStable();
+    };
+
+    beforeEach(async () => {
+      fixture.componentRef.setInput('options', withHours);
+      await fixture.whenStable();
+    });
+
+    it('should not offer Hours for a product', () => {
+      expect(baseChoices()).toEqual(['box', 'm', 'pcs']);
+    });
+
+    it('should offer Hours for a service', async () => {
+      await pickType('SERVICE');
+      expect(baseChoices()).toEqual(['hr', 'box', 'm', 'pcs']);
+    });
+
+    it('should drop Hours when a service is switched back to a product', async () => {
+      await pickType('SERVICE');
+      component.form.controls.baseUnitCode.setValue('hr');
+
+      await pickType('PRODUCT');
+
+      expect(component.form.controls.baseUnitCode.value).toBe('');
+      expect(baseChoices()).not.toContain('hr');
+    });
+
+    it('should keep any other unit when the type changes', async () => {
+      component.form.controls.baseUnitCode.setValue('m');
+      await pickType('SERVICE');
+      await pickType('PRODUCT');
+      expect(component.form.controls.baseUnitCode.value).toBe('m');
+    });
+  });
+
   it('should not emit while required fields are missing, and say which', async () => {
     component.onSubmit();
     await fixture.whenStable();
