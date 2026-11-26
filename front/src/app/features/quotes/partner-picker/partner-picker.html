@@ -1,0 +1,144 @@
+<div class="flex flex-col gap-1.5 min-w-0">
+  @if (locked(); as partner) {
+    <span class="font-semibold">{{ 'quotes.editor.client' | translate }}</span>
+    <div class="min-h-10.5 px-3 py-2 rounded-[9px] bg-gray flex flex-col justify-center">
+      <span class="font-semibold">{{ partner.tradeName || partner.legalName }}</span>
+      <small class="text-muted">
+        {{ partner.partnerNumber }}@if (partner.city) { · {{ partner.city }} }
+      </small>
+    </div>
+  } @else {
+    <label for="quote-partner">{{ 'quotes.editor.client' | translate }}</label>
+    <input
+      type="search"
+      (input)="onSearch($event)"
+      [attr.aria-label]="'quotes.editor.clientSearch' | translate"
+      [placeholder]="'quotes.editor.clientSearch' | translate"
+      class="h-9 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+    />
+    <select
+      id="quote-partner"
+      [formControl]="partnerControl()"
+      (change)="onPick()"
+      class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+      [class.border-danger]="partnerInvalid()"
+    >
+      <option value="">{{ 'quotes.editor.chooseClient' | translate }}</option>
+      @for (partner of partners(); track partner.id) {
+        <option [value]="partner.id">{{ label(partner) }}</option>
+      }
+    </select>
+    @if (partnerInvalid()) {
+      <app-error-message [message]="'quotes.editor.clientRequired' | translate" />
+    }
+
+    @if (adding()) {
+      <form
+        [formGroup]="newForm"
+        (ngSubmit)="submitNew()"
+        novalidate
+        class="mt-1 p-3 rounded-[10px] bg-table-head border border-card-border flex flex-col gap-2.5"
+      >
+        <p class="m-0 font-semibold">{{ 'quotes.newClient.heading' | translate }}</p>
+        @if (createError(); as message) {
+          <app-error-message variant="banner" [message]="message" />
+        }
+        <div class="flex flex-col gap-1">
+          <label for="new-client-name">{{ 'quotes.newClient.legalName' | translate }}</label>
+          <input
+            id="new-client-name"
+            formControlName="legalName"
+            maxlength="160"
+            class="h-10 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+          />
+          @if (newForm.controls.legalName.touched && newForm.controls.legalName.invalid) {
+            <app-error-message [message]="'quotes.newClient.legalNameRequired' | translate" />
+          }
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="flex flex-col gap-1 min-w-0">
+            <label for="new-client-city">{{ 'quotes.newClient.city' | translate }}</label>
+            <input
+              id="new-client-city"
+              formControlName="city"
+              maxlength="80"
+              class="h-10 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+            />
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <label for="new-client-fiscal">{{ 'quotes.newClient.fiscalNumber' | translate }}</label>
+            <input
+              id="new-client-fiscal"
+              formControlName="fiscalNumber"
+              maxlength="30"
+              class="h-10 px-3 rounded-[9px] border border-input-border bg-white numeric focus:outline-none focus:border-primary"
+            />
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <label for="new-client-phone">{{ 'quotes.newClient.phone' | translate }}</label>
+            <input
+              id="new-client-phone"
+              formControlName="phone"
+              maxlength="30"
+              class="h-10 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+            />
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <label for="new-client-email">{{ 'quotes.newClient.email' | translate }}</label>
+            <input
+              id="new-client-email"
+              type="email"
+              formControlName="email"
+              maxlength="120"
+              class="h-10 px-3 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+            />
+            @if (newForm.controls.email.touched && newForm.controls.email.invalid) {
+              <app-error-message [message]="'quotes.newClient.emailInvalid' | translate" />
+            }
+          </div>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button
+            type="button"
+            (click)="closeForm()"
+            class="h-9 px-3 rounded-lg border-0 bg-transparent text-muted cursor-pointer hover:text-dark-blue"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+          <button
+            type="submit"
+            [disabled]="creating()"
+            class="h-9 px-4 rounded-lg border-0 bg-dark-blue text-white font-semibold cursor-pointer hover:brightness-110 disabled:opacity-60"
+          >
+            {{ (creating() ? 'common.saving' : 'quotes.newClient.submit') | translate }}
+          </button>
+        </div>
+      </form>
+    } @else {
+      <button
+        type="button"
+        (click)="openForm()"
+        class="self-start p-0 border-0 bg-transparent text-link font-semibold cursor-pointer hover:underline"
+      >
+        <small>+ {{ 'quotes.newClient.open' | translate }}</small>
+      </button>
+    }
+  }
+</div>
+
+<div class="flex flex-col gap-1.5 min-w-0">
+  <label for="quote-site">{{ 'quotes.editor.site' | translate }}</label>
+  <select
+    id="quote-site"
+    [formControl]="siteControl()"
+    class="h-10.5 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary disabled:bg-gray disabled:text-muted-strong"
+  >
+    <option value="">{{ 'quotes.editor.noSite' | translate }}</option>
+    <!-- [selected] per option: the sites arrive after the control has its value. -->
+    @for (site of sites(); track site.id) {
+      <option [value]="site.id" [selected]="siteControl().value === '' + site.id">
+        {{ site.name }}@if (site.city) { · {{ site.city }} }
+      </option>
+    }
+  </select>
+</div>

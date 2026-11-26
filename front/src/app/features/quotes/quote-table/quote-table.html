@@ -1,0 +1,211 @@
+<!-- The status views: a narrow column beside the table, wrapping above it on
+     narrow screens. Counts follow the other filters, not the status itself. -->
+<aside class="flex-[1_1_200px] max-w-full flex flex-col gap-1">
+  <p class="m-0 mb-1.5 text-muted font-semibold uppercase tracking-wider">
+    <small>{{ 'quotes.list.views' | translate }}</small>
+  </p>
+  <nav [attr.aria-label]="'quotes.list.views' | translate" class="flex flex-col gap-0.5">
+    <button
+      type="button"
+      (click)="pickStatus('')"
+      [attr.aria-pressed]="filters().status === ''"
+      class="flex justify-between items-center min-h-10 px-3 rounded-lg border-0 text-left cursor-pointer"
+      [class]="filters().status === '' ? 'bg-dark-blue text-white font-semibold' : 'bg-transparent text-light-black hover:bg-white'"
+    >
+      <span>{{ 'quotes.list.all' | translate }}</span>
+      <span class="numeric opacity-80">{{ count('') }}</span>
+    </button>
+    @for (status of statuses; track status) {
+      <button
+        type="button"
+        (click)="pickStatus(status)"
+        [attr.aria-pressed]="filters().status === status"
+        class="flex justify-between items-center min-h-10 px-3 rounded-lg border-0 text-left cursor-pointer"
+        [class]="filters().status === status ? 'bg-dark-blue text-white font-semibold' : 'bg-transparent text-light-black hover:bg-white'"
+      >
+        <span>{{ ('quotes.status.' + status) | translate }}</span>
+        <span class="numeric opacity-80">{{ count(status) }}</span>
+      </button>
+    }
+  </nav>
+</aside>
+
+<section
+  aria-labelledby="quotes-heading"
+  class="flex-[999_1_640px] min-w-0 bg-white border border-card-border rounded-[14px]"
+>
+  <div class="px-5 py-4 border-b border-card-border">
+    <h6 id="quotes-heading" class="m-0">
+      {{ 'quotes.list.heading' | translate }} <span class="text-muted">· {{ meta().total }}</span>
+    </h6>
+  </div>
+
+  <div class="flex flex-wrap gap-2 px-5 py-3 border-b border-card-border">
+    <input
+      type="search"
+      [attr.aria-label]="'quotes.list.search' | translate"
+      [placeholder]="'quotes.list.searchPlaceholder' | translate"
+      (input)="onSearch($event)"
+      class="h-10 flex-[2_1_220px] min-w-0 px-3 rounded-[9px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+    />
+
+    <select
+      [attr.aria-label]="'quotes.list.filterByClient' | translate"
+      (change)="onFilter('partnerId', $event)"
+      class="h-10 flex-[1_1_150px] min-w-0 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      <option value="">{{ 'quotes.list.allClients' | translate }}</option>
+      @for (partner of partners(); track partner.id) {
+        <option [value]="partner.id">{{ partner.tradeName || partner.legalName }}</option>
+      }
+    </select>
+
+    <select
+      [attr.aria-label]="'quotes.list.filterByAuthor' | translate"
+      (change)="onFilter('createdById', $event)"
+      class="h-10 flex-[1_1_140px] min-w-0 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    >
+      <option value="">{{ 'quotes.list.anyAuthor' | translate }}</option>
+      @for (author of authors(); track author.id) {
+        <option [value]="author.id">{{ author.name }}</option>
+      }
+    </select>
+
+    <input
+      type="date"
+      [attr.aria-label]="'quotes.list.dateFrom' | translate"
+      [title]="'quotes.list.dateFrom' | translate"
+      (change)="onFilter('dateFrom', $event)"
+      class="h-10 flex-[1_1_140px] min-w-0 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    />
+    <input
+      type="date"
+      [attr.aria-label]="'quotes.list.dateTo' | translate"
+      [title]="'quotes.list.dateTo' | translate"
+      (change)="onFilter('dateTo', $event)"
+      class="h-10 flex-[1_1_140px] min-w-0 px-2 rounded-[9px] border border-input-border bg-white focus:outline-none focus:border-primary"
+    />
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-225 border-collapse">
+      <thead>
+        <tr class="text-left text-muted">
+          <th class="py-2.5 pl-5 pr-2 border-b border-card-border" [attr.aria-sort]="ariaSort('quoteNumber')">
+            <button type="button" (click)="onSort('quoteNumber')" class="p-0 border-0 bg-transparent text-[12px] font-bold uppercase tracking-wider text-muted cursor-pointer hover:text-dark-blue">
+              {{ 'quotes.list.number' | translate }} {{ arrow('quoteNumber') }}
+            </button>
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border" [attr.aria-sort]="ariaSort('title')">
+            <button type="button" (click)="onSort('title')" class="p-0 border-0 bg-transparent text-[12px] font-bold uppercase tracking-wider text-muted cursor-pointer hover:text-dark-blue">
+              {{ 'quotes.list.clientProject' | translate }} {{ arrow('title') }}
+            </button>
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border" [attr.aria-sort]="ariaSort('createdAt')">
+            <button type="button" (click)="onSort('createdAt')" class="p-0 border-0 bg-transparent text-[12px] font-bold uppercase tracking-wider text-muted cursor-pointer hover:text-dark-blue">
+              {{ 'quotes.list.date' | translate }} {{ arrow('createdAt') }}
+            </button>
+          </th>
+          <th class="py-2.5 px-2 border-b border-card-border text-right">
+            {{ 'quotes.list.exclVat' | translate }}
+          </th>
+          @if (canViewCost()) {
+            <th class="py-2.5 px-2 border-b border-card-border text-right">
+              {{ 'quotes.list.markup' | translate }}
+            </th>
+          }
+          <th class="py-2.5 px-2 border-b border-card-border" [attr.aria-sort]="ariaSort('status')">
+            <button type="button" (click)="onSort('status')" class="p-0 border-0 bg-transparent text-[12px] font-bold uppercase tracking-wider text-muted cursor-pointer hover:text-dark-blue">
+              {{ 'quotes.list.status' | translate }} {{ arrow('status') }}
+            </button>
+          </th>
+          <th class="py-2.5 pr-5 pl-2 border-b border-card-border">
+            {{ 'quotes.list.author' | translate }}
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (row of quotes(); track row.id) {
+          <tr>
+            <td class="py-2.5 pl-5 pr-2 border-b border-row-border whitespace-nowrap">
+              <a [routerLink]="['/quotes', row.id]" class="font-semibold text-link no-underline hover:underline">
+                {{ row.quoteNumber }}
+              </a>
+              <br />
+              <small class="text-muted">
+                {{ 'quotes.list.version' | translate: { version: row.version } }} ·
+                {{
+                  (row.revisionCount === 1 ? 'quotes.list.versionCountOne' : 'quotes.list.versionCount')
+                    | translate: { count: row.revisionCount }
+                }}
+              </small>
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border">
+              <span class="flex flex-col">
+                <span class="font-medium">{{ clientName(row) }}</span>
+                <small class="text-muted">{{ row.title }}</small>
+              </span>
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border text-muted-strong whitespace-nowrap numeric">
+              {{ day(row.createdAt) }}
+            </td>
+
+            <td class="py-2.5 px-2 border-b border-row-border text-right numeric font-semibold whitespace-nowrap">
+              {{ row.subtotal | money }}
+            </td>
+
+            @if (canViewCost()) {
+              <td
+                class="py-2.5 px-2 border-b border-row-border text-right numeric whitespace-nowrap"
+                [class.text-danger]="isLow(row)"
+                [class.font-semibold]="isLow(row)"
+              >
+                @if (markup(row); as pct) {
+                  {{ pct }}%
+                } @else {
+                  <span class="text-muted">{{ 'quotes.na' | translate }}</span>
+                }
+              </td>
+            }
+
+            <td class="py-2.5 px-2 border-b border-row-border whitespace-nowrap">
+              <span
+                class="inline-flex items-center h-6 px-2.5 rounded-full font-semibold"
+                [class]="statusClasses[row.status]"
+              >
+                <small>{{ ('quotes.status.' + row.status) | translate }}</small>
+              </span>
+            </td>
+
+            <td class="py-2.5 pr-5 pl-2 border-b border-row-border text-muted-strong whitespace-nowrap">
+              {{ row.createdBy.name }}
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="canViewCost() ? 7 : 6" class="px-5 py-8 text-center text-muted">
+              {{ (loading() ? 'common.loading' : 'quotes.list.empty') | translate }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- The wrapper carries the border and padding, so it must go too when
+       there is only one page; the pager hides itself as well. -->
+  @if (meta().totalPages > 1) {
+    <div class="flex justify-end px-5 py-3 border-t border-card-border">
+      <app-pagination
+        [label]="'quotes.list.pagesLabel' | translate"
+        [page]="meta().page"
+        [pageSize]="meta().pageSize"
+        [total]="meta().total"
+        (pageChange)="pageChange.emit($event)"
+      />
+    </div>
+  }
+</section>

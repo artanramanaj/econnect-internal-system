@@ -20,7 +20,7 @@ import {
 } from "../validators/items.schema.js";
 import { paginate } from "../utils/pagination.js";
 import { actorId } from "../utils/actor.js";
-import { startOfToday } from "../utils/dates.js";
+import { vatInForceToday } from "../utils/vat.js";
 import { isUniqueViolation } from "../utils/prismaErrors.js";
 import { t, type MessageKey } from "../i18n/index.js";
 
@@ -153,15 +153,6 @@ function parseId(raw: string): number {
   return id;
 }
 
-/** VAT rates in force today. The columns are DATEs, so compare against midnight UTC. */
-function inForceToday(): Prisma.VatRateWhereInput {
-  const today = startOfToday();
-  return {
-    validFrom: { lte: today },
-    OR: [{ validTo: null }, { validTo: { gte: today } }],
-  };
-}
-
 /**
  * The unique index is case-sensitive, so without this "CAM-01" and "cam-01"
  * could both exist and a quote could pick the wrong one. Concurrent creates
@@ -220,7 +211,7 @@ async function assertReferences(
 
   if (refs.vatCode !== undefined) {
     const rate = await db.vatRate.findFirst({
-      where: { code: refs.vatCode, ...inForceToday() },
+      where: { code: refs.vatCode, ...vatInForceToday() },
       select: { id: true },
     });
     if (!rate) {
@@ -264,12 +255,82 @@ function changesSyncedField(current: SyncedValues, input: UpdateItemInput): bool
 }
 
 /**
- * The catalogue list. `q` matches code, description or category name. The
- * matching category ids are resolved first (the table holds a few dozen rows)
- * and the OR gets a plain `categoryId IN (...)` branch: a relation filter
- * would become an EXISTS subquery Postgres cannot BitmapOr with the trigram
- * indexes on sku and description, degrading the whole search to a seq scan.
+ * The search clause shared by the catalogue list and the quote editor's line
+ * picker: `q` matches code, description or category name. The matching
+ * category ids are resolved first (the table holds a few dozen rows) and the
+ * OR gets a plain `categoryId IN (...)` branch: a relation filter would become
+ * an EXISTS subquery Postgres cannot BitmapOr with the trigram indexes on sku
+ * and description, degrading the whole search to a seq scan.
  */
+async function textSearch(q: string): Promise<Prisma.ItemWhereInput> {
+  const matchingCategoryIds = (
+    await prisma.category.findMany({
+      where: { name: { contains: q, mode: "insensitive" } },
+      select: { id: true },
+    })
+  ).map((row) => row.id);
+
+  return {
+    OR: [
+      { sku: { contains: q, mode: "insensitive" } },
+      { description: { contains: q, mode: "insensitive" } },
+      ...(matchingCategoryIds.length ? [{ categoryId: { in: matchingCategoryIds } }] : []),
+    ],
+  };
+}
+
+/** How many matches the quote editor's line picker shows. */
+const SEARCH_LIMIT = 20;
+
+/**
+ * GET /api/items/search?q= — active catalogue items for a quote line, each
+ * with what the line will copy: code, description, unit, VAT code and the
+ * rate in force today, and (for users who may see it) the cost.
+ */
+export async function searchItems(req: Request, res: Response) {
+  const q = typeof req.query.q === "string" ? req.query.q.trim().slice(0, 100) : "";
+  if (q.length < 2) {
+    res.status(StatusCodes.OK).json({ items: [] });
+    return;
+  }
+
+  const [rows, rates, withCost] = await Promise.all([
+    prisma.item.findMany({
+      where: { isArchived: false, ...(await textSearch(q)) },
+      select: {
+        id: true,
+        sku: true,
+        description: true,
+        type: true,
+        baseUnitCode: true,
+        vatCode: true,
+        costPrice: true,
+        category: { select: { name: true } },
+        brochureName: true,
+      },
+      orderBy: [{ description: "asc" }, { id: "asc" }],
+      take: SEARCH_LIMIT,
+    }),
+    prisma.vatRate.findMany({ where: vatInForceToday(), select: { code: true, rate: true } }),
+    canViewItemCost(actorId(req)),
+  ]);
+
+  const rateOf = new Map(rates.map((rate) => [rate.code, rate.rate.toFixed(2)]));
+
+  res.status(StatusCodes.OK).json({
+    items: rows.map(({ costPrice, category, brochureName, ...item }) => ({
+      ...item,
+      category: category?.name ?? null,
+      hasBrochure: brochureName !== null,
+      // null when the item's code has no rate in force: the editor then makes
+      // the user pick one rather than guessing.
+      vatRate: rateOf.get(item.vatCode) ?? null,
+      ...(withCost ? { costPrice: costPrice.toFixed(4) } : {}),
+    })),
+  });
+}
+
+/** The catalogue list; see textSearch for how `q` is matched. */
 export async function getItems(req: Request, res: Response) {
   // Parsed here rather than by middleware: in Express 5 req.query is a
   // getter, so middleware cannot write the parsed value back.
@@ -279,15 +340,6 @@ export async function getItems(req: Request, res: Response) {
   }
   const { q, type, source, categoryId, brandId, status, page, pageSize } = parsed.data;
 
-  const matchingCategoryIds = q
-    ? (
-        await prisma.category.findMany({
-          where: { name: { contains: q, mode: "insensitive" } },
-          select: { id: true },
-        })
-      ).map((row) => row.id)
-    : [];
-
   const where: Prisma.ItemWhereInput = {
     ...(status === "active" ? { isArchived: false } : {}),
     ...(status === "archived" ? { isArchived: true } : {}),
@@ -295,15 +347,7 @@ export async function getItems(req: Request, res: Response) {
     ...(source ? { source } : {}),
     ...(categoryId ? { categoryId } : {}),
     ...(brandId ? { brandId } : {}),
-    ...(q
-      ? {
-          OR: [
-            { sku: { contains: q, mode: "insensitive" as const } },
-            { description: { contains: q, mode: "insensitive" as const } },
-            ...(matchingCategoryIds.length ? [{ categoryId: { in: matchingCategoryIds } }] : []),
-          ],
-        }
-      : {}),
+    ...(q ? await textSearch(q) : {}),
   };
 
   // Counted first so the page can be clamped before the rows are fetched.
@@ -339,7 +383,7 @@ export async function getItemOptions(_req: Request, res: Response) {
   const [units, vatRates, categories, brands, manufacturers] = await Promise.all([
     prisma.unit.findMany({ select: { code: true, name: true }, orderBy: { code: "asc" } }),
     prisma.vatRate.findMany({
-      where: inForceToday(),
+      where: vatInForceToday(),
       select: { code: true, name: true, rate: true },
       orderBy: [{ rate: "desc" }, { code: "asc" }],
     }),

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getItems,
   getItemOptions,
+  searchItems,
   getItem,
   createItem,
   updateItem,
@@ -22,12 +23,15 @@ const router = Router();
 // sales and admins may also change things (catalog.manage).
 const canView = requirePermission(["catalog.view", "catalog.manage"]);
 const canManage = requirePermission("catalog.manage");
+// The quote editor's line picker: whoever writes quotes may search the catalogue.
+const canSearch = requirePermission(["quote.manage", "catalog.view", "catalog.manage"]);
 
 router.use(authenticate);
 
 router.get("/", canView, getItems);
 // Declared before "/:id", which would otherwise take "options" for an id.
 router.get("/options", canView, getItemOptions);
+router.get("/search", canSearch, searchItems);
 router.get("/:id", canView, getItem);
 router.post("/", canManage, validateBody(createItemSchema), createItem);
 router.patch("/:id", canManage, validateBody(updateItemSchema), updateItem);

@@ -1,8 +1,11 @@
 # eConnect — backend
 
 Express 5 + TypeScript (ESM: imports end in `.js`), Prisma 7 on PostgreSQL, zod 4.
-`npm run dev` serves on port 3000 (tsx watch). There are no tests; run
-`npm run typecheck` before calling a change done.
+`npm run dev` serves on port 3000 (tsx watch). Run `npm run typecheck` before calling a
+change done. `npm test` runs the only unit tests there are — the quote pricing, VAT,
+approval-threshold and status-transition rules (`services/quotePricing.test.ts`, Node's
+built-in runner); keep them passing when touching `services/quotePricing.ts` or
+`services/quoteStatus.ts`.
 
 ## i18n — Albanian (`sq`) and English (`en`)
 

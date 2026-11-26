@@ -1,35 +1,8 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
 /*
  * Form plumbing the item drawer and the add-product card share. Screen-local
- * on purpose: nothing outside features/products speaks "item".
+ * on purpose: nothing outside features/products speaks "item". The decimal
+ * input helpers moved to shared/forms/decimal.ts once quotes needed them too.
  */
-
-/**
- * "12", "12.5" or "12,5": up to 8 integer digits and 4 decimals, which is what
- * a Decimal(12, 4) column holds. The comma is how amounts are typed in Albanian.
- */
-export const DECIMAL = /^\d{1,8}([.,]\d{1,4})?$/;
-
-/** What was typed ("12,50") as what the API takes (12.5). */
-export function parseDecimal(text: string): number {
-  return Number(text.trim().replace(',', '.'));
-}
-
-/** Empty passes, since that is `required`'s job; anything else must be a decimal. */
-export function decimal(options: { positive?: boolean } = {}): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const text = String(control.value ?? '').trim();
-    if (text === '') return null;
-    if (!DECIMAL.test(text)) return { decimal: true };
-    if (options.positive && parseDecimal(text) <= 0) return { decimal: true };
-    return null;
-  };
-}
-
-/** `required`, but whitespace does not count: the server trims before it checks. */
-export const notBlank: ValidatorFn = (control) =>
-  String(control.value ?? '').trim() === '' ? { required: true } : null;
 
 /** "12.5000" from the API as someone would type it: "12.5". */
 export function asTyped(value: string): string {

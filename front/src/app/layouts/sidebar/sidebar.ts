@@ -39,6 +39,17 @@ export class Sidebar {
       this.authService.hasPermission('catalog.manage'),
   );
 
+  /** The quotes routes are guarded by these three codes. */
+  readonly canViewQuotes = computed(
+    () =>
+      this.authService.hasPermission('quote.manage') ||
+      this.authService.hasPermission('quote.accept') ||
+      this.authService.hasPermission('quote.approve'),
+  );
+
+  /** "New quote" only for people who may create one. */
+  readonly canWriteQuotes = computed(() => this.authService.hasPermission('quote.manage'));
+
   logout() {
     this.authService.logout().subscribe({
       // Navigate either way — a failed logout still clears the client session.

@@ -1,0 +1,93 @@
+<div class="px-5 pt-4 pb-5 flex flex-col gap-2">
+  <div class="flex flex-wrap gap-2.5 items-end">
+    <div class="flex flex-col gap-1.5 flex-[3_1_320px] min-w-0">
+      <label for="line-search">{{ 'quotes.search.label' | translate }}</label>
+      <input
+        id="line-search"
+        type="search"
+        autocomplete="off"
+        [value]="term()"
+        (input)="onTerm($event)"
+        [placeholder]="'quotes.search.placeholder' | translate"
+        class="h-12 px-3.5 rounded-[10px] border-[1.5px] border-dashed border-primary bg-primary/5 placeholder:text-muted focus:outline-none focus:border-solid"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1.5 flex-[1_1_160px] min-w-0">
+      <label for="line-section">{{ 'quotes.search.section' | translate }}</label>
+      <input
+        id="line-section"
+        list="line-sections"
+        maxlength="60"
+        autocomplete="off"
+        [value]="section()"
+        (input)="onSection($event)"
+        [placeholder]="'quotes.search.sectionPlaceholder' | translate"
+        class="h-12 px-3 rounded-[10px] border border-input-border bg-white placeholder:text-muted focus:outline-none focus:border-primary"
+      />
+      <datalist id="line-sections">
+        @for (name of sections(); track name) {
+          <option [value]="name"></option>
+        }
+      </datalist>
+    </div>
+
+    <button
+      type="button"
+      (click)="free()"
+      class="h-12 px-4 rounded-[10px] border border-input-border bg-white font-semibold text-dark-blue cursor-pointer hover:border-primary"
+    >
+      + {{ 'quotes.search.free' | translate }}
+    </button>
+  </div>
+
+  @if (open()) {
+    <div
+      role="listbox"
+      [attr.aria-label]="'quotes.search.results' | translate"
+      class="max-w-190 rounded-xl border border-input-border bg-white shadow-lg overflow-hidden"
+    >
+      <p class="m-0 px-3.5 py-2.5 bg-table-head border-b border-card-border text-muted font-semibold uppercase tracking-wider">
+        <small>
+          {{
+            (searching() ? 'quotes.search.searching' : 'quotes.search.count')
+              | translate: { count: hits().length }
+          }}
+        </small>
+      </p>
+      @for (hit of hits(); track hit.id) {
+        <button
+          type="button"
+          role="option"
+          (click)="choose(hit)"
+          class="w-full flex items-center gap-3.5 min-h-12 px-3.5 py-2 border-0 border-b border-row-border bg-white text-left cursor-pointer hover:bg-primary/5"
+        >
+          <span class="w-32 shrink-0 font-mono font-semibold text-pill-fg break-all">
+            <small>{{ hit.sku }}</small>
+          </span>
+          <span class="flex-1 min-w-0 flex flex-col">
+            <span>{{ hit.description }}</span>
+            @if (hit.category) {
+              <small class="text-muted">{{ hit.category }}</small>
+            }
+          </span>
+          <span class="text-muted whitespace-nowrap">
+            <small>
+              @if (hit.type === 'SERVICE') {
+                {{ 'quotes.lines.kinds.SERVICE' | translate }} ·
+              }
+              @if (canViewCost() && hit.costPrice !== undefined) {
+                {{ 'quotes.search.cost' | translate }} {{ hit.costPrice | money }} ·
+              }
+              {{ hit.baseUnitCode }}
+            </small>
+          </span>
+        </button>
+      } @empty {
+        @if (!searching()) {
+          <p class="m-0 p-3.5 text-muted">{{ 'quotes.search.none' | translate }}</p>
+        }
+      }
+    </div>
+  }
+</div>

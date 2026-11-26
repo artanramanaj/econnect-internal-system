@@ -33,6 +33,24 @@ export const routes: Routes = [
         loadComponent: () => import('./features/products/products').then((m) => m.Products),
       },
       {
+        path: 'quotes',
+        canActivate: [permissionGuard('quote.manage', 'quote.accept', 'quote.approve')],
+        loadComponent: () => import('./features/quotes/quotes').then((m) => m.Quotes),
+      },
+      {
+        // Declared before 'quotes/:id', which would otherwise take "new" for an id.
+        path: 'quotes/new',
+        canActivate: [permissionGuard('quote.manage')],
+        loadComponent: () =>
+          import('./features/quotes/quote-editor/quote-editor').then((m) => m.QuoteEditor),
+      },
+      {
+        path: 'quotes/:id',
+        canActivate: [permissionGuard('quote.manage', 'quote.accept', 'quote.approve')],
+        loadComponent: () =>
+          import('./features/quotes/quote-editor/quote-editor').then((m) => m.QuoteEditor),
+      },
+      {
         path: 'team-allocations',
         loadComponent: () =>
           import('./features/team-allocations/team-allocations').then((m) => m.TeamAllocations),

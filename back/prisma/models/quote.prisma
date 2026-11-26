@@ -1,0 +1,140 @@
+// ---------- quoting ----------
+//
+// Structural rules (see CLAUDE.md, "Business flow"):
+//  - Lines belong to a REVISION, never to a quote. A quote always has at least
+//    one revision (1.0), created in the same transaction as the quote.
+//  - Saving an edit creates the next revision; earlier ones are never changed.
+//    Exactly one revision per quote has isCurrent = true.
+//  - A line COPIES sku, description, unit cost and VAT rate when it is created,
+//    so later catalogue or VAT changes cannot alter a saved quote.
+//  - Money is Decimal end to end: unit prices 4 decimals, totals 2, half-up.
+
+enum QuoteStatus {
+  DRAFT
+  PENDING_APPROVAL
+  READY_TO_SEND
+  SENT
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+enum RevisionKind {
+  NORMAL
+  CHANGE_ORDER
+}
+
+enum ApprovalStatus {
+  NOT_REQUIRED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum QuoteLineKind {
+  PRODUCT
+  SERVICE
+}
+
+model Quote {
+  id           Int         @id @default(autoincrement())
+  quoteNumber  String      @unique @map("quote_number") @db.VarChar(20) // EC-2026-0001, gap-free
+  partnerId    Int         @map("partner_id")
+  siteId       Int?        @map("site_id")
+  title        String      @db.VarChar(160)
+  label        String?     @db.VarChar(80)
+  status       QuoteStatus @default(DRAFT)
+  validUntil   DateTime?   @map("valid_until") @db.Date
+  paymentTerms String?     @map("payment_terms") @db.VarChar(160)
+  notes        String?
+  createdById  Int         @map("created_by_id")
+  version      Int         @default(1) // optimistic lock, bumped on every save
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @default(now()) @updatedAt @map("updated_at")
+
+  partner   Partner         @relation(fields: [partnerId], references: [id], onDelete: Restrict)
+  site      Site?           @relation(fields: [siteId], references: [id], onDelete: Restrict)
+  createdBy User            @relation("QuoteAuthor", fields: [createdById], references: [id])
+  revisions QuoteRevision[]
+
+  @@index([partnerId])
+  @@index([status])
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("quotes")
+}
+
+model QuoteRevision {
+  id            Int          @id @default(autoincrement())
+  quoteId       Int          @map("quote_id")
+  revisionMajor Int          @default(1) @map("revision_major")
+  revisionMinor Int          @default(0) @map("revision_minor")
+  kind          RevisionKind @default(NORMAL)
+  isCurrent     Boolean      @default(true) @map("is_current")
+  isLocked      Boolean      @default(false) @map("is_locked")
+
+  subtotal         Decimal  @db.Decimal(14, 2)
+  totalCost        Decimal  @map("total_cost") @db.Decimal(14, 2)
+  overallMarkupPct Decimal? @map("overall_markup_pct") @db.Decimal(9, 4) // null when total cost is 0
+  vatTotal         Decimal  @map("vat_total") @db.Decimal(14, 2)
+  grandTotal       Decimal  @map("grand_total") @db.Decimal(14, 2)
+
+  approvalStatus ApprovalStatus @default(NOT_REQUIRED) @map("approval_status")
+  approvedById   Int?           @map("approved_by_id") // whoever approved OR rejected
+  approvedAt     DateTime?      @map("approved_at")
+  rejectionNote  String?        @map("rejection_note")
+
+  sentAt DateTime? @map("sent_at")
+
+  acceptedAt     DateTime? @map("accepted_at")
+  acceptedById   Int?      @map("accepted_by_id")
+  clientOrderRef String?   @map("client_order_ref") @db.VarChar(80)
+
+  // The approval rule looks at this, not the quote's author. Below the
+  // threshold, a saver holding quote.approve approves their own revision on
+  // save (approvedById = createdById); anyone else's waits for an approver.
+  createdById Int      @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  quote      Quote       @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  createdBy  User        @relation("RevisionAuthor", fields: [createdById], references: [id])
+  approvedBy User?       @relation("RevisionApprover", fields: [approvedById], references: [id])
+  lines      QuoteLine[]
+
+  @@unique([quoteId, revisionMajor, revisionMinor])
+  @@index([quoteId, isCurrent])
+  @@map("quote_revisions")
+}
+
+model QuoteLine {
+  id         Int           @id @default(autoincrement())
+  revisionId Int           @map("revision_id")
+  sortOrder  Int           @map("sort_order")
+  section    String?       @db.VarChar(60) // CCTV, Cabling, Labour
+  kind       QuoteLineKind
+
+  itemId      Int?    @map("item_id") // null = free line with no catalogue item
+  sku         String? @db.VarChar(60)
+  description String  @db.VarChar(255)
+  unitCode    String  @map("unit_code") @db.VarChar(10)
+
+  quantity  Decimal  @db.Decimal(14, 4)
+  unitCost  Decimal  @map("unit_cost") @db.Decimal(12, 4)
+  markupPct Decimal? @map("markup_pct") @db.Decimal(9, 4) // null when unit cost is 0
+  unitPrice Decimal  @map("unit_price") @db.Decimal(12, 4)
+  lineCost  Decimal  @map("line_cost") @db.Decimal(14, 2)
+  lineTotal Decimal  @map("line_total") @db.Decimal(14, 2)
+
+  vatCode String  @map("vat_code") @db.VarChar(20)
+  vatRate Decimal @map("vat_rate") @db.Decimal(5, 2)
+
+  revision QuoteRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  // SetNull: the line keeps its copied sku and description, so deleting a
+  // catalogue item never breaks a saved quote.
+  item     Item?         @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  @@index([revisionId, sortOrder])
+  @@index([itemId])
+  @@map("quote_lines")
+}

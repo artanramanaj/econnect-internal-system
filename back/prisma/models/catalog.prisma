@@ -64,6 +64,7 @@ model Item {
   baseUnit    Unit              @relation(fields: [baseUnitCode], references: [code])
   units       ItemUnit[]
   costHistory ItemCostHistory[]
+  quoteLines  QuoteLine[]
 
   @@index([categoryId])
   @@index([brandId])

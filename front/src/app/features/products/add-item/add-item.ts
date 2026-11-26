@@ -17,15 +17,8 @@ import {
 } from '../../../core/models/item.model';
 import { ErrorMessage } from '../../../shared/components/error-message/error-message';
 import { CodeLabelPipe } from '../../../shared/pipes/code-label.pipe';
-import {
-  BROCHURE_MAX_MB,
-  BrochureProblem,
-  brochureProblem,
-  decimal,
-  notBlank,
-  parseDecimal,
-  sizeLabel,
-} from '../item-form';
+import { decimal, notBlank, parseDecimal } from '../../../shared/forms/decimal';
+import { BROCHURE_MAX_MB, BrochureProblem, brochureProblem, sizeLabel } from '../item-form';
 
 /** The new item, plus the PDF to attach to it once it exists. */
 export interface AddItemSubmit {

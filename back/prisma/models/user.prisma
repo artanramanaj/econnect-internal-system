@@ -17,6 +17,10 @@ model User {
   roles         UserRole[]
   refreshTokens RefreshToken[]
 
+  quotes            Quote[]         @relation("QuoteAuthor")
+  quoteRevisions    QuoteRevision[] @relation("RevisionAuthor")
+  approvedRevisions QuoteRevision[] @relation("RevisionApprover")
+
   @@map("users")
 }
 

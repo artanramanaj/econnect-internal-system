@@ -104,6 +104,33 @@
     "stillUsed_one": "{{count}} artikull e përdor ende \"{{name}}\". Kalojeni më parë në një brend tjetër.",
     "stillUsed_other": "{{count}} artikuj e përdorin ende \"{{name}}\". Kalojini më parë në një brend tjetër."
   },
+  "quotes": {
+    "invalidId": "ID e pavlefshme e ofertës.",
+    "invalidFilters": "Filtra kërkimi ose faqe e pavlefshme.",
+    "notFound": "Oferta nuk u gjet.",
+    "unknownPartner": "Ky klient nuk ekziston ose nuk është më aktiv.",
+    "unknownSite": "Ky objekt nuk i përket këtij klienti.",
+    "unknownUnit": "Njësi e panjohur \"{{code}}\".",
+    "unknownItem": "Njëri nga rreshtat tregon një artikull të katalogut që nuk ekziston më.",
+    "unknownVatRate": "{{rate}}% nuk është normë TVSH-je e \"{{code}}\".",
+    "amountTooLarge": "Totali i ofertës është shumë i madh.",
+    "notEditable": "Kjo ofertë nuk mund të ndryshohet më.",
+    "stale": "Dikush tjetër e ruajti këtë ofertë ndërkohë. Ringarkojeni dhe bëni ndryshimet përsëri.",
+    "notPendingApproval": "Kjo ofertë nuk është në pritje të miratimit.",
+    "cannotApproveOwn": "Nuk mund ta miratoni ose refuzoni një ofertë që e keni ruajtur vetë.",
+    "created": "Oferta {{number}} u krijua.",
+    "saved": "Oferta {{number}} u ruajt si versioni {{version}}.",
+    "savedPending": "Oferta {{number}} u ruajt si versioni {{version}}. Marzhi i përgjithshëm është nën {{threshold}}%, prandaj duhet miratim përpara se të dërgohet.",
+    "savedLowMarkup": "Oferta {{number}} u ruajt si versioni {{version}}. Kujdes: marzhi i përgjithshëm {{markup}}% është nën minimumin {{threshold}}%.",
+    "approved": "Oferta {{number}} u miratua.",
+    "rejected": "Oferta {{number}} u kthye në draft."
+  },
+  "partners": {
+    "invalidId": "ID e pavlefshme e klientit.",
+    "invalidFilters": "Filtra kërkimi ose faqe e pavlefshme.",
+    "notFound": "Klienti nuk u gjet.",
+    "added": "\"{{name}}\" u shtua."
+  },
   "validation": {
     "correctFields": "Ju lutemi korrigjoni fushat e shënuara.",
     "required": "Kjo fushë është e detyrueshme",
@@ -143,6 +170,20 @@
     "factorInvalid": "Shkruani një sasi më të madhe se 0, me më së shumti 4 shifra dhjetore",
     "unitsDuplicate": "Secila njësi mund të shënohet vetëm një herë",
     "refNameMin": "Emri duhet të ketë të paktën 2 karaktere",
-    "refNameMax": "Emri është shumë i gjatë"
+    "refNameMax": "Emri është shumë i gjatë",
+    "unknownField": "Fushë e panjohur: {{fields}}",
+    "quoteTitleRequired": "Emri i projektit duhet të ketë të paktën 2 karaktere",
+    "partnerRequired": "Zgjidhni një klient",
+    "legalNameRequired": "Emri duhet të ketë të paktën 2 karaktere",
+    "lineDescriptionRequired": "Përshkrimi është i detyrueshëm",
+    "quantityInvalid": "Shkruani një sasi më të madhe se 0, me më së shumti 4 shifra dhjetore",
+    "unitCostInvalid": "Shkruani një kosto 0 ose më të madhe, me më së shumti 4 shifra dhjetore",
+    "unitPriceInvalid": "Shkruani një çmim 0 ose më të madh, me më së shumti 4 shifra dhjetore",
+    "markupInvalid": "Shkruani një marzh me më së shumti 4 shifra dhjetore",
+    "markupRequired": "Shkruani një marzh",
+    "priceRequired": "Shkruani një çmim për njësi",
+    "vatRateInvalid": "Normë TVSH-je e pavlefshme",
+    "dateInvalid": "Shkruani një datë të vlefshme",
+    "rejectionNoteRequired": "Tregoni pse refuzohet oferta"
   }
 }

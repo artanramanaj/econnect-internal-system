@@ -8,6 +8,12 @@ import {
   DEFAULT_UNITS,
   DEFAULT_VAT_RATES,
 } from "../constants/catalog.constants.js";
+import {
+  DEFAULT_MIN_MARKUP_PCT,
+  PARTNER_SEQUENCE,
+  QUOTE_SEQUENCE,
+  SETTING_MIN_MARKUP_PCT,
+} from "../constants/quote.constants.js";
 
 /**
  * The five job titles the app ships with. The migration also imported whatever
@@ -66,6 +72,31 @@ async function main() {
       create: { name },
     });
   }
+
+  // Left alone on update: next_number is live data, and an admin may have
+  // changed the threshold. (The quote sequence of a later year is created by
+  // the first quote of that year; this row only makes a fresh database tidy.)
+  console.log("Seeding document sequences and settings...");
+  const year = new Date().getFullYear();
+  for (const sequence of [
+    { docType: QUOTE_SEQUENCE.docType, year, prefix: QUOTE_SEQUENCE.prefix },
+    {
+      docType: PARTNER_SEQUENCE.docType,
+      year: PARTNER_SEQUENCE.year,
+      prefix: PARTNER_SEQUENCE.prefix,
+    },
+  ]) {
+    await prisma.documentSequence.upsert({
+      where: { docType_year: { docType: sequence.docType, year: sequence.year } },
+      update: {},
+      create: sequence,
+    });
+  }
+  await prisma.appSetting.upsert({
+    where: { key: SETTING_MIN_MARKUP_PCT },
+    update: {},
+    create: { key: SETTING_MIN_MARKUP_PCT, value: DEFAULT_MIN_MARKUP_PCT },
+  });
 
   console.log("Seeding roles...");
   for (const role of ROLES) {

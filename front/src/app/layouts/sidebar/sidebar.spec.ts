@@ -97,6 +97,47 @@ describe('Sidebar', () => {
     expect(hrefs()).toContain('/products');
   });
 
+  describe('quote links', () => {
+    const signIn = async (codes: string[]) => {
+      localStorage.clear();
+      TestBed.inject(AuthService).me().subscribe();
+      httpMock.expectOne('/api/auth/me').flush({
+        user: {
+          id: 38,
+          username: 'rexhep',
+          email: 'rexhep@econnect-ks.com',
+          status: 'ACTIVE',
+          locale: 'sq',
+          createdAt: '',
+          lastLoginAt: null,
+          roles: ['project_manager'],
+          employee: null,
+        },
+        permissions: codes.map((code) => ({ code, scope: 'ALL' })),
+      });
+      await fixture.whenStable();
+    };
+
+    it('should be hidden without a quote permission', () => {
+      expect(hrefs()).not.toContain('/quotes');
+      expect(hrefs()).not.toContain('/quotes/new');
+    });
+
+    it('should show Quotes and New quote to someone who writes quotes', async () => {
+      await signIn(['quote.manage']);
+
+      // Right after the dashboard, as in the design.
+      expect(hrefs().slice(0, 3)).toEqual(['/dashboard', '/quotes', '/quotes/new']);
+    });
+
+    it('should show only Quotes to someone who approves but does not write', async () => {
+      await signIn(['quote.approve']);
+
+      expect(hrefs()).toContain('/quotes');
+      expect(hrefs()).not.toContain('/quotes/new');
+    });
+  });
+
   it('should toast the server message and go to login after signing out', async () => {
     component.logout();
     httpMock.expectOne('/api/auth/logout').flush({ message: 'Signed out successfully' });

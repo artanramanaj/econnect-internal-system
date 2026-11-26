@@ -1,0 +1,52 @@
+// ---------- partners ----------
+
+/// A company EMS does business with. Deliberately not "clients": the same
+/// company can buy from us and sell to us, so it is one table with two flags.
+/// Partners never log in — quotes reach them as a PDF, outside EMS.
+model Partner {
+  id             Int      @id @default(autoincrement())
+  partnerNumber  String   @unique @map("partner_number") @db.VarChar(20) // P-0001, from document_sequences
+  legalName      String   @map("legal_name") @db.VarChar(160)
+  tradeName      String?  @map("trade_name") @db.VarChar(160)
+  businessNumber String?  @map("business_number") @db.VarChar(30)
+  fiscalNumber   String?  @map("fiscal_number") @db.VarChar(30)
+  vatNumber      String?  @map("vat_number") @db.VarChar(30)
+  billingAddress String?  @map("billing_address") @db.VarChar(255)
+  city           String?  @db.VarChar(80)
+  email          String?  @db.VarChar(120)
+  phone          String?  @db.VarChar(30)
+  paymentTerms   String?  @map("payment_terms") @db.VarChar(160)
+  prodataCode    String?  @unique @map("prodata_code") @db.VarChar(40) // set by the ProData sync
+  isCustomer     Boolean  @default(true) @map("is_customer")
+  isSupplier     Boolean  @default(false) @map("is_supplier")
+  isActive       Boolean  @default(true) @map("is_active")
+  version        Int      @default(1) // optimistic lock, bumped on every update
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  sites  Site[]
+  quotes Quote[]
+
+  @@index([isCustomer, isActive])
+  @@map("partners")
+}
+
+/// Where the work happens: a partner's branch, warehouse or building.
+model Site {
+  id          Int      @id @default(autoincrement())
+  partnerId   Int      @map("partner_id")
+  name        String   @db.VarChar(120)
+  address     String?  @db.VarChar(255)
+  city        String?  @db.VarChar(80)
+  latitude    Decimal? @db.Decimal(9, 6)
+  longitude   Decimal? @db.Decimal(9, 6)
+  accessNotes String?  @map("access_notes")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  quotes  Quote[]
+
+  @@index([partnerId])
+  @@map("sites")
+}

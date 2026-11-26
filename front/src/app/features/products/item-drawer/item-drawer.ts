@@ -20,14 +20,12 @@ import { LanguageService } from '../../../core/services/language.service';
 import { ErrorMessage } from '../../../shared/components/error-message/error-message';
 import { CodeLabelPipe } from '../../../shared/pipes/code-label.pipe';
 import { MoneyPipe } from '../../../shared/pipes/money.pipe';
+import { decimal, notBlank, parseDecimal } from '../../../shared/forms/decimal';
 import {
   BROCHURE_MAX_MB,
   BrochureProblem,
   asTyped,
   brochureProblem,
-  decimal,
-  notBlank,
-  parseDecimal,
   sizeLabel,
 } from '../item-form';
 

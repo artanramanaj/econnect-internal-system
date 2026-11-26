@@ -16,6 +16,7 @@ export const PERMISSIONS: ReadonlyArray<{
   { code: "quote.manage", module: "quoting", description: "Create, edit & copy quotes" },
   { code: "quote.view_cost", module: "quoting", description: "See cost price & margin" },
   { code: "quote.accept", module: "quoting", description: "Accept quote & assign project manager" },
+  { code: "quote.approve", module: "quoting", description: "Approve quotes below the minimum markup" },
   // catalog
   { code: "catalog.manage", module: "catalog", description: "Manage products, services & clients" },
   { code: "catalog.view", module: "catalog", description: "View products, services & clients" },
@@ -46,6 +47,7 @@ export const ROLE_PERMISSIONS: Record<RoleCode, ReadonlyArray<[string, Scope]>> 
     ["quote.manage", "ALL"],
     ["quote.view_cost", "ALL"],
     ["quote.accept", "ALL"],
+    ["quote.approve", "ALL"],
     ["catalog.manage", "ALL"],
     ["report.sales", "ALL"],
     ["report.project", "ALL"],
@@ -61,6 +63,7 @@ export const ROLE_PERMISSIONS: Record<RoleCode, ReadonlyArray<[string, Scope]>> 
     ["quote.manage", "ALL"],
     ["quote.view_cost", "ALL"],
     ["quote.accept", "ALL"],
+    ["quote.approve", "ALL"],
     ["catalog.manage", "ALL"],
     ["report.sales", "ALL"],
     ["report.project", "ALL"],
@@ -126,6 +129,7 @@ export const MATRIX_ROWS: ReadonlyArray<{
 }> = [
   { label: "matrix.rows.quoteManage", area: "matrix.areas.quotes", full: "quote.manage" },
   { label: "matrix.rows.quoteViewCost", area: "matrix.areas.quotes", full: "quote.view_cost" },
+  { label: "matrix.rows.quoteApprove", area: "matrix.areas.quotes", full: "quote.approve" },
   {
     label: "matrix.rows.catalogManage",
     area: "matrix.areas.catalog",

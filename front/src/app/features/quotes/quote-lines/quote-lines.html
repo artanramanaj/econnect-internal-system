@@ -1,0 +1,196 @@
+<div class="overflow-x-auto">
+  <table class="w-full min-w-250 border-collapse">
+    <thead>
+      <tr class="text-left text-muted bg-table-head">
+        <th class="py-2.5 pl-5 pr-2 w-10">#</th>
+        <th class="py-2.5 px-2">{{ 'quotes.lines.code' | translate }}</th>
+        <th class="py-2.5 px-2">{{ 'quotes.lines.description' | translate }}</th>
+        <th class="py-2.5 px-2 text-right">{{ 'quotes.lines.quantity' | translate }}</th>
+        @if (canViewCost()) {
+          <th class="py-2.5 px-2 text-right">{{ 'quotes.lines.cost' | translate }}</th>
+          <th class="py-2.5 px-2 text-right">{{ 'quotes.lines.markup' | translate }}</th>
+        }
+        <th class="py-2.5 px-2 text-right">{{ 'quotes.lines.unitPrice' | translate }}</th>
+        <th class="py-2.5 px-2">{{ 'quotes.lines.vat' | translate }}</th>
+        <th class="py-2.5 px-2 text-right">{{ 'quotes.lines.lineTotal' | translate }}</th>
+        <th class="py-2.5 pr-5 pl-2 w-12">
+          <span class="sr-only">{{ 'quotes.lines.remove' | translate }}</span>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (line of lines().controls; track line; let i = $index) {
+        @if (startsSection(i)) {
+          <tr class="bg-gray/60">
+            <td [attr.colspan]="columns()" class="py-1.5 px-5 border-b border-row-border">
+              <input
+                [value]="line.controls.section.value"
+                (change)="renameSection(i, $event)"
+                [disabled]="!editable()"
+                maxlength="60"
+                [attr.aria-label]="'quotes.lines.sectionName' | translate"
+                [placeholder]="'quotes.lines.noSection' | translate"
+                class="h-8 w-64 max-w-full px-2 rounded-lg border border-transparent bg-transparent font-semibold text-muted-strong placeholder:text-muted placeholder:font-normal hover:border-input-border focus:outline-none focus:border-primary focus:bg-white disabled:hover:border-transparent"
+              />
+            </td>
+          </tr>
+        }
+
+        <tr [formGroup]="line" [class.bg-grp-tl-bg]="isLow(line)">
+          <td class="py-2 pl-5 pr-2 border-b border-row-border text-muted numeric align-top pt-4">
+            {{ i + 1 }}
+          </td>
+
+          <td class="py-2 px-2 border-b border-row-border align-top">
+            @if (line.controls.itemId.value !== null) {
+              <span class="inline-block pt-2 font-mono whitespace-nowrap">
+                <small>{{ line.controls.sku.value }}</small>
+              </span>
+            } @else {
+              <input
+                formControlName="sku"
+                maxlength="60"
+                [attr.aria-label]="'quotes.lines.codeOf' | translate: { n: i + 1 }"
+                class="h-9 w-28 px-2 rounded-lg border border-input-border bg-white font-mono focus:outline-none focus:border-primary disabled:bg-gray"
+              />
+            }
+          </td>
+
+          <td class="py-2 px-2 border-b border-row-border min-w-60 align-top">
+            <input
+              formControlName="description"
+              maxlength="255"
+              [attr.aria-label]="'quotes.lines.descriptionOf' | translate: { n: i + 1 }"
+              class="h-9 w-full px-2 rounded-lg border border-input-border bg-white focus:outline-none focus:border-primary disabled:bg-gray"
+              [class.border-danger]="invalid(line.controls.description)"
+            />
+            <span class="flex items-center gap-2 mt-1">
+              <select
+                formControlName="kind"
+                [attr.aria-label]="'quotes.lines.kindOf' | translate: { n: i + 1 }"
+                class="h-6 px-1 rounded-md border-0 bg-pill-bg text-pill-fg font-semibold focus:outline-none disabled:opacity-100"
+              >
+                <option value="PRODUCT">{{ 'quotes.lines.kinds.PRODUCT' | translate }}</option>
+                <option value="SERVICE">{{ 'quotes.lines.kinds.SERVICE' | translate }}</option>
+              </select>
+              @if (isLow(line)) {
+                <small class="text-grp-tl-fg font-semibold">
+                  {{ 'quotes.lines.lowMarkup' | translate: { min: minMarkupPct() } }}
+                </small>
+              }
+            </span>
+            @if (lineInvalid(line)) {
+              <app-error-message [message]="'quotes.lines.invalid' | translate" />
+            }
+          </td>
+
+          <td class="py-2 px-2 border-b border-row-border text-right whitespace-nowrap align-top">
+            <input
+              formControlName="quantity"
+              inputmode="decimal"
+              autocomplete="off"
+              [attr.aria-label]="'quotes.lines.quantityOf' | translate: { n: i + 1 }"
+              class="h-9 w-18 px-2 rounded-lg border border-input-border bg-white text-right numeric focus:outline-none focus:border-primary disabled:bg-gray"
+              [class.border-danger]="invalid(line.controls.quantity)"
+            />
+            <select
+              formControlName="unitCode"
+              [attr.aria-label]="'quotes.lines.unitOf' | translate: { n: i + 1 }"
+              class="h-9 ml-1 px-1 rounded-lg border border-input-border bg-white text-muted-strong focus:outline-none focus:border-primary disabled:bg-gray"
+            >
+              <!-- [selected] per option: the options can arrive after the line. -->
+              @for (unit of units(); track unit.code) {
+                <option [value]="unit.code" [selected]="unit.code === line.controls.unitCode.value">
+                  {{ unit.code }}
+                </option>
+              }
+            </select>
+          </td>
+
+          @if (canViewCost()) {
+            <td class="py-2 px-2 border-b border-row-border text-right align-top">
+              <input
+                formControlName="unitCost"
+                (input)="onCost(line)"
+                inputmode="decimal"
+                autocomplete="off"
+                [attr.aria-label]="'quotes.lines.costOf' | translate: { n: i + 1 }"
+                class="h-9 w-22 px-2 rounded-lg border border-input-border bg-white text-right numeric focus:outline-none focus:border-primary disabled:bg-gray"
+                [class.border-danger]="invalid(line.controls.unitCost)"
+              />
+            </td>
+
+            <td class="py-2 px-2 border-b border-row-border text-right align-top">
+              @if (costIsZero(line)) {
+                <span class="inline-block pt-2 text-muted">{{ 'quotes.na' | translate }}</span>
+              } @else {
+                <input
+                  formControlName="markupPct"
+                  (input)="onMarkup(line)"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  [attr.aria-label]="'quotes.lines.markupOf' | translate: { n: i + 1 }"
+                  class="h-9 w-20 px-2 rounded-lg border border-input-border bg-white text-right numeric focus:outline-none focus:border-primary disabled:bg-gray"
+                  [class.border-danger]="invalid(line.controls.markupPct)"
+                  [class.text-danger]="isLow(line)"
+                />
+              }
+            </td>
+          }
+
+          <td class="py-2 px-2 border-b border-row-border text-right align-top">
+            <input
+              formControlName="unitPrice"
+              (input)="onPrice(line)"
+              inputmode="decimal"
+              autocomplete="off"
+              [attr.aria-label]="'quotes.lines.unitPriceOf' | translate: { n: i + 1 }"
+              class="h-9 w-24 px-2 rounded-lg border border-primary bg-white text-right numeric font-semibold focus:outline-none disabled:bg-gray disabled:border-input-border"
+              [class.border-danger]="invalid(line.controls.unitPrice)"
+            />
+          </td>
+
+          <td class="py-2 px-2 border-b border-row-border align-top">
+            <select
+              formControlName="vatCode"
+              (change)="onVat(line)"
+              [attr.aria-label]="'quotes.lines.vatOf' | translate: { n: i + 1 }"
+              class="h-9 px-1 rounded-lg border border-input-border bg-white focus:outline-none focus:border-primary disabled:bg-gray"
+              [class.border-danger]="invalid(line.controls.vatCode)"
+            >
+              @for (choice of vatChoices(line); track choice.code) {
+                <option [value]="choice.code" [selected]="choice.code === line.controls.vatCode.value">
+                  {{ choice.label }}
+                </option>
+              }
+            </select>
+          </td>
+
+          <td class="py-2 px-2 border-b border-row-border text-right numeric font-semibold whitespace-nowrap align-top pt-4">
+            {{ lineTotal(line) | money }}
+          </td>
+
+          <td class="py-2 pr-5 pl-2 border-b border-row-border align-top">
+            @if (editable()) {
+              <button
+                type="button"
+                (click)="remove(i)"
+                [attr.aria-label]="'quotes.lines.removeLine' | translate: { n: i + 1 }"
+                class="w-9 h-9 rounded-lg border-0 bg-transparent text-muted cursor-pointer hover:bg-gray hover:text-danger"
+              >
+                ✕
+              </button>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td [attr.colspan]="columns()" class="px-5 py-8 text-center text-muted">
+            {{ 'quotes.lines.empty' | translate }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

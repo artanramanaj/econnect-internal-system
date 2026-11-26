@@ -54,6 +54,10 @@ function genericIssue(issue: z.core.$ZodIssue): { key: MessageKey; params?: Mess
       return issue.origin === "string"
         ? { key: "validation.tooLong", params: { max: Number(issue.maximum) } }
         : { key: "validation.tooBig", params: { max: Number(issue.maximum) } };
+    // A strict schema met a key it does not know. Named, so a typo in a
+    // field name is found at once instead of being silently dropped.
+    case "unrecognized_keys":
+      return { key: "validation.unknownField", params: { fields: issue.keys.join(", ") } };
     default:
       return { key: "validation.invalid" };
   }

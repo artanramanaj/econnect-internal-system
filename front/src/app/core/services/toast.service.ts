@@ -20,4 +20,9 @@ export class ToastService {
   error(text: string): void {
     this._current.set({ text, type: 'error' });
   }
+
+  /** Done, but with something to look at (a quote saved below the minimum markup). */
+  warning(text: string): void {
+    this._current.set({ text, type: 'warning' });
+  }
 }

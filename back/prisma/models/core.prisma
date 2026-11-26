@@ -17,3 +17,28 @@ model VatRate {
   @@unique([code, validFrom])
   @@map("vat_rates")
 }
+
+/// Gap-free document numbers (a legal requirement for quotes). The row is
+/// locked with SELECT ... FOR UPDATE inside the transaction that creates the
+/// document, so a rollback hands the number back. A Postgres sequence would
+/// not: it skips numbers on rollback.
+model DocumentSequence {
+  id         Int    @id @default(autoincrement())
+  docType    String @map("doc_type") @db.VarChar(20) // QUOTE, PARTNER
+  year       Int // 0 for a sequence that never restarts
+  prefix     String @db.VarChar(10) // EC, P
+  nextNumber Int    @default(1) @map("next_number")
+
+  @@unique([docType, year])
+  @@map("document_sequences")
+}
+
+/// Business settings that must not be hardcoded, e.g. the markup below which
+/// a quote needs approval. Values are strings; the reader parses them.
+model AppSetting {
+  key       String   @id @db.VarChar(60) // quote.min_markup_pct
+  value     String   @db.VarChar(255)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("app_settings")
+}

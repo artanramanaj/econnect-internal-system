@@ -6,6 +6,8 @@ import roleRoutes from "./roleRoutes.js";
 import positionsRoutes from "./positionsRoutes.js";
 import itemsRoutes from "./itemsRoutes.js";
 import { brandsRoutes, categoriesRoutes } from "./catalogRefsRoutes.js";
+import partnersRoutes from "./partnersRoutes.js";
+import quotesRoutes from "./quotesRoutes.js";
 
 const router = Router();
 
@@ -19,5 +21,7 @@ router.use("/positions", positionsRoutes);
 router.use("/items", itemsRoutes);
 router.use("/categories", categoriesRoutes);
 router.use("/brands", brandsRoutes);
+router.use("/partners", partnersRoutes);
+router.use("/quotes", quotesRoutes);
 
 export default router;

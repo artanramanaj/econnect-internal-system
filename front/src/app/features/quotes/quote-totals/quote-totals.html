@@ -1,0 +1,60 @@
+<section
+  [attr.aria-label]="'quotes.totals.heading' | translate"
+  class="bg-white border border-card-border rounded-[14px] p-5 flex flex-col gap-3"
+>
+  <div class="flex justify-between gap-3">
+    <span class="text-muted-strong">{{ 'quotes.totals.subtotal' | translate }}</span>
+    <span class="font-semibold numeric">{{ view().subtotal | money }}</span>
+  </div>
+  <!-- One row per VAT rate in use: an 8% row appears only when there are 8% lines. -->
+  @for (band of view().vatBands; track band.rate) {
+    <div class="flex justify-between gap-3">
+      <span class="text-muted-strong">{{ 'quotes.totals.vat' | translate: { rate: band.rate } }}</span>
+      <span class="numeric">{{ band.vat | money }}</span>
+    </div>
+  }
+  <div class="h-px bg-card-border"></div>
+  <div class="flex justify-between items-baseline gap-3">
+    <span class="font-semibold">{{ 'quotes.totals.grandTotal' | translate }}</span>
+    <span class="numeric font-semibold text-h4">{{ view().grandTotal | money }}</span>
+  </div>
+</section>
+
+@if (canViewCost()) {
+  <section
+    [attr.aria-label]="'quotes.totals.internal' | translate"
+    class="bg-dark-blue text-white rounded-[14px] p-5 flex flex-col gap-2.5"
+  >
+    <p class="m-0 mb-1 text-primary font-semibold uppercase tracking-wider">
+      <small>{{ 'quotes.totals.internal' | translate }}</small>
+    </p>
+    <div class="flex justify-between gap-3">
+      <span class="text-sidebar-text">{{ 'quotes.totals.totalCost' | translate }}</span>
+      <span class="numeric">{{ view().totalCost | money }}</span>
+    </div>
+    <div class="flex justify-between gap-3">
+      <span class="text-sidebar-text">{{ 'quotes.totals.profit' | translate }}</span>
+      <span class="numeric font-semibold">{{ view().profit | money }}</span>
+    </div>
+    <div class="flex justify-between gap-3">
+      <span class="text-sidebar-text">{{ 'quotes.totals.overallMarkup' | translate }}</span>
+      <span class="numeric font-semibold" [class.text-grp-tl-bg]="view().low">
+        @if (view().markup; as markup) {
+          {{ markup }}%
+        } @else {
+          {{ 'quotes.na' | translate }}
+        }
+      </span>
+    </div>
+    @if (view().low) {
+      <p class="m-0 mt-1 px-3 py-2 rounded-[10px] bg-grp-tl-bg text-grp-tl-fg">
+        <small>
+          {{
+            (approver() ? 'quotes.totals.belowMinimum' : 'quotes.totals.needsApproval')
+              | translate: { min: minMarkupPct() }
+          }}
+        </small>
+      </p>
+    }
+  </section>
+}
